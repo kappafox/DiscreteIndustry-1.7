@@ -106,54 +106,10 @@ public class TileEntityStorageRack extends TileEntityDiscreteBlock implements IS
 		return true;
 	}
 	
-	
-	private int cooldown = 0;
 	@Override
 	public void updateEntity( )
 	{
-		/*
-		System.out.println("update!");
-		if(SideHelper.onServer())
-		{
-			
-			//if(cooldown <= 0)
-			//{
-				boolean didUpdate = false;
-				for(int i = 0; i < insertionSlots.length; i++)
-				{	
-					didUpdate = (didUpdate || this.updateInsertionSlot(i) || this.updateExtractionSlot(i));
-					//this.dumpDebugStats(i);
-				}
-				
-				if(didUpdate)
-				{
-					this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
-				}
-				else
-				{
-					cooldown = 10;
-				}
-			//}
-			//else
-			//{
-				cooldown--;
-			//}
-		}
-		*/
 		
-		/*
-		if(SideHelper.onServer())
-		{
-			System.out.print("SERVER:");
-			this.dumpDebugStats(0);
-		}
-		else
-		{
-			System.out.print("CLIENT:");
-			this.dumpDebugStats(0);
-		}
-		*/
-
 	}
 	
 	private boolean updateInsertionSlot(int slot)
@@ -163,7 +119,6 @@ public class TileEntityStorageRack extends TileEntityDiscreteBlock implements IS
 			return false;
 		}
 		
-
 		int amount = amounts[slot] + this.getExtractionSlotCount(slot);
 		int max = this.getMaxCapacity(storageUnits[slot].getItemDamage());
 		int adjustedMax =  max - insertionSlots[slot].getMaxStackSize();
@@ -183,8 +138,6 @@ public class TileEntityStorageRack extends TileEntityDiscreteBlock implements IS
 				int space = adjustedMax - amount;
 				insertionSlots[slot].stackSize -= space;
 				amounts[slot] += space;
-				//insertionSlots[slot].stackSize = sim - amounts[slot];
-				//amounts[slot] = adjustedMax;
 			}
 		}
 		
@@ -215,7 +168,7 @@ public class TileEntityStorageRack extends TileEntityDiscreteBlock implements IS
 		}
 		
 		//space in the extraction slot
-		int space = storageUnits[slot].getMaxStackSize() - this.getExtractionSlotCount(slot);
+		int space = this.getContainerContent(slot).getMaxStackSize() - this.getExtractionSlotCount(slot);
 		
 
 		if(extractionSlots[slot] == null)
@@ -367,7 +320,6 @@ public class TileEntityStorageRack extends TileEntityDiscreteBlock implements IS
 								int overflow = amounts[slot] - (this.getMaxCapacity(container.getItemDamage()) - content.getMaxStackSize());
 								amounts[slot] -= overflow;
 								
-
 								insertionSlots[slot] = content.copy();
 								insertionSlots[slot].stackSize = overflow;
 								
@@ -700,7 +652,7 @@ public class TileEntityStorageRack extends TileEntityDiscreteBlock implements IS
 								
 								//plenty of space
 								if(space >= istack.stackSize)
-								{
+								{								
 									aslot.stackSize += istack.stackSize;
 									istack.stackSize = 0;
 									
@@ -885,8 +837,7 @@ public class TileEntityStorageRack extends TileEntityDiscreteBlock implements IS
     {
         super.readFromNBT(tag);
         NBTTagList containers = tag.getTagList("Containers", tag.getId());
-        
-        
+               
         int size = tag.getInteger("slots");
         storageUnits = null;
         storageUnits = new ItemStack[size];
@@ -923,7 +874,7 @@ public class TileEntityStorageRack extends TileEntityDiscreteBlock implements IS
             }
         }
 
-        
+       
         extractionSlots = null;
         extractionSlots = new ItemStack[size];
         
@@ -1105,7 +1056,7 @@ public class TileEntityStorageRack extends TileEntityDiscreteBlock implements IS
 						}
 					}
 					this.updateExtraSlots(slot);
-					this.updateTileEntity();			
+					this.updateTileEntity();		
 				}
 			}
 		}
@@ -1224,19 +1175,6 @@ public class TileEntityStorageRack extends TileEntityDiscreteBlock implements IS
 	@Override
 	public boolean canExtractItem(int slot, ItemStack istack, int side)
 	{
-		/*
-		//E-Slots
-		System.out.println(slot + ":" + storageUnits.length);
-		System.out.println((slot >= storageUnits.length) + ":" + this.hasContainer(slot - storageUnits.length));
-		if(slot >= storageUnits.length && this.hasContainer(slot - storageUnits.length))
-		{
-			System.out.println("canExtractItem:true");
-			return true;
-		}
-		System.out.println("canExtractItem:false");
-		return false;
-		*/
-		
 		return true;
 	}
 
