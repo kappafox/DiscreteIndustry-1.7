@@ -49,15 +49,9 @@ public class DiscreteIndustry
 	
 	public static Class<?> GTWrench = null;
 	public static Class<?> BCWrench = null;
-	
 
-	
-	//Public references
-	//public static int renderID;
-	
 	//Items
-	
-	
+		
 	//Modules
 	private DiscreteElectrics electrics = new DiscreteElectrics();
 	private DiscreteTransport transport = new DiscreteTransport();
@@ -69,12 +63,10 @@ public class DiscreteIndustry
 	{
 		//grab the id database
 		librarian.preInit();
-		//DiscreteID ids = DiscreteIndustry.librarian.dibi;
 		
 		//Initialise network
 		network = NetworkRegistry.INSTANCE.newSimpleChannel("DINetworkChannel");
 		//network.registerMessage(DiscretePacketHandler.class, discret, discriminator, side);
-		
 		
 		
 		Configuration config = new Configuration(event.getSuggestedConfigurationFile());	//grab the config file or create it
@@ -103,7 +95,7 @@ public class DiscreteIndustry
 		decorative.load(event_);
 		
 		//Gui Stuff
-		//NetworkRegistry.instance().registerGuiHandler(this, new DiscreteGuiHandler());
+		NetworkRegistry.INSTANCE.registerGuiHandler(this, new DiscreteGuiHandler());
 		
 		//register tile entities
 		GameRegistry.registerTileEntity(TileEntitySingleVariable.class, "SVTE");
