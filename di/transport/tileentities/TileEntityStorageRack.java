@@ -29,8 +29,7 @@ public class TileEntityStorageRack extends TileEntityDiscreteBlock implements IS
 	
 	private static final int DOUBLE_CLICK_DELAY = 1000;	
 	private static short MAX_STACK_SIZE = 64;
-	
-	
+		
 	private boolean unifyContents = true;
 	private boolean sticky = false;
 	private boolean leaveLast = true;
@@ -48,8 +47,7 @@ public class TileEntityStorageRack extends TileEntityDiscreteBlock implements IS
 	private static final short MAX_CAPACITY_EMERALD= 8192;
 	private static final short MAX_CAPACITY_IRIDIUM = 16364;
 	
-	//Lapis, copper, tin, tungsten, coal?
-	
+
 	public TileEntityStorageRack( )
 	{
 		this(1);
@@ -281,6 +279,7 @@ public class TileEntityStorageRack extends TileEntityDiscreteBlock implements IS
 		
 		return false;
 	}
+	
 	public int getSize( )
 	{
 		return storageUnits.length;
@@ -384,8 +383,7 @@ public class TileEntityStorageRack extends TileEntityDiscreteBlock implements IS
 								insertionSlots[slot] = dummy;
 								extractionSlots[slot] = dummy.copy();
 							}
-
-							
+						
 							container.getTagCompound().removeTag("ContainerAmount");
 						}
 					}
@@ -640,36 +638,6 @@ public class TileEntityStorageRack extends TileEntityDiscreteBlock implements IS
 		}			
 	}
 	
-	/*
-	public ItemStack addItemEnmasseToContainer(int slot, ItemStack istack)
-	{
-		if(slot < storageUnits.length)
-		{
-			if(this.hasContainer(slot) && istack != null)
-			{
-				if(this.isContainerEmpty(slot) == false)
-				{
-					ItemStack contents = ItemStack.loadItemStackFromNBT(storageUnits[slot].getTagCompound());
-					if(this.areItemStacksEqual(contents, istack))
-					{
-						int freespace = this.getFreeSpace(slot);
-						int count = istack.stackSize;
-						
-						if(freespace > count)
-						{
-							amounts[slot] += count;
-							istack.stackSize = 0;
-							return istack;
-						}
-						
-					}
-				}				
-			}
-		}
-		return null;
-	}
-	*/
-	
 	public ItemStack addItemToContainer(int slot, ItemStack istack, boolean fullStack)
 	{
 		if(SideHelper.onServer())
@@ -769,8 +737,7 @@ public class TileEntityStorageRack extends TileEntityDiscreteBlock implements IS
 						}
 					}
 					else	//no items in here yet
-					{
-	
+					{	
 						storageUnits[slot].stackTagCompound = null;
 						NBTTagCompound contents = new NBTTagCompound();
 						istack.writeToNBT(contents);
@@ -789,8 +756,7 @@ public class TileEntityStorageRack extends TileEntityDiscreteBlock implements IS
 						this.updateExtraSlots(slot);
 						this.updateTileEntity();
 						
-						return istack;
-						
+						return istack;						
 					}
 				}
 			
@@ -1088,7 +1054,6 @@ public class TileEntityStorageRack extends TileEntityDiscreteBlock implements IS
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack istack)
 	{
-		//System.out.println("setInventorySlotContents:" + istack.stackSize);
 		if(SideHelper.onServer())
 		{
 			if(slot < storageUnits.length)
@@ -1097,7 +1062,6 @@ public class TileEntityStorageRack extends TileEntityDiscreteBlock implements IS
 				{
 					if(this.isContainerEmpty(slot))
 					{
-
 						storageUnits[slot].stackTagCompound = null;
 						NBTTagCompound contents = new NBTTagCompound();
 						istack.writeToNBT(contents);
@@ -1118,7 +1082,6 @@ public class TileEntityStorageRack extends TileEntityDiscreteBlock implements IS
 					
 					this.updateExtraSlots(slot);
 					this.updateTileEntity();
-
 				}
 			}
 			else
@@ -1140,7 +1103,6 @@ public class TileEntityStorageRack extends TileEntityDiscreteBlock implements IS
 						{
 							extractionSlots[slot - storageUnits.length] = istack;	
 						}
-
 					}
 					this.updateExtraSlots(slot);
 					this.updateTileEntity();			
@@ -1218,8 +1180,7 @@ public class TileEntityStorageRack extends TileEntityDiscreteBlock implements IS
 		System.out.println("Total:" + total + "\tAmounts:" + amount + "\tIS:" + ASamount + "\tES:" + this.getExtractionSlotCount(slot));
 	}
 
-	
-	
+		
 	@Override
 	public void markDirty( )
 	{
@@ -1230,11 +1191,9 @@ public class TileEntityStorageRack extends TileEntityDiscreteBlock implements IS
 		}
 	}
 	
-	
 	@Override
 	public int[] getAccessibleSlotsFromSide(int side)
-	{
-		
+	{		
 		switch(storageUnits.length)
 		{
 			case 1:
