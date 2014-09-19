@@ -26,16 +26,14 @@ public class TileEntityDiscreteHopper extends TileEntityHopper implements IInven
 		
 	}
 	
-	public TileEntityDiscreteHopper(int size_)
+	public TileEntityDiscreteHopper(int size)
 	{
-		//System.out.println("Meta:" + this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
-		items = new ItemStack[size_];
+		items = new ItemStack[size];
 	}
 	
 	
 	public boolean getExtractFromAbove( )
 	{
-		//System.out.println(xCoord + ":" + yCoord + ":" + zCoord + "\t" + extractFromAbove);
 		return extractFromAbove;
 	}
 	
@@ -50,7 +48,6 @@ public class TileEntityDiscreteHopper extends TileEntityHopper implements IInven
 		{
 			extractFromAbove = true;
 		}
-		//System.out.println("POST" + "\t" + xCoord + ":" + yCoord + ":" + zCoord + "\t" + extractFromAbove);
 	}
 	
     /**
@@ -64,32 +61,32 @@ public class TileEntityDiscreteHopper extends TileEntityHopper implements IInven
     /**
      * Returns the stack in slot i
      */
-    public ItemStack getStackInSlot(int i_)
+    public ItemStack getStackInSlot(int i)
     {
-    	return items[i_];
+    	return items[i];
     }
 
     /**
      * Removes from an inventory slot (first arg) up to a specified number (second arg) of items and returns them in a
      * new stack.
      */
-    public ItemStack decrStackSize(int slot_, int amount_)
+    public ItemStack decrStackSize(int slot, int amount)
     {
-		ItemStack item = getStackInSlot(slot_);
+		ItemStack item = getStackInSlot(slot);
 		
 		if(item != null)
 		{
-			if(item.stackSize <= amount_)
+			if(item.stackSize <= amount)
 			{
-				setInventorySlotContents(slot_, null);
+				setInventorySlotContents(slot, null);
 			}
 			else
 			{
-				item = item.splitStack(amount_);
+				item = item.splitStack(amount);
 				
 				if(item.stackSize == 0)
 				{
-					setInventorySlotContents(slot_, null);
+					setInventorySlotContents(slot, null);
 				}
 			}
 		}
@@ -102,12 +99,12 @@ public class TileEntityDiscreteHopper extends TileEntityHopper implements IInven
      * like when you close a workbench GUI.
      */
 	@Override
-	public ItemStack getStackInSlotOnClosing(int slot_)
+	public ItemStack getStackInSlotOnClosing(int slot)
 	{
-        ItemStack stack = getStackInSlot(slot_);
+        ItemStack stack = getStackInSlot(slot);
         if (stack != null) 
         {
-        	setInventorySlotContents(slot_, null);
+        	setInventorySlotContents(slot, null);
         }
         return stack;
 	}
@@ -116,13 +113,13 @@ public class TileEntityDiscreteHopper extends TileEntityHopper implements IInven
      * Sets the given item stack to the specified slot in the inventory (can be crafting or armor sections).
      */
 	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack_)
+	public void setInventorySlotContents(int i, ItemStack itemstack)
 	{
-		items[i] = itemstack_;
+		items[i] = itemstack;
 		
-		if(itemstack_ != null && itemstack_.stackSize > getInventoryStackLimit())
+		if(itemstack != null && itemstack.stackSize > getInventoryStackLimit())
 		{
-			itemstack_.stackSize = getInventoryStackLimit();
+			itemstack.stackSize = getInventoryStackLimit();
 		}	
 	}
 
@@ -162,11 +159,10 @@ public class TileEntityDiscreteHopper extends TileEntityHopper implements IInven
     }
 
 
-
     /**
      * Returns true if automation is allowed to insert the given stack (ignoring stack size) into the given slot.
      */
-    public boolean isStackValidForSlot(int slot_, ItemStack item_)
+    public boolean isStackValidForSlot(int slot, ItemStack item)
     {
     	return true;
     }
@@ -196,7 +192,7 @@ public class TileEntityDiscreteHopper extends TileEntityHopper implements IInven
                 if (flag)
                 {
                     this.func_145896_c(COOLDOWN);
-                    //this.onInventoryChanged();
+                    super.markDirty();
                     return true;
                 }
             }
@@ -233,7 +229,7 @@ public class TileEntityDiscreteHopper extends TileEntityHopper implements IInven
 
                     if (leftover == null || leftover.stackSize == 0)
                     {
-                        //iinventory.onInventoryChanged();
+                        iinventory.markDirty();
                         return true;
                     }
 
@@ -252,13 +248,6 @@ public class TileEntityDiscreteHopper extends TileEntityHopper implements IInven
         //getInventoryAtLocation
         return func_145893_b(this.getWorldObj(), (double)(this.xCoord + Facing.offsetsXForSide[i]), (double)(this.yCoord + Facing.offsetsYForSide[i]), (double)(this.zCoord + Facing.offsetsZForSide[i]));
     }
-    
-  
-    
-    public void openChest(){}
-
-    public void closeChest(){}
-    
     
     @Override
     public void updateEntity()
@@ -331,6 +320,5 @@ public class TileEntityDiscreteHopper extends TileEntityHopper implements IInven
         tag.setBoolean("extractFromAbove", extractFromAbove);
         tag.setShort("redstoneState", redstoneState);
         tag.setInteger("TransferCooldown", this.transferCooldown);
-
     }
 }
