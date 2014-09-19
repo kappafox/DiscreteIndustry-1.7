@@ -52,14 +52,10 @@ public class TileEntityStorageRackRenderer extends TileEntitySpecialRenderer
 					this.renderStorageRackQuad(tesr, x, y, z, animationMultiplier);
 					break;
 				}
-			}
-			
-			
+			}	
 		}
 	}
 	
-
-
 	private void drawIcon(ForgeDirection direction, float scale, ItemStack content)
 	{
 		GL11.glDisable(GL11.GL_LIGHTING);
@@ -82,8 +78,6 @@ public class TileEntityStorageRackRenderer extends TileEntitySpecialRenderer
 	    GL11.glScalef(1.0F, 1.0F, -1.0F);			//stops the item appearing inside out			    
 	    GL11.glRotatef(180.0F, 0.0F, 0.0F, 1.0F);	//rotates the item so it's not upside down
 
-
-	    
 	    translator.rotateTessellator(ForgeDirection.NORTH, direction, false);
 	    
 	    String count = this.itemCountToStacks(content, number);    
@@ -96,13 +90,11 @@ public class TileEntityStorageRackRenderer extends TileEntitySpecialRenderer
 	    	case SOUTH:
 	    	{	
 	    		GL11.glTranslated(-middle - 0.5, 0.0, -0.5);
-	    	    //GL11.glTranslated(0.5, 0.0, 0.0);
 	    		break;
 	    	}
 	    	
 	    	case EAST:
 	    	{
-	    		//GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
 	    		GL11.glTranslated(-middle, 0.0, -0.5);
 
 	    		break;
@@ -110,20 +102,17 @@ public class TileEntityStorageRackRenderer extends TileEntitySpecialRenderer
 	    	
 	    	case WEST:
 	    	{
-	    		//GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
 	    		GL11.glTranslated( -middle - 0.5, 0, 0);
 	    		break;
 	    	}
 	    	
 	    	default:
 	    	{
-	    	    //GL11.glRotatef(180.0F, 0.0F, 1.0F, 0.0F);
 	    	    GL11.glTranslated( -middle, 0, 0);
 	    	} 		
 	    }
 	    
 	    GL11.glScalef(scale, scale, scale);		//shrinks the text down to the correct size
-
 	    DiscreteRenderHelper.renderTextInWorld(count, 0, 0, 16777215, false);
 		GL11.glEnable(GL11.GL_LIGHTING);
 	}
@@ -239,7 +228,6 @@ public class TileEntityStorageRackRenderer extends TileEntitySpecialRenderer
 		    this.drawText(direction, px.one / 5.0F, content, tile.getContainerContentCount(0));
 			GL11.glPopMatrix();
 			
-			
 			//box 2
 		}
 		
@@ -329,9 +317,6 @@ public class TileEntityStorageRackRenderer extends TileEntitySpecialRenderer
 	
 	private String itemCountToStacks(ItemStack istack, int count)
 	{
-		//if(true)
-		//return "16364x64+63";
-		
 		int leftover = count % istack.getMaxStackSize();
 		int stacks = (count - leftover) / istack.getMaxStackSize();
 		
@@ -341,13 +326,20 @@ public class TileEntityStorageRackRenderer extends TileEntitySpecialRenderer
 		}
 		else
 		{
-			String s = stacks + "x" + istack.getMaxStackSize();
-			
-			if(leftover > 0)
+			if(istack.getMaxStackSize() != 1)
 			{
-				s = s + "+" + leftover; 
+				String s = stacks + "x" + istack.getMaxStackSize();
+				
+				if(leftover > 0)
+				{
+					s = s + "+" + leftover; 
+				}
+				return s;
 			}
-			return s;
+			else
+			{
+				return stacks + "";
+			}
 		}
 	}
 }
