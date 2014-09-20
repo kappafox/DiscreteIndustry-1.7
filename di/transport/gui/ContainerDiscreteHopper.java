@@ -9,15 +9,13 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 public class ContainerDiscreteHopper extends Container
-{
-	
-	
-	public ContainerDiscreteHopper(InventoryPlayer pinv_, TileEntityDiscreteHopper tile_)
+{	
+	public ContainerDiscreteHopper(InventoryPlayer pinv, TileEntityDiscreteHopper tile)
 	{
 		//Setting up the internal inventory
 		int xoffset = 44;
 		int yoffset = 16;
-		int rows = getRows(tile_.getBlockMetadata());
+		int rows = getRows(tile.getBlockMetadata());
 		int cols = 5;
 		
 		//rows
@@ -27,13 +25,12 @@ public class ContainerDiscreteHopper extends Container
 			for(int j = 0; j < cols; j++)
 			{
 				//tile, index, xdisplay, ydisplay
-				addSlotToContainer(new Slot(tile_, j + (i * cols), xoffset + j * 18, yoffset + i * 18));
+				addSlotToContainer(new Slot(tile, j + (i * cols), xoffset + j * 18, yoffset + i * 18));
 			}
 		}
 		
 		//setup the player inventory part
-		bindPlayerInventory(pinv_);
-		
+		bindPlayerInventory(pinv);		
 	}
 	
 	@Override
@@ -42,10 +39,8 @@ public class ContainerDiscreteHopper extends Container
 		return true;
 	}
 	
-
-	protected void bindPlayerInventory(InventoryPlayer pinv_)
-	{
-		
+	protected void bindPlayerInventory(InventoryPlayer pinv)
+	{	
 		//offsets determine where the players inventory slots are on the texture
 		int xoffset = 8;
 		int yoffset = 84;	//8, 84 is for standard inventory frames
@@ -54,7 +49,7 @@ public class ContainerDiscreteHopper extends Container
 		{
 			for(int j = 0; j < 9; j++)
 			{
-				addSlotToContainer(new Slot(pinv_, j + i * 9 + 9, xoffset + j * 18, yoffset + i * 18));
+				addSlotToContainer(new Slot(pinv, j + i * 9 + 9, xoffset + j * 18, yoffset + i * 18));
 			}
 		}
 		
@@ -63,9 +58,8 @@ public class ContainerDiscreteHopper extends Container
 		
 		for(int i = 0; i < 9; i++)
 		{
-			addSlotToContainer(new Slot(pinv_, i, 8 + i * 18, yoffset));
+			addSlotToContainer(new Slot(pinv, i, 8 + i * 18, yoffset));
 		}
-
 	}
 
 	
@@ -85,8 +79,7 @@ public class ContainerDiscreteHopper extends Container
 	
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int slot) 
-    {
-    		
+    {  		
 		int machineEnd = 0;
 		int max = 0;
 		
@@ -128,13 +121,11 @@ public class ContainerDiscreteHopper extends Container
                 	}
                 }    
                 else //slot is either inventory or hotbar
-                {
-                	
+                {           	
                 	if (this.mergeItemStack(stackInSlot, 0, machineEnd, false) == false)
                 	{
                 		return null;
-                	}
-                        
+                	}              
                 }
 
                 if (stackInSlot.stackSize == 0) 
@@ -156,9 +147,9 @@ public class ContainerDiscreteHopper extends Container
         return stack;
     }
     
-    private int getRows(int meta_)
+    private int getRows(int meta)
     {
-    	switch(meta_)
+    	switch(meta)
     	{
     		case 0:
     			return 3;

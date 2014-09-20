@@ -37,7 +37,6 @@ public class TileEntityDiscreteHopper extends TileEntityHopper implements IInven
 		return extractFromAbove;
 	}
 	
-	
 	public void toggleExtractFromAbove( )
 	{
 		if(extractFromAbove)
@@ -53,6 +52,7 @@ public class TileEntityDiscreteHopper extends TileEntityHopper implements IInven
     /**
      * Returns the number of slots in the inventory.
      */
+	@Override
     public int getSizeInventory( )
     {
     	return items.length;
@@ -61,6 +61,7 @@ public class TileEntityDiscreteHopper extends TileEntityHopper implements IInven
     /**
      * Returns the stack in slot i
      */
+	@Override
     public ItemStack getStackInSlot(int i)
     {
     	return items[i];

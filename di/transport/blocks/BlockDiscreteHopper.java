@@ -36,7 +36,6 @@ public class BlockDiscreteHopper extends BlockContainer
 	@SideOnly(Side.CLIENT)
 	private IIcon[] sides;
 	
-
 	
 	public BlockDiscreteHopper(Material mat, int rid)
 	{
@@ -50,14 +49,12 @@ public class BlockDiscreteHopper extends BlockContainer
 		{
 			sides = new IIcon[3];
 		}
-
 	}
 	
-
 	@Override
-    public void setBlockBoundsBasedOnState(IBlockAccess world_, int x_, int y_, int z_)
+    public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z)
     {	
-		int meta = world_.getBlockMetadata(x_, y_, z_);
+		int meta = world.getBlockMetadata(x, y, z);
 		
 		switch(meta)
 		{
@@ -80,73 +77,61 @@ public class BlockDiscreteHopper extends BlockContainer
 			default:
 				this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
 		}
-
     }
 	
 	@Override
-    public boolean onBlockActivated(World world_, int xcoord_, int ycoord_, int zcoord_, EntityPlayer player_, int side_, float par7, float par8, float par9)
+    public boolean onBlockActivated(World world, int xcoord, int ycoord, int zcoord, EntityPlayer player, int side, float par7, float par8, float par9)
     {
-		TileEntityDiscreteHopper tile = (TileEntityDiscreteHopper)world_.getTileEntity(xcoord_, ycoord_, zcoord_);
+		TileEntityDiscreteHopper tile = (TileEntityDiscreteHopper)world.getTileEntity(xcoord, ycoord, zcoord);
 		
 		if(tile != null)
 		{
-			player_.openGui(DiscreteIndustry.instance, 0, world_, xcoord_, ycoord_, zcoord_);
+			player.openGui(DiscreteIndustry.instance, 0, world, xcoord, ycoord, zcoord);
 		}
 		return true;
     }
 	
-	
 	@Override
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World world_, int x_, int y_, int z_)
+    public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z)
     {
-    	int meta = world_.getBlockMetadata(x_, y_, z_);
+    	int meta = world.getBlockMetadata(x, y, z);
     	
     	switch(meta)
     	{
         	case 0:
-        		return AxisAlignedBB.getBoundingBox((double)x_ + this.minX, (double)y_ + this.minY, (double)z_ + this.minZ, (double)x_ + 1.0, (double)y_ + 0.5, (double)z_ + 1.0);		
+        		return AxisAlignedBB.getBoundingBox((double)x + this.minX, (double)y + this.minY, (double)z + this.minZ, (double)x + 1.0, (double)y + 0.5, (double)z + 1.0);		
         	case 1:
-        		return AxisAlignedBB.getBoundingBox((double)x_ + this.minX, (double)y_ + this.minY, (double)z_ + this.minZ, (double)x_ + 1.0, (double)y_ + 0.3, (double)z_ + 1.0);
+        		return AxisAlignedBB.getBoundingBox((double)x + this.minX, (double)y + this.minY, (double)z + this.minZ, (double)x + 1.0, (double)y + 0.3, (double)z + 1.0);
         	case 2:
-        		return AxisAlignedBB.getBoundingBox((double)x_ + this.minX, (double)y_ + this.minY, (double)z_ + this.minZ, (double)x_ + 1.0, (double)y_ + 0.1, (double)z_ + 1.0);
+        		return AxisAlignedBB.getBoundingBox((double)x + this.minX, (double)y + this.minY, (double)z + this.minZ, (double)x + 1.0, (double)y + 0.1, (double)z + 1.0);
     	}
     	
-        return AxisAlignedBB.getBoundingBox((double)x_ + this.minX, (double)y_ + this.minY, (double)z_ + this.minZ, (double)x_ + this.maxX, (double)y_ + this.maxY, (double)z_ + this.maxZ);
+        return AxisAlignedBB.getBoundingBox((double)x + this.minX, (double)y + this.minY, (double)z + this.minZ, (double)x + this.maxX, (double)y + this.maxY, (double)z + this.maxZ);
     }
     
-	
-
-
-
- 
 	@Override
 	@SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister ireg_)
+    public void registerBlockIcons(IIconRegister ireg)
     {		
-		sides[0] = ireg_.registerIcon(DiscreteIndustry.MODID + ":" + "hoppers/blockFullHopper_side");
-		sides[1] = ireg_.registerIcon(DiscreteIndustry.MODID + ":" + "hoppers/blockHalfHopper_side");
-		sides[2] = ireg_.registerIcon(DiscreteIndustry.MODID + ":" + "hoppers/blockQuarterHopper_side");	
+		sides[0] = ireg.registerIcon(DiscreteIndustry.MODID + ":" + "hoppers/blockFullHopper_side");
+		sides[1] = ireg.registerIcon(DiscreteIndustry.MODID + ":" + "hoppers/blockHalfHopper_side");
+		sides[2] = ireg.registerIcon(DiscreteIndustry.MODID + ":" + "hoppers/blockQuarterHopper_side");	
 		
-        this.top = ireg_.registerIcon(DiscreteIndustry.MODID + ":" + "hoppers/blockDiscreteHopperTop");
-        
+        this.top = ireg.registerIcon(DiscreteIndustry.MODID + ":" + "hoppers/blockDiscreteHopperTop");     
     }
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-    public IIcon getIcon(int side_, int meta_)
+    public IIcon getIcon(int side, int meta)
     {
-		if(side_ == 1 || side_ == 0)
+		if(side == 1 || side == 0)
 		{
 			return top;
 		}
 		
-        return sides[meta_];
+        return sides[meta];
     }
 
-	
-
-		
-	
 	@Override
 	public int getRenderType()
 	{
@@ -154,41 +139,31 @@ public class BlockDiscreteHopper extends BlockContainer
 	}
 	
 	@Override
-	public int damageDropped(int meta_)
+	public int damageDropped(int meta)
 	{
-		return meta_;
+		return meta;
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(Item item, CreativeTabs tabs_, List list_)
+	public void getSubBlocks(Item item, CreativeTabs tabs, List list)
 	{
 		// block id, count, meta	
-		list_.add(new ItemStack(item, 1, 0));
-		list_.add(new ItemStack(item, 1, 1));
-		list_.add(new ItemStack(item, 1, 2));
+		list.add(new ItemStack(item, 1, 0));
+		list.add(new ItemStack(item, 1, 1));
+		list.add(new ItemStack(item, 1, 2));
 	}
 	
 	@Override
-    public int onBlockPlaced(World world_, int x_, int y_, int z_, int side_, float hitx_, float hity_, float hitz_, int meta_)
+    public int onBlockPlaced(World world, int x, int y, int z, int side, float hitx, float hity, float hitz, int meta)
 	{	
-		TileEntity tile = this.createMetaTileEntity(world_, meta_);
-        world_.setTileEntity(x_, y_, z_, tile);	
-		return super.onBlockPlaced(world_, x_, y_, z_, side_, hitz_, hity_, hitz_, meta_);
+		return super.onBlockPlaced(world, x, y, z, side, hitz, hity, hitz, meta);
 	}
-	
-	/*
+
 	@Override
-	public void onBlockAdded(World world_, int x_, int y_, int z_)
-	{
-	
-	}
-	*/
-	
-	
-	public TileEntity createMetaTileEntity(World world_, int meta_)
-	{
-		switch(meta_)
+    public TileEntity createNewTileEntity(World world, int meta)
+    {
+		switch(meta)
 		{
 			case 0:
 				return new TileEntityDiscreteHopper(15);
@@ -202,14 +177,8 @@ public class BlockDiscreteHopper extends BlockContainer
 			default:
 				return new TileEntityDiscreteHopper(0);
 		}
-	}
-	@Override
-    public TileEntity createNewTileEntity(World world, int meta)
-    {
-		return new TileEntityDiscreteHopper(15);
     }
 	
-
 	@Override
 	public boolean isOpaqueCube( )
 	{
@@ -236,7 +205,7 @@ public class BlockDiscreteHopper extends BlockContainer
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-    public boolean shouldSideBeRendered(IBlockAccess block_, int x_, int y_, int z_, int side_)
+    public boolean shouldSideBeRendered(IBlockAccess block, int x, int y, int z, int side)
     {
         return true;
     }
@@ -289,7 +258,4 @@ public class BlockDiscreteHopper extends BlockContainer
 
         super.breakBlock(par1World, par2, par3, par4, par5, par6);
     }
-
-
-
 }
