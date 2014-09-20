@@ -276,6 +276,7 @@ public class SubBlockStorageRack extends SubBlock
 		
 		return side;
 	}
+	
 	private void spawnItemIntoWorld(World world, int x, int y, int z, EntityPlayer player, ItemStack istack, int side)
 	{
 		if(SideHelper.onServer())
@@ -354,8 +355,7 @@ public class SubBlockStorageRack extends SubBlock
 	        ent.motionY = vely;
 	        ent.motionZ = velz;
 	        world.spawnEntityInWorld(ent);
-		}
-		
+		}		
 	}
 
 	@Override

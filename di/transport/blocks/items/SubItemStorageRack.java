@@ -30,15 +30,13 @@ public class SubItemStorageRack implements SubItem
 			tile = new TileEntityStorageRack(4);
 		}
 		
-		tile.setOriginalBlock(block);
 		tile.setSubtype(type);
 		tile.setDirection((short)dir);
 		tile.setFullColour(true);
 		tile.setAllTexturesFromSource(block, type);
+		tile.setOriginalBlock(block);
 
 		
-		return tile;
-		
+		return tile;		
 	}
-
 }

@@ -328,8 +328,7 @@ public class TileEntityDiscreteBlock extends TileEntitySubtype
 
     }
 	
-	
-	
+
 	public boolean isFullColour( )
 	{
 		return fullColour;
@@ -340,11 +339,16 @@ public class TileEntityDiscreteBlock extends TileEntitySubtype
 		fullColour = b;
 	}
 	
+	public boolean isSideOriginalTexture(int side)
+	{
+		if((this.getTextureSource(side).equals(this.getOriginalBlockName())) && (this.getTextureSourceMeta(side) == this.getSubtype()))
+		{
+			return true;
+		}
+		
+		return false;
+	}
 
-
-
-
-	
 	protected int directionToSide(ForgeDirection dir)
 	{
 		
@@ -377,8 +381,6 @@ public class TileEntityDiscreteBlock extends TileEntitySubtype
 		{
 			return 5;
 		}
-		
-
 		
 		return 0;
 	}

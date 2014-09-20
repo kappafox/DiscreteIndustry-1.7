@@ -113,7 +113,7 @@ public class BaseBlockDiscreteSubtype extends BlockDiscreteBlock
 				
 				if(tile != null)
 				{
-					if((tile.getTextureSource(side) == tile.getOriginalBlockName()) && (tile.getTextureSourceMeta(side) == tile.getSubtype()))
+					if(tile.isSideOriginalTexture(side) == true)
 					{
 						return blocks.get(meta).getIcon(world, x, y, z, side);
 					}
