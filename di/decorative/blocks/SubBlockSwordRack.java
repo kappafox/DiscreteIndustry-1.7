@@ -33,8 +33,8 @@ public class SubBlockSwordRack extends SubBlock
 	@Override
 	public void registerBlockIcons(IIconRegister ireg) 
 	{
-		side = ireg.registerIcon(DiscreteIndustry.MODID + ":" + "blockSwordRackside");
-		top = ireg.registerIcon(DiscreteIndustry.MODID + ":" + "blockSwordRacktop");
+		side = ireg.registerIcon(DiscreteIndustry.MODID + ":" + "blockSwordRack_side");
+		top = ireg.registerIcon(DiscreteIndustry.MODID + ":" + "blockSwordRack_top");
 
 	}
 
