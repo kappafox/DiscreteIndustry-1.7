@@ -8,24 +8,24 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 public class TileEntitySidedConnector extends TileEntityDiscreteBlock implements ISidedConnection
 {
 	private boolean[] connections = new boolean[6];
-
+	
 	@Override
-	public boolean getConnection(short direction_) 
+	public boolean getConnection(short direction) 
 	{
-		if(direction_ >= 0 && direction_ < connections.length)
+		if(direction >= 0 && direction < connections.length)
 		{
-			return connections[direction_];
+			return connections[direction];
 		}
 		
 		return false;
 	}
 
 	@Override
-	public void setConnection(short direction_, boolean state_) 
+	public void setConnection(short direction, boolean state) 
 	{
-		if(direction_ >= 0 && direction_ < connections.length)
+		if(direction >= 0 && direction < connections.length)
 		{
-			connections[direction_] = state_;
+			connections[direction] = state;
 		}
 	}
 
@@ -43,9 +43,9 @@ public class TileEntitySidedConnector extends TileEntityDiscreteBlock implements
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound nbt_)
+	public void writeToNBT(NBTTagCompound nbt)
 	{		
-		super.writeToNBT(nbt_);
+		super.writeToNBT(nbt);
 		
 		int[] send = new int[connections.length];
 		
@@ -61,15 +61,15 @@ public class TileEntitySidedConnector extends TileEntityDiscreteBlock implements
 			}
 		}
 		
-		nbt_.setIntArray("cons", send);
+		nbt.setIntArray("cons", send);
 	}
 	
 	@Override
-	public void readFromNBT(NBTTagCompound nbt_)
+	public void readFromNBT(NBTTagCompound nbt)
 	{
-		super.readFromNBT(nbt_);
+		super.readFromNBT(nbt);
 		
-		int[] send = nbt_.getIntArray("cons");
+		int[] send = nbt.getIntArray("cons");
 		connections = new boolean[send.length];
 		
 		for(int i = 0; i < send.length; i++)
@@ -108,22 +108,20 @@ public class TileEntitySidedConnector extends TileEntityDiscreteBlock implements
 	
 
 	@Override
-	public void toggleConnection(short direction_) 
+	public void toggleConnection(short direction) 
 	{
-		if(direction_ >= 0 && direction_ < connections.length)
+		if(direction >= 0 && direction < connections.length)
 		{
-			connections[direction_] = !connections[direction_];
+			connections[direction] = !connections[direction];
 		}
-		
-		//this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
 	@Override
-	public void setAllConnections(boolean state_) 
+	public void setAllConnections(boolean state) 
 	{
 		for(int i = 0; i < connections.length; i++)
 		{
-			connections[i] = state_;
+			connections[i] = state;
 		}
 	}
 }
