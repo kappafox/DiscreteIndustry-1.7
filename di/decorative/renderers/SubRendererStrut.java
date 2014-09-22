@@ -8,8 +8,8 @@ import net.minecraft.world.IBlockAccess;
 import kappafox.di.base.DiscreteRenderHelper;
 import kappafox.di.base.SubBlockRenderingHandler;
 import kappafox.di.base.tileentities.TileEntityDiscreteBlock;
+import kappafox.di.base.tileentities.TileEntitySidedConnector;
 import kappafox.di.base.tileentities.TileEntitySubtype;
-import kappafox.di.decorative.tileentities.TileEntityFixtureBlock;
 
 public class SubRendererStrut extends SubBlockRenderingHandler
 {
@@ -100,11 +100,11 @@ public class SubRendererStrut extends SubBlockRenderingHandler
 			connections[i] = true;
 		}
 		//we need this legacy because of the old fixtures not using this tileentity
-		if(tile != null && tile instanceof TileEntityFixtureBlock)
+		if(tile != null && tile instanceof TileEntitySidedConnector)
 		{
 			int type = subtype;
 			
-			TileEntityFixtureBlock t2 = (TileEntityFixtureBlock)tile;
+			TileEntitySidedConnector t2 = (TileEntitySidedConnector)tile;
 			
 			switch(type)
 			{

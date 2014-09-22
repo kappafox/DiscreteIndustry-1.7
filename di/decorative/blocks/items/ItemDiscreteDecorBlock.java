@@ -28,7 +28,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ItemDiscreteDecorBlock extends ItemBlock
 {
 	
-	private static SubItem[] subs = new SubItem[4];
+	private static SubItem[] subs = new SubItem[5];
 	
 	public ItemDiscreteDecorBlock(Block block)
 	{
@@ -40,6 +40,7 @@ public class ItemDiscreteDecorBlock extends ItemBlock
 		subs[1] = new SubItemDiscreteStairs();
 		subs[2] = new SubItemFixture();
 		subs[3] = new SubItemShape();
+		subs[4] = new SubItemWall();
 	}
 	
 	public String getUnlocalizedName(ItemStack istack)
@@ -215,9 +216,14 @@ public class ItemDiscreteDecorBlock extends ItemBlock
 				return "Test Item";
 			}
 			
+			case 900:
+			{
+				return "Standard Wall";
+			}
+			
 			default:
 			{
-				name = "how did you get this?";
+				name = "how did you get this?:" + istack.getItemDamage();
 				break;
 			}
 		}
@@ -263,6 +269,8 @@ public class ItemDiscreteDecorBlock extends ItemBlock
         //Shapes
         itemList.add(new ItemStack(item, 1, 881));	//Slab
         
+        //Fences
+        itemList.add(new ItemStack(item, 1, 900));	//Standard Discrete Wall
         //itemList.add(new ItemStack(id, 1, 888));
     }
 	
@@ -521,6 +529,11 @@ public class ItemDiscreteDecorBlock extends ItemBlock
     		return 3;
     	}
     	
+    	if(type >= BlockDecor.RANGE_WALL.lowerEndpoint() && type <= BlockDecor.RANGE_WALL.upperEndpoint())
+    	{
+    		return 4;
+    	}
+    	
         
         return -1;
     }
@@ -556,7 +569,10 @@ public class ItemDiscreteDecorBlock extends ItemBlock
     		return 7;
     	}
     	
-    	
+    	if(damage >= BlockDecor.RANGE_WALL.lowerEndpoint() && damage <= BlockDecor.RANGE_WALL.upperEndpoint())
+    	{
+    		return 8;
+    	}
     	
     	return 0;
     }

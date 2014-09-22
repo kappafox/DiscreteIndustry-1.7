@@ -4,7 +4,7 @@ import ic2.api.item.IC2Items;
 import kappafox.di.DiscreteIndustry;
 import kappafox.di.base.blocks.SubBlock;
 import kappafox.di.base.compat.ToolHelper;
-import kappafox.di.decorative.tileentities.TileEntityFixtureBlock;
+import kappafox.di.base.tileentities.TileEntitySidedConnector;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -40,7 +40,7 @@ public class SubBlockStrut extends SubBlock
 		
 		//System.out.println(side_ + "," + hitx_ + "," + hity_ + "," + hitz_);
 		
-		TileEntityFixtureBlock tile = (TileEntityFixtureBlock)world_.getTileEntity(xcoord_, ycoord_, zcoord_);
+		TileEntitySidedConnector tile = (TileEntitySidedConnector)world_.getTileEntity(xcoord_, ycoord_, zcoord_);
 
 		
 		if(tile == null)
@@ -154,7 +154,7 @@ public class SubBlockStrut extends SubBlock
 	@Override
 	public TileEntity createTileEntity(World world_, int meta_) 
 	{
-		return new TileEntityFixtureBlock();
+		return new TileEntitySidedConnector();
 	}
 
 	@Override

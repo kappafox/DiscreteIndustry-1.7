@@ -4,8 +4,8 @@ import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import kappafox.di.base.items.SubItem;
 import kappafox.di.base.tileentities.TileEntityDiscreteBlock;
+import kappafox.di.base.tileentities.TileEntitySidedConnector;
 import kappafox.di.decorative.blocks.BlockDecor;
-import kappafox.di.decorative.tileentities.TileEntityFixtureBlock;
 
 public class SubItemShape implements SubItem
 {

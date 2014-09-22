@@ -40,7 +40,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockDecor extends BlockDiscreteBlock
 {
-	private static final short SUB_BLOCKS = 8;
+	private static final short SUB_BLOCKS = 9;
 	private static SubBlock[] blocks;
 	
 	public static final short ID_LADDER_FOOTHOLD = 800;
@@ -62,12 +62,15 @@ public class BlockDecor extends BlockDiscreteBlock
 	public static final short ID_STRUT_6X6 = 873;
 	
 	public static final short ID_SHAPE_SLAB = 881;
+	
+	public static final short ID_WALL_DISCRETE = 900;
 
 	public static final Range<Integer> RANGE_LADDER = Range.closed(800, 820);
 	public static final Range<Integer> RANGE_RACK = Range.closed(821, 840);
 	public static final Range<Integer> RANGE_STAIRS = Range.closed(861, 870);
 	public static final Range<Integer> RANGE_STRUT = Range.closed(871, 880);
 	public static final Range<Integer> RANGE_SHAPE = Range.closed(881, 890);
+	public static final Range<Integer> RANGE_WALL = Range.closed(900, 920);
 	
 	@SideOnly(Side.CLIENT)
 	private int rid;
@@ -91,6 +94,7 @@ public class BlockDecor extends BlockDiscreteBlock
 		blocks[5] = new SubBlockStairs();
 		blocks[6] = new SubBlockStrut();
 		blocks[7] = new SubBlockShape();
+		blocks[8] = new SubBlockWall();
 		
 		if(FMLCommonHandler.instance().getEffectiveSide().isClient() == true)
 		{
@@ -130,38 +134,43 @@ public class BlockDecor extends BlockDiscreteBlock
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side_, int meta_)
+	public IIcon getIcon(int side, int meta)
 	{
-		if(meta_ > 15)
+		if(meta > 15)
 		{
-			if(RANGE_LADDER.contains(meta_))
+			if(RANGE_LADDER.contains(meta))
 			{
-				return blocks[2].getOverloadedIcon(side_, meta_);
+				return blocks[2].getOverloadedIcon(side, meta);
 			}
 			
-			if(RANGE_RACK.contains(meta_))
+			if(RANGE_RACK.contains(meta))
 			{
-				return blocks[4].getOverloadedIcon(side_, meta_);
+				return blocks[4].getOverloadedIcon(side, meta);
 			}
 			
-			if(RANGE_STAIRS.contains(meta_))
+			if(RANGE_STAIRS.contains(meta))
 			{
-				return blocks[5].getOverloadedIcon(side_, meta_);
+				return blocks[5].getOverloadedIcon(side, meta);
 			}
 			
-			if(RANGE_STRUT.contains(meta_))
+			if(RANGE_STRUT.contains(meta))
 			{
-				return blocks[6].getOverloadedIcon(side_, meta_);
+				return blocks[6].getOverloadedIcon(side, meta);
 			}
 			
-			if(RANGE_SHAPE.contains(meta_))
+			if(RANGE_SHAPE.contains(meta))
 			{
-				return blocks[7].getOverloadedIcon(side_, meta_);
+				return blocks[7].getOverloadedIcon(side, meta);
+			}
+			
+			if(RANGE_WALL.contains(meta))
+			{
+				return blocks[8].getOverloadedIcon(side, meta);
 			}
 		}
 		else
 		{
-			return blocks[meta_].getIcon(side_, meta_);
+			return blocks[meta].getIcon(side, meta);
 		}
 		
 		return null;
@@ -172,8 +181,7 @@ public class BlockDecor extends BlockDiscreteBlock
     public boolean onBlockActivated(World world, int xcoord, int ycoord, int zcoord, EntityPlayer player, int side, float par7, float par8, float par9)
     {	
 		int meta = world.getBlockMetadata(xcoord, ycoord, zcoord);
-		return blocks[meta].onBlockActivated(world, xcoord, ycoord, zcoord, player, side, par7, par8, par9);
-		
+		return blocks[meta].onBlockActivated(world, xcoord, ycoord, zcoord, player, side, par7, par8, par9);	
     }
 
     
@@ -183,7 +191,6 @@ public class BlockDecor extends BlockDiscreteBlock
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side)
     {	
-
 		int meta = world.getBlockMetadata(x, y, z);
 		
 		if(blocks[meta].isDiscrete() == true)
@@ -192,7 +199,7 @@ public class BlockDecor extends BlockDiscreteBlock
 			
 			if(tile != null)
 			{
-				if((tile.getTextureSource(side) == tile.getOriginalBlockName()) && (tile.getTextureSourceMeta(side) == tile.getSubtype()))
+				if(tile.isSideOriginalTexture(side) == true)
 				{
 					return blocks[meta].getIcon(world, x, y, z, side);
 				}
@@ -201,7 +208,6 @@ public class BlockDecor extends BlockDiscreteBlock
 			return super.getIcon(world, x, y, z, side);
 		}
 		
-
 		return blocks[meta].getIcon(world, x, y, z, side);	
     }
 	
@@ -279,10 +285,6 @@ public class BlockDecor extends BlockDiscreteBlock
     public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int side)
     {	
 		return true;
-		/*
-		int meta = world.getBlockMetadata(x, y, z);
-		return blocks[meta].shouldSideBeRendered(world, x, y, z, side);
-		*/
     }
 	
 	
@@ -330,7 +332,6 @@ public class BlockDecor extends BlockDiscreteBlock
     	
     	if(dim != null)
     	{
-    		//this.setBlockBounds(dim.x1, dim.x2, dim.y1, dim.y2, dim.z1, dim.z2);
     		this.setBlockBounds(dim.x1, dim.y1, dim.z1, dim.x2, dim.y2, dim.z2);
     	}
     	else
@@ -377,8 +378,7 @@ public class BlockDecor extends BlockDiscreteBlock
         	return new ItemStack(item, 3, 0);
         }
 
-        return new ItemStack(item, 1, getDamageValue(world, x, y, z));
-        
+        return new ItemStack(item, 1, getDamageValue(world, x, y, z));      
     }
     
     
@@ -400,6 +400,4 @@ public class BlockDecor extends BlockDiscreteBlock
     {
     	blocks[world.getBlockMetadata(x, y, z)].getCollisionBoxes(world, x, y, z, mask, boxlist, entity);   
     }
-
-
 }

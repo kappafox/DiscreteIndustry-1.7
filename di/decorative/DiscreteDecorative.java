@@ -4,6 +4,7 @@ import ic2.api.recipe.RecipeInputItemStack;
 import ic2.api.recipe.Recipes;
 import kappafox.di.DiscreteIndustry;
 import kappafox.di.base.lib.DiscreteID;
+import kappafox.di.base.tileentities.TileEntitySidedConnector;
 import kappafox.di.decorative.blocks.BlockDecor;
 import kappafox.di.decorative.blocks.BlockHazard;
 import kappafox.di.decorative.blocks.items.ItemDiscreteDecorBlock;
@@ -11,7 +12,6 @@ import kappafox.di.decorative.blocks.items.ItemDiscreteHazardBlock;
 import kappafox.di.decorative.renderers.DiscreteDecorativeItemRenderer;
 import kappafox.di.decorative.renderers.DiscreteDecorativeRenderManager;
 import kappafox.di.decorative.renderers.TileEntitySwordRackRenderer;
-import kappafox.di.decorative.tileentities.TileEntityFixtureBlock;
 import kappafox.di.decorative.tileentities.TileEntityHazardBlock;
 import kappafox.di.decorative.tileentities.TileEntityLoomBlock;
 import kappafox.di.decorative.tileentities.TileEntityStripHazardBlock;
@@ -88,7 +88,7 @@ public class DiscreteDecorative
 		GameRegistry.registerTileEntity(TileEntityStripHazardBlock.class, "Hazard Strip Block");
 		GameRegistry.registerTileEntity(TileEntityLoomBlock.class, "DD Loom Block");
 		GameRegistry.registerTileEntity(TileEntitySwordRack.class, "DD Sword Rack");
-		GameRegistry.registerTileEntity(TileEntityFixtureBlock.class, "DD Fixture");
+		GameRegistry.registerTileEntity(TileEntitySidedConnector.class, "DD Fixture");
 		
 		//register actual entities
 		//EntityRegistry.registerGlobalEntityID(EntityWorldItem.class, "EntWorldItem", EntityRegistry.findGlobalUniqueEntityId());		
@@ -161,14 +161,13 @@ public class DiscreteDecorative
 		//881-890 Simple shapes
 		LanguageRegistry.addName(new ItemStack(decorBlock, 1, 881), "Discrete Slab");
 		
+		//900-920 Walls & Fences
+		LanguageRegistry.addName(new ItemStack(decorBlock, 1, 900), "Discrete Wall");
 		
 		//Tests
 		LanguageRegistry.addName(new ItemStack(decorBlock, 1, 805), "Flag Yolo Test");		
 		
 		LanguageRegistry.addName(new ItemStack(decorBlock, 1, 888), "Test Item");
-		
-
-		
 	}
 	
 	@SideOnly(Side.CLIENT)

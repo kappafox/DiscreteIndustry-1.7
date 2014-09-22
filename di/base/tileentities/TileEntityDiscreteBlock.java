@@ -15,9 +15,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityDiscreteBlock extends TileEntitySubtype
 {
-
-	
-
 	private int facadeBlockID = 810;					//the current block we look like
 	private int facadeMeta = 0;						//the damage value of the meta based facade
 	private short facing;
@@ -384,5 +381,4 @@ public class TileEntityDiscreteBlock extends TileEntitySubtype
 		
 		return 0;
 	}
-
 }
