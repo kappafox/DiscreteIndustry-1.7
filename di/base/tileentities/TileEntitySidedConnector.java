@@ -1,12 +1,11 @@
-package kappafox.di.decorative.tileentities;
+package kappafox.di.base.tileentities;
 
-import kappafox.di.base.tileentities.TileEntityDiscreteBlock;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 
-public class TileEntityFixtureBlock extends TileEntityDiscreteBlock implements ISidedConnection
+public class TileEntitySidedConnector extends TileEntityDiscreteBlock implements ISidedConnection
 {
 	private boolean[] connections = new boolean[6];
 
@@ -28,8 +27,6 @@ public class TileEntityFixtureBlock extends TileEntityDiscreteBlock implements I
 		{
 			connections[direction_] = state_;
 		}
-		
-		//this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
 	@Override
