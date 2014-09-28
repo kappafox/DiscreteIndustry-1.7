@@ -1,15 +1,19 @@
 package kappafox.di.base.tileentities;
 
+import java.util.HashMap;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntitySidedConnector extends TileEntityDiscreteBlock implements ISidedConnection
 {
 	private boolean[] connections = new boolean[6];
 	
 	@Override
+	@Deprecated
 	public boolean getConnection(short direction) 
 	{
 		if(direction >= 0 && direction < connections.length)
@@ -21,6 +25,7 @@ public class TileEntitySidedConnector extends TileEntityDiscreteBlock implements
 	}
 
 	@Override
+	@Deprecated
 	public void setConnection(short direction, boolean state) 
 	{
 		if(direction >= 0 && direction < connections.length)
@@ -30,6 +35,7 @@ public class TileEntitySidedConnector extends TileEntityDiscreteBlock implements
 	}
 
 	@Override
+	@Deprecated
 	public boolean[] getAllConnections() 
 	{
 		boolean[] copy = new boolean[connections.length];
@@ -41,6 +47,7 @@ public class TileEntitySidedConnector extends TileEntityDiscreteBlock implements
 		
 		return copy;
 	}
+	
 	
 	@Override
 	public void writeToNBT(NBTTagCompound nbt)
@@ -123,5 +130,18 @@ public class TileEntitySidedConnector extends TileEntityDiscreteBlock implements
 		{
 			connections[i] = state;
 		}
+	}
+
+	@Override
+	public HashMap<ForgeDirection, Boolean> getConnectionMap() 
+	{
+		HashMap<ForgeDirection, Boolean> cons = new HashMap<ForgeDirection, Boolean>();
+		
+		for(int i = 0; i < connections.length ; i++)
+		{
+			cons.put(ForgeDirection.getOrientation(i), this.getConnection((short)i));
+		}
+		
+		return cons;
 	}
 }
