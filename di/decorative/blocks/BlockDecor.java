@@ -6,12 +6,14 @@
 
 package kappafox.di.decorative.blocks;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
 import com.google.common.collect.Range;
 
 import kappafox.di.base.blocks.BlockDiscreteBlock;
+import kappafox.di.base.blocks.ISubItemRangeProvider;
 import kappafox.di.base.blocks.SubBlock;
 import kappafox.di.base.blocks.SubBlockDummy;
 import kappafox.di.base.tileentities.TileEntityDiscreteBlock;
@@ -38,10 +40,17 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockDecor extends BlockDiscreteBlock
+public class BlockDecor extends BlockDiscreteBlock implements ISubItemRangeProvider
 {
 	private static final short SUB_BLOCKS = 9;
 	private static SubBlock[] blocks;
+	
+	public static final short META_LADDER = 2;
+	public static final short META_SWORDRACK = 4;
+	public static final short META_STAIRS = 5;
+	public static final short META_STRUT = 6;
+	public static final short META_SHAPE = 7;
+	public static final short META_WALL = 8;
 	
 	public static final short ID_LADDER_FOOTHOLD = 800;
 	public static final short ID_LADDER_POLE = 801;
@@ -72,6 +81,8 @@ public class BlockDecor extends BlockDiscreteBlock
 	public static final Range<Integer> RANGE_SHAPE = Range.closed(881, 890);
 	public static final Range<Integer> RANGE_WALL = Range.closed(900, 920);
 	
+	private static HashMap<Short, Range> RANGE_SETS;
+	
 	@SideOnly(Side.CLIENT)
 	private int rid;
 	
@@ -100,6 +111,14 @@ public class BlockDecor extends BlockDiscreteBlock
 		{
 			rid = renderID;
 		}
+		
+		RANGE_SETS = new HashMap<Short, Range>();
+		RANGE_SETS.put(META_LADDER, RANGE_LADDER);
+		RANGE_SETS.put(META_SWORDRACK, RANGE_RACK);
+		RANGE_SETS.put(META_STAIRS, RANGE_STAIRS);
+		RANGE_SETS.put(META_STRUT, RANGE_STRUT);
+		RANGE_SETS.put(META_SHAPE, RANGE_SHAPE);
+		RANGE_SETS.put(META_WALL, RANGE_WALL);	
 	}
 	
 	@Override
@@ -399,5 +418,10 @@ public class BlockDecor extends BlockDiscreteBlock
     public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB mask, List boxlist, Entity entity)
     {
     	blocks[world.getBlockMetadata(x, y, z)].getCollisionBoxes(world, x, y, z, mask, boxlist, entity);   
+    }
+    
+    public HashMap<Short, Range> getRangeSet( )
+    {
+    	return RANGE_SETS;
     }
 }
