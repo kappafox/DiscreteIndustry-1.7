@@ -13,15 +13,16 @@ public class SubItemWall implements SubItem
 	@Override
 	public TileEntity getTileEntity(int type, int dir, int var1, Block block, int blockMeta, int side, float hitx, float hity, float hitz)
 	{
-		TileEntityDiscreteBlock tile = new TileEntityDiscreteBlock();
+		TileEntitySidedConnector tile = new TileEntitySidedConnector();
 		
-		tile.setFullColour(false);
+		tile.setFullColour(true);
 		tile.setSubtype(type);
 		tile.setDirection((short)dir);
 		
 		tile.setAllTexturesFromSource(block, type);
 		tile.setOriginalBlock(block);
 		tile.setVariable(0);
+		tile.setAllConnections(true);
 		
 		return tile;
 	}
