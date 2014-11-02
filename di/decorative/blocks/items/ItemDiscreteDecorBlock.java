@@ -74,8 +74,9 @@ public class ItemDiscreteDecorBlock extends BaseItemDiscreteOverloaded
         //Shapes
         itemList.add(new ItemStack(item, 1, BlockDecor.ID_SHAPE_SLAB));	//Slab
         
-        //Fences
+        //Fences/Railings/Etc
         itemList.add(new ItemStack(item, 1, BlockDecor.ID_WALL_DISCRETE));	//Standard Discrete Wall
+        itemList.add(new ItemStack(item, 1, BlockDecor.ID_WALL_RAILING_SIMPLE));
     }
 
     @Override

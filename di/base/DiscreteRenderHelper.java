@@ -65,7 +65,6 @@ public class DiscreteRenderHelper
     	this.renderDiscreteQuadWithColourMultiplier(world, renderer, block, x, y, z);
     }
     
-    
 	public void renderDiscreteQuadWithColourMultiplier(IBlockAccess world, RenderBlocks renderer, Block block, int x, int y, int z)
 	{
 		TileEntityDiscreteBlock tile = (TileEntityDiscreteBlock)world.getTileEntity(x, y, z);
@@ -95,9 +94,6 @@ public class DiscreteRenderHelper
 		            g = f4;
 		            b = f5;
 		        }
-		        
-		        
-		        //System.out.println("ORIENT:" + tile.getTextureOrientation());
 		        
 		        if(tile.getTextureOrientation() == 3)
 		        {
@@ -226,17 +222,25 @@ public class DiscreteRenderHelper
 	
 	public void renderDiscreteQuadWithTextureOffsets(IBlockAccess world, RenderBlocks renderer, Block block, int x, int y, int z, TextureOffset off)
 	{
-		this.renderDiscreteQuadWithTextureOffsetsAO(world, renderer, block, x, y, z, off, true);
+		this.renderDiscreteQuadWithTextureOffsets(world, renderer, block, x, y, z, off, true);
 	}
 	
-	public void renderDiscreteQuadWithTextureOffsetsAO(IBlockAccess world, RenderBlocks renderer, Block block, int x, int y, int z, TextureOffset off, boolean AO)
-	{				
+	public void renderDiscreteQuadWithTextureOffsets(IBlockAccess world, RenderBlocks renderer, Block block, int x, int y, int z, TextureOffset off, boolean AO)
+	{		
+		TileEntityDiscreteBlock tile = (TileEntityDiscreteBlock)world.getTileEntity(x, y, z);
+
+		
+		if(tile != null)
+		{
 			renderer.enableAO = AO;
 			
 			AdjustableIcon aico;
 	    	
+			//block = tile.getTextureSourceBlock(0);
+			
 	    	if(off.hasOffset(0))
 	    	{
+	    		
 	    		aico = new AdjustableIcon(renderer.getBlockIcon(block, world, x, y, z, 0));
 	    		aico.offsetU(off.getOffsetU(0));
 	    		aico.offsetV(off.getOffsetV(0));
@@ -262,6 +266,7 @@ public class DiscreteRenderHelper
 	    		}
 	    	}
 	    	
+			//block = tile.getTextureSourceBlock(1);
 	    	if(off.hasOffset(1))
 	    	{
 	    		aico = new AdjustableIcon(renderer.getBlockIcon(block, world, x, y, z, 1));
@@ -290,6 +295,7 @@ public class DiscreteRenderHelper
 	    		}   		
 	    	}
 	    	
+			//block = tile.getTextureSourceBlock(2);
 	    	if(off.hasOffset(2))
 	    	{
 	    		aico = new AdjustableIcon(renderer.getBlockIcon(block, world, x, y, z, 2));
@@ -317,6 +323,7 @@ public class DiscreteRenderHelper
 	    		}
 	    	}
 	    	
+			//block = tile.getTextureSourceBlock(3);
 	    	if(off.hasOffset(3))
 	    	{
 	    		aico = new AdjustableIcon(renderer.getBlockIcon(block, world, x, y, z, 3));
@@ -344,7 +351,7 @@ public class DiscreteRenderHelper
 	    		}
 	    	}
 	    	
-	    	
+			//block = tile.getTextureSourceBlock(4);
 	    	if(off.hasOffset(4))
 	    	{
 	    		aico = new AdjustableIcon(renderer.getBlockIcon(block, world, x, y, z, 4));
@@ -372,7 +379,7 @@ public class DiscreteRenderHelper
 	    		}
 	    	}
 	    	
-	    	
+			//block = tile.getTextureSourceBlock(5);
 	    	if(off.hasOffset(5))
 	    	{
 	    		aico = new AdjustableIcon(renderer.getBlockIcon(block, world, x, y, z, 5));
@@ -400,6 +407,7 @@ public class DiscreteRenderHelper
 	    		}
 	    	}
 
+		}
 	    	renderer.enableAO = false;
 	}
 	
@@ -1396,9 +1404,9 @@ public class DiscreteRenderHelper
 	public void renderFaceAOYNeg(IBlockAccess world, RenderBlocks renderer, Block block, int x, int y, int z, IIcon ico)
 	{
         int l2 = this.setupColour(world, renderer, block, x, y, z, 0);
-        float par5 = (float)(l2 >> 16 & 255) / 255.0F;
-        float par6 = (float)(l2 >> 8 & 255) / 255.0F;
-        float par7 = (float)(l2 & 255) / 255.0F;
+        float r = (float)(l2 >> 16 & 255) / 255.0F;
+        float g = (float)(l2 >> 8 & 255) / 255.0F;
+        float b = (float)(l2 & 255) / 255.0F;
         
         boolean flag = false;
         float f3 = 0.0F;
@@ -1516,9 +1524,9 @@ public class DiscreteRenderHelper
 
             if (flag1)
             {
-                renderer.colorRedTopLeft = renderer.colorRedBottomLeft = renderer.colorRedBottomRight = renderer.colorRedTopRight = par5 * 0.5F;
-                renderer.colorGreenTopLeft = renderer.colorGreenBottomLeft = renderer.colorGreenBottomRight = renderer.colorGreenTopRight = par6 * 0.5F;
-                renderer.colorBlueTopLeft = renderer.colorBlueBottomLeft = renderer.colorBlueBottomRight = renderer.colorBlueTopRight = par7 * 0.5F;
+                renderer.colorRedTopLeft = renderer.colorRedBottomLeft = renderer.colorRedBottomRight = renderer.colorRedTopRight = r * 0.5F;
+                renderer.colorGreenTopLeft = renderer.colorGreenBottomLeft = renderer.colorGreenBottomRight = renderer.colorGreenTopRight = g * 0.5F;
+                renderer.colorBlueTopLeft = renderer.colorBlueBottomLeft = renderer.colorBlueBottomRight = renderer.colorBlueTopRight = b * 0.5F;
             }
             else
             {
@@ -1555,7 +1563,6 @@ public class DiscreteRenderHelper
             renderer.renderFaceYNeg(block, (double)x, (double)y, (double)z, icon);
         }
         
-
 	}
 	
 	public void tessellateInventoryBlock(RenderBlocks renderer, Block block, int meta, int side, PointSet bounds)
@@ -1812,124 +1819,6 @@ public class DiscreteRenderHelper
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)i1, (float)j1);
 	}
 	
-    
-    public void renderFaceXPos(Block block, RenderBlocks renderer, double x, double y, double z, IIcon icon, double uoff, double voff, int texMode)
-    {
-        Tessellator tessellator = Tessellator.instance;
-
-        if (renderer.hasOverrideBlockTexture())
-        {
-            icon = renderer.overrideBlockTexture;
-        }
-        
-        double d3 = (double)icon.getInterpolatedU(renderer.renderMinZ * 16.0D);
-        double d4 = (double)icon.getInterpolatedU(renderer.renderMaxZ * 16.0D);
-        double d5 = (double)icon.getInterpolatedV(16.0D - renderer.renderMaxY * 16.0D);
-        double d6 = (double)icon.getInterpolatedV(16.0D - renderer.renderMinY * 16.0D);
-        double d7;
-        
-        //static texture not based on block dimensions
-        if(texMode == 1)
-        {
-	        d3 = (double)icon.getInterpolatedU(0.0D + uoff);
-	        d4 = (double)icon.getMaxU();
-	        d5 = (double)icon.getMinV();
-	        d6 = (double)icon.getInterpolatedV(0.0D + voff);        	
-        }
-
-        if (renderer.flipTexture)
-        {
-            d7 = d3;
-            d3 = d4;
-            d4 = d7;
-        }
-
-        if (renderer.renderMinZ < 0.0D || renderer.renderMaxZ > 1.0D)
-        {
-            d3 = (double)icon.getMinU();
-            d4 = (double)icon.getMaxU();
-        }
-
-        if (renderer.renderMinY < 0.0D || renderer.renderMaxY > 1.0D)
-        {
-            d5 = (double)icon.getMinV();
-            d6 = (double)icon.getMaxV();
-        }
-
-        d7 = d4;
-        double d8 = d3;
-        double d9 = d5;
-        double d10 = d6;
-
-        if (renderer.uvRotateSouth == 2)
-        {
-            d3 = (double)icon.getInterpolatedU(renderer.renderMinY * 16.0D);
-            d5 = (double)icon.getInterpolatedV(16.0D - renderer.renderMinZ * 16.0D);
-            d4 = (double)icon.getInterpolatedU(renderer.renderMaxY * 16.0D);
-            d6 = (double)icon.getInterpolatedV(16.0D - renderer.renderMaxZ * 16.0D);
-            d9 = d5;
-            d10 = d6;
-            d7 = d3;
-            d8 = d4;
-            d5 = d6;
-            d6 = d9;
-        }
-        else if (renderer.uvRotateSouth == 1)
-        {
-            d3 = (double)icon.getInterpolatedU(16.0D - renderer.renderMaxY * 16.0D);
-            d5 = (double)icon.getInterpolatedV(renderer.renderMaxZ * 16.0D);
-            d4 = (double)icon.getInterpolatedU(16.0D - renderer.renderMinY * 16.0D);
-            d6 = (double)icon.getInterpolatedV(renderer.renderMinZ * 16.0D);
-            d7 = d4;
-            d8 = d3;
-            d3 = d4;
-            d4 = d8;
-            d9 = d6;
-            d10 = d5;
-        }
-        else if (renderer.uvRotateSouth == 3)
-        {
-            d3 = (double)icon.getInterpolatedU(16.0D - renderer.renderMinZ * 16.0D);
-            d4 = (double)icon.getInterpolatedU(16.0D - renderer.renderMaxZ * 16.0D);
-            d5 = (double)icon.getInterpolatedV(renderer.renderMaxY * 16.0D);
-            d6 = (double)icon.getInterpolatedV(renderer.renderMinY * 16.0D);
-            d7 = d4;
-            d8 = d3;
-            d9 = d5;
-            d10 = d6;
-        }
-
-        double d11 = x + renderer.renderMaxX;
-        double d12 = y + renderer.renderMinY;
-        double d13 = y + renderer.renderMaxY;
-        double d14 = z + renderer.renderMinZ;
-        double d15 = z + renderer.renderMaxZ;
-
-        if (renderer.enableAO)
-        {
-            tessellator.setColorOpaque_F(renderer.colorRedTopLeft, renderer.colorGreenTopLeft, renderer.colorBlueTopLeft);
-            tessellator.setBrightness(renderer.brightnessTopLeft);
-            tessellator.addVertexWithUV(d11, d12, d15, d8, d10);
-            tessellator.setColorOpaque_F(renderer.colorRedBottomLeft, renderer.colorGreenBottomLeft, renderer.colorBlueBottomLeft);
-            tessellator.setBrightness(renderer.brightnessBottomLeft);
-            tessellator.addVertexWithUV(d11, d12, d14, d4, d6);
-            tessellator.setColorOpaque_F(renderer.colorRedBottomRight, renderer.colorGreenBottomRight, renderer.colorBlueBottomRight);
-            tessellator.setBrightness(renderer.brightnessBottomRight);
-            tessellator.addVertexWithUV(d11, d13, d14, d7, d9);
-            tessellator.setColorOpaque_F(renderer.colorRedTopRight, renderer.colorGreenTopRight, renderer.colorBlueTopRight);
-            tessellator.setBrightness(renderer.brightnessTopRight);
-            tessellator.addVertexWithUV(d11, d13, d15, d3, d5);
-        }
-        else
-        {
-            tessellator.addVertexWithUV(d11, d12, d15, d8, d10);
-            tessellator.addVertexWithUV(d11, d12, d14, d4, d6);
-            tessellator.addVertexWithUV(d11, d13, d14, d7, d9);
-            tessellator.addVertexWithUV(d11, d13, d15, d3, d5);
-        }
-    }
-    
-    
     public void setRenderBounds(RenderBlocks renderer, BoundSet points)
     {
     	renderer.setRenderBounds(points.x1, points.y1, points.z1, points.x2, points.y2, points.z2);
@@ -1977,7 +1866,10 @@ public class DiscreteRenderHelper
     //these functions are pass throughs to the renderer functions, but setup the lighting and colour for you without needing a whole block render
     public void renderFaceYNeg(IBlockAccess world, RenderBlocks renderer, Block block, int x, int y, int z, IIcon icon)
     {
-        int blockColour = block.colorMultiplier(world, x, y, z);
+        TileEntityDiscreteBlock tile = (TileEntityDiscreteBlock)world.getTileEntity(x, y, z);
+        Block sourceBlock = tile.getTextureSourceBlock(0);
+        
+        int blockColour = sourceBlock.colorMultiplier(world, x, y, z);    
         int brightness = block.getMixedBrightnessForBlock(world, x, y, z);
         float[] rgb = this.colourMultiplerToRGBWithLight(blockColour, 0);
         
@@ -1996,9 +1888,13 @@ public class DiscreteRenderHelper
     
     public void renderFaceYPos(IBlockAccess world, RenderBlocks renderer, Block block, int x, int y, int z, IIcon icon)
     {
-        int blockColour = block.colorMultiplier(world, x, y, z);
+        TileEntityDiscreteBlock tile = (TileEntityDiscreteBlock)world.getTileEntity(x, y, z);
+        Block sourceBlock = tile.getTextureSourceBlock(1);
+        
+        int blockColour = sourceBlock.colorMultiplier(world, x, y, z);    
         int brightness = block.getMixedBrightnessForBlock(world, x, y, z);
         float[] rgb = this.colourMultiplerToRGBWithLight(blockColour, 1);
+        
         if(icon == null)
         {
         	icon = renderer.getBlockIcon(block, world, x, y, z, 1);
@@ -2014,8 +1910,12 @@ public class DiscreteRenderHelper
     
     public void renderFaceZNeg(IBlockAccess world, RenderBlocks renderer, Block block, int x, int y, int z, IIcon icon)
     {
-        int blockColour = block.colorMultiplier(world, x, y, z);
+        TileEntityDiscreteBlock tile = (TileEntityDiscreteBlock)world.getTileEntity(x, y, z);
+        Block sourceBlock = tile.getTextureSourceBlock(2);
+        
+        int blockColour = sourceBlock.colorMultiplier(world, x, y, z);    
         int brightness = block.getMixedBrightnessForBlock(world, x, y, z);
+        
         float[] rgb = this.colourMultiplerToRGBWithLight(blockColour, 2);
 
         if(icon == null)
@@ -2033,8 +1933,12 @@ public class DiscreteRenderHelper
     
     public void renderFaceZPos(IBlockAccess world, RenderBlocks renderer, Block block, int x, int y, int z, IIcon icon)
     {
-        int blockColour = block.colorMultiplier(world, x, y, z);  
+        TileEntityDiscreteBlock tile = (TileEntityDiscreteBlock)world.getTileEntity(x, y, z);
+        Block sourceBlock = tile.getTextureSourceBlock(3);
+        
+        int blockColour = sourceBlock.colorMultiplier(world, x, y, z);    
         int brightness = block.getMixedBrightnessForBlock(world, x, y, z);
+        
         float[] rgb = this.colourMultiplerToRGBWithLight(blockColour, 3);
 
         if(icon == null)
@@ -2052,8 +1956,12 @@ public class DiscreteRenderHelper
     
     public void renderFaceXNeg(IBlockAccess world, RenderBlocks renderer, Block block, int x, int y, int z, IIcon icon)
     {
-        int blockColour = block.colorMultiplier(world, x, y, z); 
+        TileEntityDiscreteBlock tile = (TileEntityDiscreteBlock)world.getTileEntity(x, y, z);
+        Block sourceBlock = tile.getTextureSourceBlock(4);
+        
+        int blockColour = sourceBlock.colorMultiplier(world, x, y, z);    
         int brightness = block.getMixedBrightnessForBlock(world, x, y, z);
+        
         float[] rgb = this.colourMultiplerToRGBWithLight(blockColour, 4);
 
         if(icon == null)
@@ -2071,10 +1979,14 @@ public class DiscreteRenderHelper
     
     public void renderFaceXPos(IBlockAccess world, RenderBlocks renderer, Block block, int x, int y, int z, IIcon icon)
     {
-        int blockColour = block.colorMultiplier(world, x, y, z);      
+        TileEntityDiscreteBlock tile = (TileEntityDiscreteBlock)world.getTileEntity(x, y, z);
+        Block sourceBlock = tile.getTextureSourceBlock(5);
+        
+        int blockColour = sourceBlock.colorMultiplier(world, x, y, z);      
         int brightness = block.getMixedBrightnessForBlock(world, x, y, z);
+        
         float[] rgb = this.colourMultiplerToRGBWithLight(blockColour, 5);
-
+        
         if(icon == null)
         {
         	icon = renderer.getBlockIcon(block, world, x, y, z, 5);

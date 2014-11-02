@@ -6,6 +6,8 @@
 
 package kappafox.di.base.blocks;
 
+import static net.minecraftforge.common.util.ForgeDirection.UP;
+
 import java.util.List;
 
 import kappafox.di.DiscreteIndustry;
@@ -16,6 +18,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -72,7 +75,6 @@ public class BlockDiscreteBlock extends Block
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	//public void getSubBlocks(int id, CreativeTabs tabs, List list)
 	public void getSubBlocks(Item item, CreativeTabs tabs, List list)
 	{
 		list.add(new ItemStack(item, 1, 0));
@@ -84,112 +86,21 @@ public class BlockDiscreteBlock extends Block
 	{
 		return icons[meta]; 
 	}
-	
-	
-	/*
-	//@SideOnly(Side.CLIENT)
-	private boolean refreshTextures(IBlockAccess ibaccess, int xcoord, int ycoord, int zcoord, int side)
-	{
-		
-		if(lockRefresh == true)
-		{
-			return true;
-		}
-		
-		TileEntityDiscreteBlock tile = (TileEntityDiscreteBlock)ibaccess.getTileEntity(xcoord, ycoord, zcoord);
-		
-		
-		if(tile != null)
-		{
-			int face = tile.getFace();
-					
-			//higher blockids are reserved for items
-			Block inHand;
-			int item = tile.getTextureSource(side);
-			try
-			{
-				inHand = Block.blocksList[item];
-			}
-			catch(Exception e)
-			{
-				return true;
-			}
-			
 
-			//grab all the textures fresh;
-			
-			//if(inHand != null)
-			//{
-			
-			if(FMLCommonHandler.instance().getEffectiveSide().isClient() == true)
-			{
-				for(int i = 0; i < 6; i++)
-				{
-					textures[i] = inHand.getIcon(i, tile.getTextureSourceMeta(side));
-				}
-				
-				Icon oldFace = textures[3];
-				textures[3] = textures[face];
-				textures[face] = oldFace;
-				
-			}
-			
-		}
-		
-		return true;
-	}
-	*/
-	
 	@Override
     public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side)
     {
-		/*
-    	refreshTextures(ibaccess, xcoord, ycoord, zcoord, side);
-    	
-    	TileEntityDiscreteBlock tile = (TileEntityDiscreteBlock)ibaccess.getTileEntity(xcoord, ycoord, zcoord);
-    	
-    	if(tile != null && tile.getTextureSource() == this.blockID)
-    	{
-    		return icons[0];
-    	}
-    	else
-    	{
-    		return textures[side];
-    	}
-    	*/
-		
-    	//refreshTextures(ibaccess, xcoord, ycoord, zcoord, side);
-    	//int id = world.getBlock(x, y, z);
-    	//int meta = world.getBlockMetadata(x, y, z);
-		
     	TileEntityDiscreteBlock tile = (TileEntityDiscreteBlock)world.getTileEntity(x, y, z);
     	
     	if(tile != null)
     	{
+    		Block target = tile.getTextureSourceBlock(side);
     		
-    		/*
-	    	if(tile.getTextureSource(side) == id)
-	    	{
-	    		
-	    		System.out.println("match!" + id + "\t" + Block.blocksList[this.blockID].getIcon(side, meta).getIconName());
-	    		//return textures[0];
-	    		return Block.blocksList[this.blockID].getIcon(side, meta);
-	    		
-	    	}
-	    	else
-	    	{
-	    	*/
-	    		Block target = tile.getTextureSourceBlock(side);
-	    		
-	    		if(target != null && tile.getBlockTexture(side) != null)
-	    		{
-	    			return tile.getBlockTexture(side);
-	    		}
-
-
-	    	//}
+    		if(target != null && tile.getBlockTexture(side) != null)
+    		{
+    			return tile.getBlockTexture(side);
+    		}
     	}
-    	//return this.getIcon(side, ibaccess.getBlockMetadata(x, y, z));
     	return textures[0];
     }
 	
@@ -233,8 +144,8 @@ public class BlockDiscreteBlock extends Block
 				}
 			}
 		
-		tile.setFace(dir);
-		tile.setTextureOrientation(dir);
+			tile.setFace(dir);
+			tile.setTextureOrientation(dir);
 		}
     }
     
@@ -276,73 +187,6 @@ public class BlockDiscreteBlock extends Block
     {
     	return renderType;
     }
-
-    /*
-	@Override
-    public boolean onBlockActivated(World world, int xcoord, int ycoord, int zcoord, EntityPlayer player, int side, float par7, float par8, float par9)
-    {	
-		
-		
-		//change in 1.0.2 to make blocks only change when sneaking
-		if(player.isSneaking() == false)
-		{
-			return false;
-		}
-		
-		
-		//System.out.println("ENTRY");
-		TileEntityDiscreteBlock tile = (TileEntityDiscreteBlock)world.getTileEntity(xcoord, ycoord, zcoord);
-
-		
-		if(tile == null)
-		{
-			//System.out.println("NULL TILE");
-			return false;
-		}
-		
-		ItemStack item = player.inventory.getCurrentItem();
-		Block inHand = null;
-		
-		//higher blockids are reserved for items
-		try
-		{
-			inHand = Block.blocksList[item.itemID];
-		}
-		catch(Exception e)
-		{
-			//System.out.println("EXCEPTION");
-			return false;
-		}
-		
-		if(item != null && canUseTexture(inHand) == true)
-		{			
-			
-			//client only for .getIcon()
-			if(FMLCommonHandler.instance().getEffectiveSide().isClient() == true)
-			{
-				for(int i = 0; i < 6; i++)
-				{
-					//System.out.println("TEXTURE SET");
-					textures[i] = inHand.getIcon(i, item.getItemDamage());
-				}
-			}
-			
-			tile.setTextureSource(item.itemID);
-			tile.setTextureSourceMeta(item.getItemDamage());
-			tile.setFace((short)side);
-			world.markBlockForUpdate(xcoord, ycoord, zcoord);
-			return true;
-		}
-		
-		if(FMLCommonHandler.instance().getEffectiveSide().isServer() == true)
-		{
-			System.out.println("Clicked!");
-		}
-        return false;
-        
-    }
-    */
-    
 	
 	@Override
 	public int damageDropped(int meta)
@@ -355,44 +199,4 @@ public class BlockDiscreteBlock extends Block
     {
     	return new ItemStack(Items.apple);
     }
-	
-	
-	/*
-	private boolean canUseTexture(Block target)
-	{
-		if(target != null)
-		{
-			if(target.renderAsNormalBlock() && target.blockID != this.blockID)
-			{
-				return true;
-			}
-		}
-			
-			//item != null && inHand.isNormalCube(item.itemID) == true && item.itemID != this.blockID
-		
-		return false;
-	}
-	*/
-	
-	
-	/*
-    @SideOnly(Side.CLIENT)
-    @Override
-    public int colorMultiplier(IBlockAccess world, int x, int y, int z)
-    {
-    	TileEntityDiscreteBlock tile = (TileEntityDiscreteBlock)world.getTileEntity(x, y, z);
-    	
-		if(tile == null)
-		{
-			return 16777215;
-		}
-		else
-		{
-			if(tile.getTextureSource())
-			return Block.blocksList[tile.getTextureSource(0)].colorMultiplier(world, x, y, z);
-		}		
-        
-    }
-    */
-
 }

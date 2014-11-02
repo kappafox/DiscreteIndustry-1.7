@@ -13,26 +13,32 @@ import net.minecraftforge.common.util.ForgeDirection;
 import kappafox.di.base.SubBlockRenderingHandler;
 import kappafox.di.base.tileentities.TileEntityDiscreteBlock;
 import kappafox.di.base.tileentities.TileEntitySidedConnector;
+import kappafox.di.base.util.PointSet;
+import kappafox.di.base.util.TextureOffset;
 import kappafox.di.decorative.blocks.BlockDecor;
 import kappafox.di.decorative.blocks.SubBlockWall;
 
 public class SubRendererWall extends SubBlockRenderingHandler
 {
-
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelID, RenderBlocks renderer)
 	{
-		TileEntityDiscreteBlock t = (TileEntityDiscreteBlock)world.getTileEntity(x, y, z);
-		int subtype = t.getSubtype();
+		TileEntityDiscreteBlock tile = (TileEntityDiscreteBlock)world.getTileEntity(x, y, z);
+		int subtype = tile.getSubtype();
 		
 		switch(subtype)
 		{
 			case BlockDecor.ID_WALL_DISCRETE:
-				return this.renderWorldDiscreteWallBlock(world, x, y, z, block, t, renderer, subtype);
+				return this.renderWorldDiscreteWallBlock(world, x, y, z, block, tile, renderer, subtype);
+				
+			case BlockDecor.ID_WALL_RAILING_SIMPLE:
+				return this.renderWorldDiscreteWallRailingSimple(world, x, y, z, block, tile, renderer, subtype);
 		}
 		
 		return false;
 	}
+
+
 
 	@Override
 	public void renderInventoryBlock(Block block, int subtype, int modelID, RenderBlocks renderer)
@@ -55,152 +61,198 @@ public class SubRendererWall extends SubBlockRenderingHandler
 	
 	private boolean renderWorldDiscreteWallBlock(IBlockAccess world, int x, int y, int z, Block block, TileEntityDiscreteBlock t, RenderBlocks renderer, int subtype) 
 	{
-		HashMap<ForgeDirection, Boolean> adjMap = this.getAdjacencyMap(world, x, y, z);
+		HashMap<ForgeDirection, Boolean> adjMap = SubBlockWall.getAdjacencyMap(world, x, y, z);
 		HashMap<ForgeDirection, Boolean> conMap = ((TileEntitySidedConnector)t).getConnectionMap();
 		
 		if(adjMap.size() == 0 || conMap.size() == 0) return false;
 		
+		boolean topBlock = SubBlockWall.shouldWallConnect(world.getBlock(x, y + 1, z)) && !SubBlockWall.isWall(world.getTileEntity(x, y + 1, z));
 		
-		this.mergeMaps(adjMap, conMap);
-		int adjCount = this.getAdjacencyCount(adjMap);
+		SubBlockWall.mergeMaps(adjMap, conMap);
+		int adjCount = SubBlockWall.getAdjacencyCount(adjMap);
+		boolean verticalStretch = false;
+		boolean bottomOfStack = adjMap.get(ForgeDirection.UP) && !adjMap.get(ForgeDirection.DOWN);
+
+		if(adjMap.get(ForgeDirection.DOWN))
+		{
+			verticalStretch = true;
+		}
 		
 		//with 0, 1 or 3+ we draw the 'post'
-		if(adjCount != 2)
+		if(adjCount != 2 || topBlock || SubBlockWall.isCorner(adjMap))
 		{
-			drh.renderDiscreteQuad(world, renderer, block, x, y, z, SubBlockWall.PART_WALL_POST);
-		}
-		else
-		{
-			if(adjMap.get(ForgeDirection.NORTH) && adjMap.get(ForgeDirection.EAST))
-			{
-				drh.renderDiscreteQuad(world, renderer, block, x, y, z, SubBlockWall.PART_WALL_POST);
-			}
-			
-			if(adjMap.get(ForgeDirection.NORTH) && adjMap.get(ForgeDirection.WEST))
-			{
-				drh.renderDiscreteQuad(world, renderer, block, x, y, z, SubBlockWall.PART_WALL_POST);
-			}
-			
-			if(adjMap.get(ForgeDirection.SOUTH) && adjMap.get(ForgeDirection.EAST))
-			{
-				drh.renderDiscreteQuad(world, renderer, block, x, y, z, SubBlockWall.PART_WALL_POST);
-			}
-			
-			if(adjMap.get(ForgeDirection.SOUTH) && adjMap.get(ForgeDirection.WEST))
-			{
-				drh.renderDiscreteQuad(world, renderer, block, x, y, z, SubBlockWall.PART_WALL_POST);
-			}
+			drh.renderDiscreteQuadWithColourMultiplier(world, renderer, block, x, y, z, SubBlockWall.PART_WALL_POST);
 		}
 		
+		
+		TextureOffset off;
 		
 		if(adjMap.get(ForgeDirection.NORTH))
 		{
-			drh.renderDiscreteQuad(world, renderer, block, x, y, z, SubBlockWall.PART_WALL_NORTH);
+			off = new TextureOffset();
+			off.setOffsetU(5, 8);
+			
+			if(bottomOfStack || !verticalStretch)
+			{
+				off.setOffsetV(5, -3);
+				off.setOffsetV(4, -3);
+			}
+			
+			drh.setRenderBounds(renderer, (verticalStretch) ? SubBlockWall.PART_WALL_NORTH_EXT : SubBlockWall.PART_WALL_NORTH);
+			drh.renderDiscreteQuadWithTextureOffsets(world, renderer, block, x, y, z, off, false);
 		}
 		
 		if(adjMap.get(ForgeDirection.SOUTH))
 		{
-			drh.renderDiscreteQuad(world, renderer, block, x, y, z, SubBlockWall.PART_WALL_SOUTH);
+			off = new TextureOffset();
+			off.setOffsetU(5, -8);
+			
+			if(bottomOfStack || !verticalStretch)
+			{
+				off.setOffsetV(5, -3);
+				off.setOffsetV(4, -3);
+			}
+			
+			drh.setRenderBounds(renderer, (verticalStretch) ? SubBlockWall.PART_WALL_SOUTH_EXT : SubBlockWall.PART_WALL_SOUTH);
+			drh.renderDiscreteQuadWithTextureOffsets(world, renderer, block, x, y, z, off, false);
 		}
 		
 		if(adjMap.get(ForgeDirection.EAST))
 		{
-			drh.renderDiscreteQuad(world, renderer, block, x, y, z, SubBlockWall.PART_WALL_EAST);
+			off = new TextureOffset();
+			off.setOffsetU(2, -8);
+			
+			if(bottomOfStack || !verticalStretch)
+			{
+				off.setOffsetV(2, -3);
+				off.setOffsetV(3, -3);
+			}
+			
+			drh.setRenderBounds(renderer, (verticalStretch) ? SubBlockWall.PART_WALL_EAST_EXT : SubBlockWall.PART_WALL_EAST);
+			drh.renderDiscreteQuadWithTextureOffsets(world, renderer, block, x, y, z, off, false);
+
 		}
 		
 		if(adjMap.get(ForgeDirection.WEST))
 		{
-			drh.renderDiscreteQuad(world, renderer, block, x, y, z, SubBlockWall.PART_WALL_WEST);
+			off = new TextureOffset();
+			off.setOffsetU(2, 8);
+			
+			if(bottomOfStack || !verticalStretch)
+			{
+				off.setOffsetV(2, -3);
+				off.setOffsetV(3, -3);
+			}
+			
+			drh.setRenderBounds(renderer, (verticalStretch) ? SubBlockWall.PART_WALL_WEST_EXT : SubBlockWall.PART_WALL_WEST);
+			drh.renderDiscreteQuadWithTextureOffsets(world, renderer, block, x, y, z, off, false);
 		}
 
 		return false;
 	}
 	
-	private void mergeMaps(HashMap<ForgeDirection, Boolean> copyTo, HashMap<ForgeDirection, Boolean> copyFrom)
+	private boolean renderWorldDiscreteWallRailingSimple(IBlockAccess world, int x, int y, int z, Block block, TileEntityDiscreteBlock tile, RenderBlocks renderer, int subtype) 
 	{
-		for(Entry<ForgeDirection, Boolean> entry : copyTo.entrySet())
-		{
-			copyTo.put(entry.getKey(), entry.getValue() && copyFrom.get(entry.getKey()));
-		}
-	}
-	
-	private int getAdjacencyCount(HashMap<ForgeDirection, Boolean> map)
-	{
-		int count = 0;
-		for(Entry<ForgeDirection, Boolean> entry : map.entrySet())
-		{
-			if(entry.getValue())
-			{
-				count++;
-			}
-		}
+		HashMap<ForgeDirection, Boolean> adjMap = SubBlockWall.getAdjacencyMap(world, x, y, z);
+		HashMap<ForgeDirection, Boolean> conMap = ((TileEntitySidedConnector)tile).getConnectionMap();
 		
-		return count;
-	}
-	
-	private HashMap<ForgeDirection, Boolean> getAdjacencyMap(IBlockAccess world, int x, int y, int z)
-	{
-		TileEntity north = world.getTileEntity(x, y, z - 1);
-		TileEntity south = world.getTileEntity(x, y, z + 1);
-		TileEntity east = world.getTileEntity(x + 1, y, z);
-		TileEntity west = world.getTileEntity(x - 1, y, z);
+		if(adjMap.size() == 0 || conMap.size() == 0) return false;
 		
-		HashMap<ForgeDirection, Boolean> adj = new HashMap<ForgeDirection, Boolean>();
+		boolean topBlock = SubBlockWall.shouldWallConnect(world.getBlock(x, y + 1, z)) && !SubBlockWall.isWall(world.getTileEntity(x, y + 1, z));
 		
-		if(this.isWall(north))
-		{
-			adj.put(ForgeDirection.NORTH, true);
-		}
-		else
-		{
-			adj.put(ForgeDirection.NORTH, false);			
-		}
-		
-		if(this.isWall(south))
-		{
-			adj.put(ForgeDirection.SOUTH, true);
-		}
-		else
-		{
-			adj.put(ForgeDirection.SOUTH, false);			
-		}
-		
-		if(this.isWall(east))
-		{
-			adj.put(ForgeDirection.EAST, true);
-		}
-		else
-		{
-			adj.put(ForgeDirection.EAST, false);			
-		}
-		
-		if(this.isWall(west))
-		{
-			adj.put(ForgeDirection.WEST, true);
-		}
-		else
-		{
-			adj.put(ForgeDirection.WEST, false);			
-		}
-		
-		adj.put(ForgeDirection.UP, false);
-		adj.put(ForgeDirection.DOWN, false);
+		SubBlockWall.mergeMaps(adjMap, conMap);
+		int adjCount = SubBlockWall.getAdjacencyCount(adjMap);
+		boolean verticalStretch = false;
+		boolean bottomOfStack = !adjMap.get(ForgeDirection.DOWN);
 
-		return adj;
-	}
-	
-	private boolean isWall(TileEntity tile)
-	{
-		if(tile instanceof TileEntitySidedConnector)
+		if(adjMap.get(ForgeDirection.DOWN))
 		{
-			TileEntitySidedConnector te = (TileEntitySidedConnector)tile;
-			
-			if(BlockDecor.RANGE_WALL.contains(te.getSubtype()))
-			{
-				return true;
-			}
+			verticalStretch = true;
 		}
 		
+		if(((TileEntitySidedConnector)tile).getConnection((short)0))
+		{
+			drh.renderDiscreteQuadWithColourMultiplier(world, renderer, block, x, y, z, SubBlockWall.PART_WALL_RAILING_SIMPLE_POST);
+			
+			if(bottomOfStack)
+			{
+				drh.renderDiscreteQuadWithColourMultiplier(world, renderer, block, x, y, z, SubBlockWall.PART_WALL_RAILING_SIMPLE_POST_BASE);
+			}
+		}
+		else
+		{
+			drh.renderDiscreteQuadWithColourMultiplier(world, renderer, block, x, y, z, new PointSet(px.seven + px.half, px.fifteen, px.seven + px.half, px.eight + px.half, px.sixteen, px.eight + px.half));
+		}
+		
+		TextureOffset off;
+		
+		if(adjMap.get(ForgeDirection.NORTH))
+		{
+
+			off = new TextureOffset();
+			/*
+			off.setOffsetU(5, 8);
+			
+			if(bottomOfStack || !verticalStretch)
+			{
+				off.setOffsetV(5, -3);
+				off.setOffsetV(4, -3);
+			}
+			*/
+			drh.setRenderBounds(renderer, SubBlockWall.PART_WALL_RAILING_SIMPLE_NORTH);
+			drh.renderDiscreteQuadWithTextureOffsets(world, renderer, block, x, y, z, off, false);
+		}
+		
+		if(adjMap.get(ForgeDirection.SOUTH))
+		{
+			off = new TextureOffset();
+			/*
+			off.setOffsetU(5, -8);
+			
+			if(bottomOfStack || !verticalStretch)
+			{
+				off.setOffsetV(5, -3);
+				off.setOffsetV(4, -3);
+			}
+			*/
+			
+			drh.setRenderBounds(renderer, drh.translate(ForgeDirection.NORTH, ForgeDirection.SOUTH, SubBlockWall.PART_WALL_RAILING_SIMPLE_NORTH));
+			drh.renderDiscreteQuadWithTextureOffsets(world, renderer, block, x, y, z, off, false);
+		}
+		
+		if(adjMap.get(ForgeDirection.EAST))
+		{
+			off = new TextureOffset();
+			/*
+			off.setOffsetU(2, -8);
+			
+			if(bottomOfStack || !verticalStretch)
+			{
+				off.setOffsetV(2, -3);
+				off.setOffsetV(3, -3);
+			}
+			*/
+			drh.setRenderBounds(renderer, drh.translate(ForgeDirection.NORTH, ForgeDirection.EAST, SubBlockWall.PART_WALL_RAILING_SIMPLE_NORTH));
+			drh.renderDiscreteQuadWithTextureOffsets(world, renderer, block, x, y, z, off, false);
+
+		}
+		
+		if(adjMap.get(ForgeDirection.WEST))
+		{
+			off = new TextureOffset();
+			/*
+			off.setOffsetU(2, 8);
+			
+			if(bottomOfStack || !verticalStretch)
+			{
+				off.setOffsetV(2, -3);
+				off.setOffsetV(3, -3);
+			}
+			*/
+			drh.setRenderBounds(renderer, drh.translate(ForgeDirection.NORTH, ForgeDirection.WEST, SubBlockWall.PART_WALL_RAILING_SIMPLE_NORTH));
+			drh.renderDiscreteQuadWithTextureOffsets(world, renderer, block, x, y, z, off, false);
+		}
+
 		return false;
 	}
 }

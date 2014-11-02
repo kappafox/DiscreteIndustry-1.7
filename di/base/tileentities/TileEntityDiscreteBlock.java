@@ -119,10 +119,7 @@ public class TileEntityDiscreteBlock extends TileEntitySubtype
 		}
 		
 
-		return blockMetas[side];	
-
-
-		//return facadeMeta;		
+		return blockMetas[side];		
 	}
 	
 	//side of this block to get from
@@ -229,8 +226,6 @@ public class TileEntityDiscreteBlock extends TileEntitySubtype
 		return (Block)Block.blockRegistry.getObject(blockNames[side]);
 	}
 	
-
-		
 	public void writeToNBT(NBTTagCompound nbt)
 	{
 		

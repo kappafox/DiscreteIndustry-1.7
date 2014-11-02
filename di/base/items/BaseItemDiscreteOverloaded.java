@@ -372,9 +372,9 @@ public abstract class BaseItemDiscreteOverloaded extends ItemBlock
     protected void registerItemRanges( )
     {
     	ISubItemRangeProvider block = (ISubItemRangeProvider)field_150939_a;
-    	HashMap<Short, Range> ranges = block.getRangeSet();
+    	HashMap<Integer, Range> ranges = block.getRangeSet();
     	
-    	for(Entry<Short, Range> entry : ranges.entrySet())
+    	for(Entry<Integer, Range> entry : ranges.entrySet())
     	{
     		this.registerRange(entry.getKey(), entry.getValue());
     	} 	

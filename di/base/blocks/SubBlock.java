@@ -49,7 +49,7 @@ public abstract class SubBlock
 		return meta;
 	}
 	
-	public boolean onBlockActivated(World world, int xcoord, int ycoord, int zcoord, EntityPlayer player, int side, float par7, float par8, float par9)
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitx, float hity, float hitz)
 	{
 		//player.openGui(DiscreteIndustry.instance, 1, world, xcoord, ycoord, zcoord);
 		return false;
@@ -175,5 +175,15 @@ public abstract class SubBlock
 	public IIcon getSpecialIcon(int index, int meta)
 	{
 		return this.getIcon(0, meta);
+	}
+	
+    public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side)
+    {
+		return true;
+    }
+
+	public boolean canPlaceTorchOnTop(World world, int x, int y, int z) 
+	{
+		return false;
 	}
 }

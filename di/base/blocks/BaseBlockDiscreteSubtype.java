@@ -1,13 +1,19 @@
 package kappafox.di.base.blocks;
 
+import static net.minecraftforge.common.util.ForgeDirection.UP;
+
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Random;
+
+import com.google.common.collect.Range;
 
 import kappafox.di.base.network.PacketCrafter;
 import kappafox.di.base.tileentities.TileEntityDiscreteBlock;
 import kappafox.di.base.tileentities.TileEntitySubtype;
 import kappafox.di.base.util.BoundSet;
+import kappafox.di.decorative.tileentities.TileEntityLoomBlock;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -35,7 +41,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class BaseBlockDiscreteSubtype extends BlockDiscreteBlock
 {
-	protected HashMap<Integer, SubBlock> blocks;	
+	protected HashMap<Integer, SubBlock> blocks;
+	
+	protected static HashMap<Integer, Range> subtypeMapping;
 	protected int renderID;
 	
 	public BaseBlockDiscreteSubtype(Material mat, int rID)
@@ -43,6 +51,7 @@ public class BaseBlockDiscreteSubtype extends BlockDiscreteBlock
 		super(mat, rID);
 		renderID = rID;
 		blocks = new HashMap<Integer, SubBlock>();
+		subtypeMapping = new HashMap<Integer, Range>();
 	}
 	
 	
@@ -67,14 +76,46 @@ public class BaseBlockDiscreteSubtype extends BlockDiscreteBlock
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta)
 	{
-		if(blocks.containsKey(meta))
+		if(meta > 15)
 		{
-			return blocks.get(meta).getIcon(side, meta);
+			int realMeta = this.getOverloadedMeta(side, meta);
+			
+			if(realMeta >= 0)
+			{
+				if(blocks.containsKey(realMeta))
+				{
+					return blocks.get(realMeta).getIcon(side, meta);
+				}
+			}
+			else
+			{
+				return Blocks.lava.getIcon(side, meta);
+			}
+		}
+		else
+		{
+			if(blocks.containsKey(meta))
+			{
+				return blocks.get(meta).getIcon(side, meta);
+			}
 		}
 		
-		return Blocks.stone.getIcon(0, 0);
+		return Blocks.portal.getIcon(side, meta);
 	}
 	
+	protected int getOverloadedMeta(int side, int subtype)
+	{
+		for(Entry<Integer, Range> entry : subtypeMapping.entrySet())
+		{
+			if(entry.getValue().contains(subtype))
+			{
+				return entry.getKey();
+			}
+		}
+		
+		return -1;
+	}
+
 	public IIcon getSpecialIcon(int index, int meta)
 	{
 		if(blocks.containsKey(meta))
@@ -330,34 +371,58 @@ public class BaseBlockDiscreteSubtype extends BlockDiscreteBlock
     }
     
     @Override
+    public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side)
+    {
+    	int meta = world.getBlockMetadata(x, y, z);
+		if(blocks.containsKey(meta))
+		{
+			return blocks.get(meta).isSideSolid(world, x, y, z, side);
+		}
+		
+		return true;
+    }
+    
+    @Override
+    public boolean canPlaceTorchOnTop(World world, int x, int y, int z)
+    {
+    	int meta = world.getBlockMetadata(x, y, z);
+		if(blocks.containsKey(meta))
+		{
+			return blocks.get(meta).canPlaceTorchOnTop(world, x, y, z);
+		}
+		
+		return true;
+    }
+    
+    @Override
     public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
     {
-    	//TODO FIX FOR 1.7
-    	/*
-        int id = idPicked(world, x, y, z);        
+    	Item item = getItem(world, x, y, z);
         TileEntity t = world.getTileEntity(x, y, z);
         
-        if (Item.itemsList[id] == null)
+        if(item == null || Item.getIdFromItem(item) == 0)
         {
-            return null;
+        	return null;
         }
         
         
-        if(t instanceof TileEntitySubtype)
+        if(t instanceof TileEntityDiscreteBlock)
         {
-        	TileEntitySubtype tile = (TileEntitySubtype)t;
+        	TileEntityDiscreteBlock tile = (TileEntityDiscreteBlock)t;
         	int type = tile.getSubtype();
         	
         	if(type != 0)
         	{
-        		return new ItemStack(id, 1, type);
+        		return new ItemStack(item, 1, type);
         	}
         }
         
-        return new ItemStack(id, 1, getDamageValue(world, x, y, z));
-        */
-    	
-    	return new ItemStack(Blocks.stone);
+        if(t instanceof TileEntityLoomBlock)
+        {
+        	return new ItemStack(item, 3, 0);
+        }
+
+        return new ItemStack(item, 1, getDamageValue(world, x, y, z));      
     }
     
     @Override
