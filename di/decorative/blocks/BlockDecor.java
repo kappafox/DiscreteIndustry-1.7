@@ -74,6 +74,8 @@ public class BlockDecor extends BaseBlockDiscreteSubtype implements ISubItemRang
 	
 	public static final short ID_WALL_DISCRETE = 900;
 	public static final short ID_WALL_RAILING_SIMPLE = 910;
+	public static final short ID_WALL_RAILING_DOUBLE = 911;
+	public static final short ID_WALL_RAILING_TRIPLE = 912;
 
 	public static final Range<Integer> RANGE_LADDER = Range.closed(800, 820);
 	public static final Range<Integer> RANGE_RACK = Range.closed(821, 840);

@@ -164,7 +164,9 @@ public class DiscreteDecorative
 		//900-920 Walls & Fences
 		LanguageRegistry.addName(new ItemStack(decorBlock, 1, BlockDecor.ID_WALL_DISCRETE), "Discrete Wall");
 		
-		LanguageRegistry.addName(new ItemStack(decorBlock, 1, BlockDecor.ID_WALL_RAILING_SIMPLE), "Discrete Wall");
+		LanguageRegistry.addName(new ItemStack(decorBlock, 1, BlockDecor.ID_WALL_RAILING_SIMPLE), "Simple Railing");
+		LanguageRegistry.addName(new ItemStack(decorBlock, 1, BlockDecor.ID_WALL_RAILING_DOUBLE), "Double Railing");
+		LanguageRegistry.addName(new ItemStack(decorBlock, 1, BlockDecor.ID_WALL_RAILING_TRIPLE), "Triple Railing");
 		
 		//Tests
 		LanguageRegistry.addName(new ItemStack(decorBlock, 1, 805), "Flag Yolo Test");		

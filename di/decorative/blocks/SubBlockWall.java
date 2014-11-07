@@ -54,11 +54,20 @@ public class SubBlockWall extends SubBlock
 	public static final PointSet PART_WALL_EAST_EXT = new PointSet(px.eight, -px.three, px.five, px.sixteen, px.thirteen, px.eleven);
 	public static final PointSet PART_WALL_WEST_EXT = new PointSet(px.zero, -px.three, px.five, px.eight, px.thirteen, px.eleven);
 	
+	public static final PointSet PART_WALL_NORTH_SHORT = new PointSet(px.five, px.fifteen, px.zero, px.eleven, collisionHeight, px.eight);
+	
 	// Simple Rail
 	public static final PointSet PART_WALL_RAILING_SIMPLE_POST = new PointSet(px.seven + px.half, px.zero, px.seven + px.half, px.eight + px.half, px.sixteen, px.eight + px.half);
 	public static final PointSet PART_WALL_RAILING_SIMPLE_POST_BASE = new PointSet(px.six + px.half, px.zero, px.six + px.half, px.nine + px.half, px.one, px.nine + px.half);
 	public static final PointSet PART_WALL_RAILING_SIMPLE_NORTH = new PointSet(px.seven + px.half, px.fifteen, px.zero, px.eight + px.half, px.sixteen, px.seven + px.half);
 	
+	public static final PointSet PART_WALL_RAILING_SIMPLE_POST_SHORT = new PointSet(px.seven + px.half, px.fifteen, px.seven + px.half, px.eight + px.half, px.sixteen, px.eight + px.half);
+	
+	// Double Rail
+	public static final PointSet PART_WALL_RAILING_DOUBLE_NORTH = new PointSet(px.seven + px.half, px.nine, px.zero, px.eight + px.half, px.ten, px.seven + px.half);
+	
+	// Triple Rail
+	public static final PointSet PART_WALL_RAILING_TRIPLE_NORTH = new PointSet(px.seven + px.half, px.three, px.zero, px.eight + px.half, px.four, px.seven + px.half);
 	
 	@Override
 	public IIcon getIcon(int side, int meta) 
@@ -282,6 +291,11 @@ public class SubBlockWall extends SubBlock
 			    		result.combine(PART_WALL_RAILING_SIMPLE_NORTH.translateTo(ForgeDirection.WEST));
 			    	}
 			    	
+					if(!conMap.get(ForgeDirection.DOWN))
+					{
+						result.y1 = px.fifteen;
+					}
+					
 			    	return result.toAABB(x, y, z);
 				}
 			}
@@ -307,7 +321,6 @@ public class SubBlockWall extends SubBlock
 			
 			switch(type)
 			{
-				case BlockDecor.ID_WALL_RAILING_SIMPLE:
 				case BlockDecor.ID_WALL_DISCRETE:
 				{
 			    	if(adjCount == 0 || adjCount > 2)
@@ -359,6 +372,78 @@ public class SubBlockWall extends SubBlock
 			        		boxlist.add(box);
 			        	}
 			    	}
+				}
+				
+				case BlockDecor.ID_WALL_RAILING_SIMPLE:
+				{
+		    		PointSet piece = PART_WALL_NORTH_TALL;
+		    		boolean shortened = false;
+		    		
+		    		if(!conMap.get(ForgeDirection.DOWN))
+		    		{
+		    			piece = PART_WALL_NORTH_SHORT;
+		    			shortened = true;
+		    		}
+		    		
+		    		
+			    	if(adjCount == 0 || adjCount > 2)
+			    	{
+			    		if(!shortened)
+			    		{
+			    			box = new PointSet(PART_WALL_RAILING_SIMPLE_POST).toAABB(x, y, z);
+			    		}
+			    		else
+			    		{
+			    			box = new PointSet(PART_WALL_RAILING_SIMPLE_POST_SHORT).toAABB(x, y, z);
+			    		}
+
+			        	if(mask.intersectsWith(box) == true)
+			        	{
+			        		boxlist.add(box);
+			        	}
+			    	}
+			    	
+			    	if(adjMap.get(ForgeDirection.NORTH))
+			    	{
+			    		box = piece.toAABB(x, y, z);
+			    		
+			        	if(mask.intersectsWith(box) == true)
+			        	{
+			        		boxlist.add(box);
+			        	}
+			    	}
+
+			    	if(adjMap.get(ForgeDirection.SOUTH))
+			    	{
+			    		box = piece.translateTo(ForgeDirection.SOUTH).toAABB(x, y, z);
+			    		
+			        	if(mask.intersectsWith(box) == true)
+			        	{
+			        		boxlist.add(box);
+			        	}
+			    	}
+			    	
+			    	if(adjMap.get(ForgeDirection.EAST))
+			    	{
+			    		box = piece.translateTo(ForgeDirection.EAST).toAABB(x, y, z);
+			    		
+			        	if(mask.intersectsWith(box) == true)
+			        	{
+			        		boxlist.add(box);
+			        	}
+			    	}
+			    	
+			    	if(adjMap.get(ForgeDirection.WEST))
+			    	{
+			    		box = piece.translateTo(ForgeDirection.WEST).toAABB(x, y, z);
+			    		
+			        	if(mask.intersectsWith(box) == true)
+			        	{
+			        		boxlist.add(box);
+			        	}
+			    	}
+			    	
+					break;
 				}
 			}
     	}  	
