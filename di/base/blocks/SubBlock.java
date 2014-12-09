@@ -169,7 +169,7 @@ public abstract class SubBlock
 	
     public boolean isNormalCube(IBlockAccess world, int x, int y, int z)
     {
-    	return false;
+    	return true;
     }
 
 	public IIcon getSpecialIcon(int index, int meta)

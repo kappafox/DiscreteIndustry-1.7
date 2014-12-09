@@ -54,6 +54,11 @@ public class BaseBlockDiscreteSubtype extends BlockDiscreteBlock
 		subtypeMapping = new HashMap<Integer, Range>();
 	}
 	
+	protected void registerSubBlock(int meta, Range<Integer> range, SubBlock sub)
+	{
+		this.blocks.put(Integer.valueOf(meta), sub);
+		subtypeMapping.put(Integer.valueOf(meta), range);
+	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -224,6 +229,7 @@ public class BaseBlockDiscreteSubtype extends BlockDiscreteBlock
 		{
 			blocks.get(meta).breakBlock(world, x, y, z, block, meta);
 		}
+		
 		super.breakBlock(world, x, y, z, block, meta);
     }
 	
@@ -347,6 +353,13 @@ public class BaseBlockDiscreteSubtype extends BlockDiscreteBlock
     }
     
     @Override
+    @SideOnly(Side.CLIENT)
+    public boolean isBlockNormalCube()
+    {
+        return this.blockMaterial.blocksMovement() && this.renderAsNormalBlock();
+    }
+    
+    @Override
     public boolean isNormalCube(IBlockAccess world, int x, int y, int z)
     {
     	int meta = world.getBlockMetadata(x, y, z);
@@ -461,5 +474,10 @@ public class BaseBlockDiscreteSubtype extends BlockDiscreteBlock
 				blocks.get(meta).onBlockClicked(world, x, y, z, player, hitx, hity, hitz);
 			}
 		}
+    }
+    
+    public HashMap<Integer, Range> getRangeSet()
+    {
+      return subtypeMapping;
     }
 }

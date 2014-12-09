@@ -32,25 +32,25 @@ public class BlockHazard extends BlockDiscreteBlock
 {
 	
 	@SideOnly(Side.CLIENT)
-	private IIcon[] diagonalIcons;
+	public static IIcon[] diagonalIcons;
 	
 	@SideOnly(Side.CLIENT)
-	private IIcon[] arrowIcons;
+	public static IIcon[] arrowIcons;
 	
 	@SideOnly(Side.CLIENT)
-	private IIcon[] redDiagonalIcons;
+	public static IIcon[] redDiagonalIcons;
 	
 	@SideOnly(Side.CLIENT)
-	private IIcon[] redArrowIcons;
+	public static IIcon[] redArrowIcons;
 	
 	@SideOnly(Side.CLIENT)
-	private IIcon checkeredIcon;
+	public static IIcon checkeredIcon;
 	
 	@SideOnly(Side.CLIENT)
-	private IIcon smallCheckeredIcon;
+	public static IIcon smallCheckeredIcon;
 	
 	@SideOnly(Side.CLIENT)
-	private IIcon discreteBlock;
+	public static IIcon discreteBlock;
 	
 	@SideOnly(Side.CLIENT)
 	private int rid;

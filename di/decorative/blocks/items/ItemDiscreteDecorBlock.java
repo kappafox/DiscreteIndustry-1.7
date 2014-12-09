@@ -79,6 +79,16 @@ public class ItemDiscreteDecorBlock extends BaseItemDiscreteOverloaded
         itemList.add(new ItemStack(item, 1, BlockDecor.ID_WALL_RAILING_SIMPLE));
         itemList.add(new ItemStack(item, 1, BlockDecor.ID_WALL_RAILING_DOUBLE));
         itemList.add(new ItemStack(item, 1, BlockDecor.ID_WALL_RAILING_TRIPLE));
+        
+        itemList.add(new ItemStack(item, 1, 913));
+        itemList.add(new ItemStack(item, 1, 914));
+        itemList.add(new ItemStack(item, 1, 915));
+        
+        itemList.add(new ItemStack(item, 1, 916));
+        
+        itemList.add(new ItemStack(item, 1, 950));
+        itemList.add(new ItemStack(item, 1, 951));
+        itemList.add(new ItemStack(item, 1, 952));
     }
 
     @Override

@@ -32,11 +32,15 @@ public class TileEntityDiscreteBlock extends TileEntitySubtype
 	private String originalBlockName = "";
 	private int originalMeta = 0;
 	
+	private String secondaryTextureSource = null;
+	private int secondaryTextureMeta = 0;
+	private int secondaryTextureSide = 0;
+	
+	
 	public TileEntityDiscreteBlock( )
 	{
 		this(Blocks.stone, 0);
 	}
-	
 	
 	public TileEntityDiscreteBlock(Block block, int meta)
 	{
@@ -132,7 +136,50 @@ public class TileEntityDiscreteBlock extends TileEntitySubtype
 		
 		return blockSides[side];
 	}
-
+	
+	public void setSecondaryTextureSource(Block block,int meta, int side)
+	{
+		this.secondaryTextureSource=getBlockName(block);
+		this.secondaryTextureMeta=meta;
+	}
+	
+	public void setSecondaryTextureSource(String texture, int meta, int side)
+	{
+		this.secondaryTextureSource=texture;
+		this.secondaryTextureMeta=meta;
+	}
+	
+	public String getSecondaryTextureSource()
+	{
+		return this.secondaryTextureSource;
+	}
+	
+		public int getSecondaryTextureMeta()
+	{
+			return this.secondaryTextureMeta;
+	}
+	
+	public int getSecondaryTextureSide()
+	{
+		return 2;
+	}
+	
+	public IIcon getSecondaryBlockTexture()
+	{
+		Block source = getSecondaryTextureSourceBlock();
+		if (source != null) 
+		{
+			return source.getIcon(getSecondaryTextureSide(), getSecondaryTextureMeta());
+		}
+		
+		return null;
+	}
+	
+	public Block getSecondaryTextureSourceBlock()
+	{
+		return (Block)Block.blockRegistry.getObject(this.secondaryTextureSource);
+	}
+	  
 	public int getBlockColor( )
 	{
 		return colour;
@@ -236,7 +283,6 @@ public class TileEntityDiscreteBlock extends TileEntitySubtype
 		nbt.setShort("facing", facing);
 		nbt.setInteger("colour", colour);
 		nbt.setInteger("var1", var1);
-		//nbt.setInteger("subType", subType);
 		nbt.setInteger("torient", textureOrienation);
 		nbt.setShort("direction", direction);
 		
@@ -253,7 +299,6 @@ public class TileEntityDiscreteBlock extends TileEntitySubtype
 		}
 		
 		nbt.setTag("blockNames", blockNameList);
-		//nbt.setIntArray("blockIDs", blockIDs);
 		nbt.setIntArray("blockMetas", blockMetas);
 		nbt.setIntArray("blockSides", blockSides);
 		
@@ -261,6 +306,13 @@ public class TileEntityDiscreteBlock extends TileEntitySubtype
 		
 		nbt.setString("originalBlockName", originalBlockName);
 		nbt.setInteger("originalMeta", originalMeta);
+		
+	    if((this.secondaryTextureSource != null) && (!this.secondaryTextureSource.isEmpty()))
+	    {
+			nbt.setString("secondaryTextureSource", this.secondaryTextureSource);
+			nbt.setInteger("secondaryTextureMeta", this.secondaryTextureMeta);
+			nbt.setInteger("secondaryTextureSide", this.secondaryTextureSide);
+	    }
 		
 	}
 	
@@ -293,6 +345,10 @@ public class TileEntityDiscreteBlock extends TileEntitySubtype
 		
 		originalBlockName = nbt.getString("originalBlockName");
 		originalMeta = nbt.getInteger("originalMeta");
+		
+		this.secondaryTextureSource = nbt.getString("secondaryTextureSource");
+		this.secondaryTextureMeta = nbt.getInteger("secondaryTextureMeta");
+		this.secondaryTextureSide = nbt.getInteger("secondaryTextureSide");
 		
 		//sometimes this happens before we have a valid world object
 		if(worldObj != null)

@@ -48,10 +48,6 @@ public class DiscreteDecorative
 	
 	//Items
 	
-	//IDs
-	//public static int hazardBlockID;
-	//public static int decorBlockID;
-	
 	//RIDS
 	public static int hazardRenderID;
 	public static int decorRenderID;
@@ -94,6 +90,7 @@ public class DiscreteDecorative
 		//EntityRegistry.registerGlobalEntityID(EntityWorldItem.class, "EntWorldItem", EntityRegistry.findGlobalUniqueEntityId());		
 		//EntityRegistry.registerModEntity(EntityWorldItem.class, "EntWorldItem", 0, this, 350, 5, false);
 		
+	    DiscreteDecorativePacketHandler.initPackets();
 	}
 
 
@@ -168,6 +165,16 @@ public class DiscreteDecorative
 		LanguageRegistry.addName(new ItemStack(decorBlock, 1, BlockDecor.ID_WALL_RAILING_DOUBLE), "Double Railing");
 		LanguageRegistry.addName(new ItemStack(decorBlock, 1, BlockDecor.ID_WALL_RAILING_TRIPLE), "Triple Railing");
 		
+	    LanguageRegistry.addName(new ItemStack(decorBlock, 1, 913), "Square Railing");
+	    LanguageRegistry.addName(new ItemStack(decorBlock, 1, 914), "Square Halved Railing");
+	    LanguageRegistry.addName(new ItemStack(decorBlock, 1, 915), "Triple Quartered Railing");
+	    
+	    LanguageRegistry.addName(new ItemStack(decorBlock, 1, 916), "Danger Tape");
+	    
+	    LanguageRegistry.addName(new ItemStack(decorBlock, 1, 950), "Square Panel");
+	    LanguageRegistry.addName(new ItemStack(decorBlock, 1, 951), "Halved Square Panel");
+	    LanguageRegistry.addName(new ItemStack(decorBlock, 1, 952), "Quartered Square Panel");
+	    
 		//Tests
 		LanguageRegistry.addName(new ItemStack(decorBlock, 1, 805), "Flag Yolo Test");		
 		
@@ -299,6 +306,30 @@ public class DiscreteDecorative
 		
 		GameRegistry.addRecipe(new ShapelessOreRecipe(hazardStrip8, new Object[]{frameDiscreteCable, singleCheckeredYellowHazard}));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(angledHazardStrip8, new Object[]{frameDiscreteCable, singleCheckeredYellowHazard, singleCheckeredYellowHazard}));
+		
+	    ItemStack discreteWall1 = new ItemStack(decorBlock, 1, 900);
+	    ItemStack discreteWall8 = new ItemStack(decorBlock, 8, 900);
+	    ItemStack railingSimple = new ItemStack(decorBlock, 1, 910);
+	    ItemStack railingDouble = new ItemStack(decorBlock, 1, 911);
+	    ItemStack railingTriple = new ItemStack(decorBlock, 1, 912);
+	    ItemStack railingSquare = new ItemStack(decorBlock, 1, 913);
+	    ItemStack railingSquareDouble = new ItemStack(decorBlock, 1, 914);
+	    ItemStack railingSquareTriple = new ItemStack(decorBlock, 1, 915);
+	    ItemStack panelSquare = new ItemStack(decorBlock, 1, 950);
+	    ItemStack panelSquareDouble = new ItemStack(decorBlock, 1, 951);
+	    ItemStack panelSquareTriple = new ItemStack(decorBlock, 1, 952);
+	    
+	    GameRegistry.addRecipe(new ShapelessOreRecipe(discreteWall8, new Object[] { frameDiscreteCable, Blocks.cobblestone_wall }));
+	    GameRegistry.addRecipe(new ShapelessOreRecipe(railingSimple, new Object[] { discreteWall1, Items.stick }));
+	    GameRegistry.addRecipe(new ShapelessOreRecipe(railingDouble, new Object[] { railingSimple, Items.stick }));
+	    GameRegistry.addRecipe(new ShapelessOreRecipe(railingTriple, new Object[] { railingDouble, Items.stick }));
+	    GameRegistry.addRecipe(new ShapelessOreRecipe(railingSquare, new Object[] { discreteWall1, Blocks.planks }));
+	    GameRegistry.addRecipe(new ShapelessOreRecipe(railingSquareDouble, new Object[] { railingSquare, Items.stick }));
+	    GameRegistry.addRecipe(new ShapelessOreRecipe(railingSquareTriple, new Object[] { railingSquareDouble, Items.stick }));
+	    GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(decorBlock, 1, 916), new Object[] { discreteWall1, yellowDiagonalHazard }));
+	    GameRegistry.addRecipe(new ShapelessOreRecipe(panelSquare, new Object[] { discreteWall1, Blocks.stone}));
+	    GameRegistry.addRecipe(new ShapelessOreRecipe(panelSquareDouble, new Object[] { panelSquare, Items.stick }));
+	    GameRegistry.addRecipe(new ShapelessOreRecipe(panelSquareTriple, new Object[] { panelSquareDouble, Items.stick }));
 	}
 }
 

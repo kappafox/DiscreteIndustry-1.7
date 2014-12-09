@@ -1,9 +1,3 @@
-
-
-
-
-
-
 package kappafox.di.decorative.blocks;
 
 import java.util.HashMap;
@@ -43,8 +37,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockDecor extends BaseBlockDiscreteSubtype implements ISubItemRangeProvider
 {
-	private static final short SUB_BLOCKS = 9;
-	
 	public static final short META_LADDER = 2;
 	public static final short META_SWORDRACK = 4;
 	public static final short META_STAIRS = 5;
@@ -76,13 +68,20 @@ public class BlockDecor extends BaseBlockDiscreteSubtype implements ISubItemRang
 	public static final short ID_WALL_RAILING_SIMPLE = 910;
 	public static final short ID_WALL_RAILING_DOUBLE = 911;
 	public static final short ID_WALL_RAILING_TRIPLE = 912;
+	public static final short ID_WALL_RAILING_SQUARE = 913;
+	public static final short ID_WALL_RAILING_SQUARE_HALVED = 914;
+	public static final short ID_WALL_RAILING_SQUARE_QUARTERED = 915;
+	public static final short ID_WALL_DANGER_TAPE = 916;
+	public static final short ID_WALL_PANEL_SQUARE = 950;
+	public static final short ID_WALL_PANEL_SQUARE_HALVED = 951;
+	public static final short ID_WALL_PANEL_SQUARE_QUARTERED = 952;
 
 	public static final Range<Integer> RANGE_LADDER = Range.closed(800, 820);
 	public static final Range<Integer> RANGE_RACK = Range.closed(821, 840);
 	public static final Range<Integer> RANGE_STAIRS = Range.closed(861, 870);
 	public static final Range<Integer> RANGE_STRUT = Range.closed(871, 880);
 	public static final Range<Integer> RANGE_SHAPE = Range.closed(881, 890);
-	public static final Range<Integer> RANGE_WALL = Range.closed(900, 920);
+	public static final Range<Integer> RANGE_WALL = Range.closed(900, 999);
 	
 	@SideOnly(Side.CLIENT)
 	private int rid;
@@ -94,29 +93,23 @@ public class BlockDecor extends BaseBlockDiscreteSubtype implements ISubItemRang
 		this.setCreativeTab(CreativeTabs.tabAllSearch);
 		this.setBlockName("decorBlock");
 		this.setHardness(3.0F);
-		
-		blocks.put((int)META_LADDER, new SubBlockLadder());
-		blocks.put((int)META_SWORDRACK, new SubBlockSwordRack());
-		blocks.put((int)META_STAIRS, new SubBlockStairs());
-		blocks.put((int)META_STRUT, new SubBlockStrut());
-		blocks.put((int)META_SHAPE, new SubBlockShape());
-		blocks.put((int)META_WALL, new SubBlockWall());
 
 		if(FMLCommonHandler.instance().getEffectiveSide().isClient() == true)
 		{
 			rid = renderID;
 		}
 		
-		subtypeMapping.put((int)META_LADDER, RANGE_LADDER);
-		subtypeMapping.put((int)META_SWORDRACK, RANGE_RACK);
-		subtypeMapping.put((int)META_STAIRS, RANGE_STAIRS);
-		subtypeMapping.put((int)META_STRUT, RANGE_STRUT);
-		subtypeMapping.put((int)META_SHAPE, RANGE_SHAPE);
-		subtypeMapping.put((int)META_WALL, RANGE_WALL);	
+		super.registerSubBlock((int)META_LADDER, RANGE_LADDER, new SubBlockLadder());
+		super.registerSubBlock((int)META_SWORDRACK, RANGE_RACK, new SubBlockSwordRack());
+		super.registerSubBlock((int)META_STAIRS, RANGE_STAIRS, new SubBlockStairs());
+		super.registerSubBlock((int)META_STRUT, RANGE_STRUT, new SubBlockStrut());
+		super.registerSubBlock((int)META_SHAPE, RANGE_SHAPE, new SubBlockShape());
+		super.registerSubBlock((int)META_WALL, RANGE_WALL, new SubBlockWall());
 	}
-
-    public HashMap<Integer, Range> getRangeSet( )
+	
+    @Override
+    public boolean isNormalCube( )
     {
-    	return subtypeMapping;
+    	return false;
     }
 }

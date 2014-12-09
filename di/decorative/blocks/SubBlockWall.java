@@ -7,13 +7,16 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockAir;
 import net.minecraft.block.BlockDynamicLiquid;
+import net.minecraft.block.BlockSnow;
 import net.minecraft.block.BlockStaticLiquid;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -28,6 +31,8 @@ import kappafox.di.base.tileentities.TileEntitySidedConnector;
 import kappafox.di.base.util.BoundSet;
 import kappafox.di.base.util.PointSet;
 import kappafox.di.base.util.SideHelper;
+import kappafox.di.decorative.DiscreteDecorativePacketHandler;
+import kappafox.di.decorative.network.DiscreteDecorativeTextureSyncPacket;
 
 public class SubBlockWall extends SubBlock
 {
@@ -69,6 +74,23 @@ public class SubBlockWall extends SubBlock
 	// Triple Rail
 	public static final PointSet PART_WALL_RAILING_TRIPLE_NORTH = new PointSet(px.seven + px.half, px.three, px.zero, px.eight + px.half, px.four, px.seven + px.half);
 	
+	public static final PointSet PART_WALL_RAILING_SQUARE_POST = new PointSet(px.seven + px.half, px.zero, px.seven + px.half, px.nine - px.half, px.sixteen, px.nine - px.half);
+	public static final PointSet PART_WALL_RAILING_SQUARE_TOP_NORTH = new PointSet(px.seven + px.half, px.fifteen, px.zero, px.nine - px.half, px.sixteen, px.seven + px.half);
+	public static final PointSet PART_WALL_RAILING_SQUARE_BOT_NORTH = new PointSet(px.seven + px.half, px.zero, px.zero, px.nine - px.half, px.one, px.seven + px.half);
+	public static final PointSet PART_WALL_RAILING_SQUARE_HALVED_MID_NORTH = new PointSet(px.seven + px.half, px.seven + px.half, px.zero, px.nine - px.half, px.nine - px.half, px.seven + px.half);
+	public static final PointSet PART_WALL_RAILING_SQUARE_QUARTERED_POST_NORTH = new PointSet(px.seven + px.half, px.zero, px.zero, px.nine - px.half, px.sixteen, px.half);
+	public static final PointSet PART_WALL_RAILING_SQUARE_QUARTERED_MID_NORTH = new PointSet(px.seven + px.half, px.seven + px.half, px.half, px.nine - px.half, px.nine - px.half, px.seven + px.half);
+	public static final PointSet PART_WALL_DANGER_TAPE_POST = new PointSet(px.six + px.half, px.zero, px.six + px.half, px.ten - px.half, px.sixteen, px.ten - px.half);
+	public static final PointSet PART_WALL_DANGER_TAPE_NORTH = new PointSet(px.eight, px.twelve, px.zero, px.eight, px.fifteen, px.eight);
+	public static final PointSet PART_PANEL_POST_NORTH = new PointSet(px.seven + px.half, px.zero, px.zero, px.nine - px.half, px.sixteen, px.one);
+	public static final PointSet PART_PANEL_BAR_TOP = new PointSet(px.seven + px.half, px.fifteen, px.one, px.nine - px.half, px.sixteen, px.fifteen);
+	public static final PointSet PART_PANEL_BAR_BOT = new PointSet(px.seven + px.half, px.zero, px.one, px.nine - px.half, px.one, px.fifteen);
+	public static final PointSet PART_PANEL_META_BOX = new PointSet(px.seven + px.half, px.zero, px.zero, px.nine - px.half, px.sixteen, px.sixteen);
+	public static final PointSet PART_PANEL_SECONDARY_PART = new PointSet(px.eight, px.one, px.one, px.eight, px.fifteen, px.fifteen);
+	public static final PointSet PART_PANEL_BAR_MID = new PointSet(px.seven + px.half, px.seven + px.half, px.one, px.nine - px.half, px.nine - px.half, px.fifteen);
+	public static final PointSet PART_PANEL_POST_MID = new PointSet(px.seven + px.half, px.one, px.seven + px.half, px.nine - px.half, px.fifteen, px.nine - px.half);
+
+	
 	@Override
 	public IIcon getIcon(int side, int meta) 
 	{
@@ -106,102 +128,126 @@ public class SubBlockWall extends SubBlock
 	}
     
     @Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitx, float hity, float hitz)
-	{
-		TileEntitySidedConnector tile = (TileEntitySidedConnector)world.getTileEntity(x, y, z);
-		
-		if(tile == null) return false;
-		
-		ItemStack inhand = player.inventory.getCurrentItem();
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitx, float hity, float hitz)
+    {
+    	TileEntitySidedConnector tile = (TileEntitySidedConnector)world.getTileEntity(x, y, z);
+    	
+	    if (tile == null) return false;
+	    
+	    ItemStack inhand = player.getCurrentEquippedItem();
 
-		boolean clickHandled = false;
-		if(inhand != null)
-		{
-			
-			if(SideHelper.onServer())
-			{
-
-				if(ToolHelper.isWrench(inhand))
-				{			
-					
-					switch(side)
-					{
-						case 1:
-						{
-							if(hitz <= TOLERANCE)
-							{
-								tile.toggleConnection((short)2);
-								clickHandled = true;
-							}
-							
-							if(hitz >= 1.0F - TOLERANCE)
-							{
-								tile.toggleConnection((short)3);
-								clickHandled = true;
-							}
-							
-							if(hitx <= TOLERANCE)
-							{
-								tile.toggleConnection((short)4);
-								clickHandled = true;
-							}
-							
-							if(hitx >= 1.0F - TOLERANCE)
-							{
-								tile.toggleConnection((short)5);
-								clickHandled = true;
-							}
-							
-							break;						
-						}
+	    boolean clickHandled = false;
+	    if (inhand != null) 
+	    {
+	    	if (SideHelper.onServer())
+	    	{
+	    		if (ToolHelper.isWrench(inhand))
+	    		{
+	    			switch (side)
+				    {
+					    case 1:
+					    {
+						    if (hitz <= 0.3F)
+						    {
+							    tile.toggleConnection((short)2);
+							    clickHandled = true;
+						    }
+						    
+						    if (hitz >= 0.7F)
+						    {
+							    tile.toggleConnection((short)3);
+							    clickHandled = true;
+						    }
+						    
+						    if (hitx <= 0.3F)
+						    {
+							    tile.toggleConnection((short)4);
+							    clickHandled = true;
+						    }
+						    
+						    if (hitx >= 0.7F)
+						    {
+							    tile.toggleConnection((short)5);
+							    clickHandled = true;
+						    }
+						    
+						    break;
+					    } 
+					    
+					    case 4: 
+					    case 5: 
+					    {
+						    if (hitz <= 0.3F)
+						    {
+							    tile.toggleConnection((short)2);
+							    clickHandled = true;
+						    }
+						    
+						    if (hitz >= 0.7F)
+						    {
+							    tile.toggleConnection((short)3);
+							    clickHandled = true;
+						    }
+						    break;
+					    }
+					    case 2: 
+					    case 3: 
+					    {
+						    if (hitx <= 0.3F)
+						    {
+						    tile.toggleConnection((short)4);
+						    clickHandled = true;
+						    }
+						    if (hitx >= 0.7F)
+						    {
+						    tile.toggleConnection((short)5);
+						    clickHandled = true;
+						    }
+						    break;
+					    }
+			    	}
+	    			
+    				if (!clickHandled) 
+    				{
+					    tile.toggleConnection((short)side);
+				    }
+    				
+				    world.markBlockForUpdate(x, y, z);
+				    return true;
+	    		}
+	    	}
+	    	else if (SideHelper.onClient())
+	    	{
+	    		if(inhand == null || inhand.getItem() == null) return false;
+	    		
+			    int damage = inhand.getItemDamage();
+			    
+			    if (((inhand.getItem() instanceof ItemBlock)) && (!BlockDecor.RANGE_WALL.contains(Integer.valueOf(damage))))
+			    {
+				    ItemBlock itemBlock = (ItemBlock)inhand.getItem();
+				    Block handBlock = itemBlock.field_150939_a;
+				    
+				    if (handBlock != null)
+				    {
+					    IIcon ico = handBlock.getIcon(2, damage);
+					    if (ico != null)
+					    {
+						    tile.setSecondaryTextureSource(handBlock, inhand.getItem().getDamage(inhand), 2);
+						    
+						    IMessage message = new DiscreteDecorativeTextureSyncPacket.DiscreteDecorativeTextureSyncMessage(tile.getSecondaryTextureSource(), x, y, z, inhand.getItem().getDamage(inhand), 2, player.dimension);
+						    DiscreteDecorativePacketHandler.net.sendToServer(message);
 						
-						case 4:
-						case 5:
-						{
-							if(hitz <= TOLERANCE)
-							{
-								tile.toggleConnection((short)2);
-								clickHandled = true;
-							}
-							
-							if(hitz >= 1.0F - TOLERANCE)
-							{
-								tile.toggleConnection((short)3);
-								clickHandled = true;
-							}
-					
-							break;
-						}
-						
-						case 2:
-						case 3:
-						{
-							if(hitx <= TOLERANCE)
-							{
-								tile.toggleConnection((short)4);
-								clickHandled = true;
-							}
-							
-							if(hitx >= 1.0F - TOLERANCE)
-							{
-								tile.toggleConnection((short)5);
-								clickHandled = true;
-							}
-							
-							break;		
-						}
-					}
-					
-					if(!clickHandled) tile.toggleConnection((short)side);
-
-					world.markBlockForUpdate(x, y, z);
-					return false;
-				}
-			}
-		}
-		
-		return false;
-	}
+						    world.markBlockForUpdate(x, y, z);
+						    return true;
+				    	}
+				    }
+			    }
+	    	}
+	    }
+	    
+	    return false;
+    
+    }
 	
     @Override
     public BoundSet getHitBoxesBasedOnState(IBlockAccess world, int x, int y, int z)
@@ -262,6 +308,11 @@ public class SubBlockWall extends SubBlock
 				}
 				
 				case BlockDecor.ID_WALL_RAILING_SIMPLE:
+				case BlockDecor.ID_WALL_RAILING_DOUBLE:
+				case BlockDecor.ID_WALL_RAILING_TRIPLE:
+				case BlockDecor.ID_WALL_RAILING_SQUARE:
+				case BlockDecor.ID_WALL_RAILING_SQUARE_HALVED:
+				case BlockDecor.ID_WALL_RAILING_SQUARE_QUARTERED: 
 				{
 
 					PointSet result = new PointSet(PART_WALL_RAILING_SIMPLE_POST);
@@ -298,11 +349,59 @@ public class SubBlockWall extends SubBlock
 					
 			    	return result.toAABB(x, y, z);
 				}
+
+				case BlockDecor.ID_WALL_DANGER_TAPE:
+				{
+					PointSet result = new PointSet(PART_WALL_DANGER_TAPE_POST);
+					
+					if (getAdjacencyCount(adjMap) == 0) 
+					{
+						return result.toAABB(x, y, z);
+					}
+					
+					if (((Boolean)adjMap.get(ForgeDirection.NORTH)).booleanValue()) 
+					{
+						result.combine(PART_WALL_DANGER_TAPE_NORTH);
+					}
+					
+					if (((Boolean)adjMap.get(ForgeDirection.SOUTH)).booleanValue()) 
+					{
+						result.combine(PART_WALL_DANGER_TAPE_NORTH.translateTo(ForgeDirection.SOUTH));
+					}
+					
+					if (((Boolean)adjMap.get(ForgeDirection.EAST)).booleanValue()) 
+					{
+						result.combine(PART_WALL_DANGER_TAPE_NORTH.translateTo(ForgeDirection.EAST));
+					}
+					
+					if (((Boolean)adjMap.get(ForgeDirection.WEST)).booleanValue()) 
+					{
+						result.combine(PART_WALL_DANGER_TAPE_NORTH.translateTo(ForgeDirection.WEST));
+					}
+					
+					return result.toAABB(x, y, z);
+				}
+				
+				case BlockDecor.ID_WALL_PANEL_SQUARE: 
+				case BlockDecor.ID_WALL_PANEL_SQUARE_HALVED: 
+				case BlockDecor.ID_WALL_PANEL_SQUARE_QUARTERED: 
+				{
+					PointSet result = new PointSet(PART_PANEL_POST_NORTH);
+					
+					result.combine(PART_PANEL_POST_NORTH.translateTo(ForgeDirection.SOUTH));
+					
+					if ((tile.getForgeDirection() == ForgeDirection.EAST) || (tile.getForgeDirection() == ForgeDirection.WEST)) 
+					{
+						result = result.translateTo(ForgeDirection.EAST);
+					}
+					
+					return result.toAABB(x, y, z);
+				}
 			}
     	}
-    	
-		return AxisAlignedBB.getBoundingBox(x + 0, y + 0, z + 0, x + 1, y + 1, z + 1);
+    	return AxisAlignedBB.getBoundingBox(x + 0, y + 0, z + 0, x + 1, y + 1, z + 1);
 	}
+    
     
 	@Override
 	public void getCollisionBoxes(World world, int x, int y, int z, AxisAlignedBB mask, List boxlist, Entity entity)
@@ -375,6 +474,12 @@ public class SubBlockWall extends SubBlock
 				}
 				
 				case BlockDecor.ID_WALL_RAILING_SIMPLE:
+				case BlockDecor.ID_WALL_RAILING_DOUBLE:
+				case BlockDecor.ID_WALL_RAILING_TRIPLE:
+				case BlockDecor.ID_WALL_RAILING_SQUARE:
+				case BlockDecor.ID_WALL_RAILING_SQUARE_HALVED:
+				case BlockDecor.ID_WALL_RAILING_SQUARE_QUARTERED:
+				case BlockDecor.ID_WALL_DANGER_TAPE:
 				{
 		    		PointSet piece = PART_WALL_NORTH_TALL;
 		    		boolean shortened = false;
@@ -445,9 +550,28 @@ public class SubBlockWall extends SubBlock
 			    	
 					break;
 				}
+				
+				case 950: 
+				case 951: 
+				case 952: 
+				{
+					PointSet t = PART_PANEL_META_BOX;
+					
+					if ((tile.getForgeDirection() == ForgeDirection.EAST) || (tile.getForgeDirection() == ForgeDirection.WEST)) 
+					{
+						t = t.translateTo(ForgeDirection.EAST);
+					}
+					
+					if (mask.intersectsWith(t.toAABB(x, y, z)) == true) 
+					{
+						boxlist.add(t.toAABB(x, y, z));
+					}
+					
+					break;
+				}
 			}
-    	}  	
-	}
+    	}
+	}  	
     
     
 	public static HashMap<ForgeDirection, Boolean> getAdjacencyMap(IBlockAccess world, int x, int y, int z)
@@ -461,7 +585,7 @@ public class SubBlockWall extends SubBlock
 		
 		HashMap<ForgeDirection, Boolean> adj = new HashMap<ForgeDirection, Boolean>();
 		
-		if(isWall(north) || shouldWallConnect(world.getBlock(x, y, z - 1)))
+		if(isWall(north) || shouldWallConnect(world, x, y, z - 1))
 		{
 			adj.put(ForgeDirection.NORTH, true);
 		}
@@ -470,7 +594,7 @@ public class SubBlockWall extends SubBlock
 			adj.put(ForgeDirection.NORTH, false);			
 		}
 		
-		if(isWall(south) || shouldWallConnect(world.getBlock(x, y, z + 1)))
+		if(isWall(south) || shouldWallConnect(world, x, y, z + 1))
 		{
 			adj.put(ForgeDirection.SOUTH, true);
 		}
@@ -479,7 +603,7 @@ public class SubBlockWall extends SubBlock
 			adj.put(ForgeDirection.SOUTH, false);			
 		}
 		
-		if(isWall(east) || shouldWallConnect(world.getBlock(x + 1, y, z)))
+		if(isWall(east) || shouldWallConnect(world, x + 1, y, z))
 		{
 			adj.put(ForgeDirection.EAST, true);
 		}
@@ -488,7 +612,7 @@ public class SubBlockWall extends SubBlock
 			adj.put(ForgeDirection.EAST, false);			
 		}
 		
-		if(isWall(west) || shouldWallConnect(world.getBlock(x - 1, y, z)))
+		if(isWall(west) || shouldWallConnect(world, x - 1, y, z))
 		{
 			adj.put(ForgeDirection.WEST, true);
 		}
@@ -533,9 +657,13 @@ public class SubBlockWall extends SubBlock
 		return false;
 	}
 	
-	public static boolean shouldWallConnect(Block connect)
+	public static boolean shouldWallConnect(IBlockAccess world, int x, int y, int z)
 	{
-		if(connect instanceof BlockAir || connect instanceof BlockDynamicLiquid || connect instanceof BlockStaticLiquid)
+		if(world == null) return false;
+		
+		Block connect = world.getBlock(x, y, z);
+		
+		if (((connect instanceof BlockAir)) || ((connect instanceof BlockDynamicLiquid)) || ((connect instanceof BlockStaticLiquid)) || ((connect instanceof BlockSnow)) || (connect == null) || (!(connect instanceof Block)) || (world.isAirBlock(x, y, z)) || (connect.isAir(world, x, y, z))) 
 		{
 			return false;
 		}
@@ -545,7 +673,10 @@ public class SubBlockWall extends SubBlock
 	
 	public static int getAdjacencyCount(HashMap<ForgeDirection, Boolean> map)
 	{
+		if(map == null) return 0;
+			
 		int count = 0;
+		
 		for(Entry<ForgeDirection, Boolean> entry : map.entrySet())
 		{
 			if(entry.getValue() && entry.getKey() != ForgeDirection.UP && entry.getKey() != ForgeDirection.DOWN)
@@ -560,14 +691,21 @@ public class SubBlockWall extends SubBlock
 	
 	public static void mergeMaps(HashMap<ForgeDirection, Boolean> copyTo, HashMap<ForgeDirection, Boolean> copyFrom)
 	{
+		if(copyTo == null || copyFrom == null) return;
+		
 		for(Entry<ForgeDirection, Boolean> entry : copyTo.entrySet())
 		{
-			copyTo.put(entry.getKey(), entry.getValue() && copyFrom.get(entry.getKey()));
+			if(entry != null)
+			{
+				copyTo.put(entry.getKey(), entry.getValue() && copyFrom.get(entry.getKey()));
+			}
 		}
 	}
 	
 	public static boolean isCorner(HashMap<ForgeDirection, Boolean> adjMap)
 	{
+		if(adjMap == null) return false;
+		
 		if(adjMap.get(ForgeDirection.NORTH) && adjMap.get(ForgeDirection.EAST))
 		{
 			return true;

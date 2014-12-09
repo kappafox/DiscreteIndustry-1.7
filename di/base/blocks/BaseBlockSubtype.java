@@ -315,16 +315,16 @@ public abstract class BaseBlockSubtype extends Block
 		return true;
     }
     
-    
+    /*
     @Override
     public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
     {
-    	/*
+
     	//TODO: Update this for 1.7
-        int id = idPicked(world, x, y, z);        
+        Block block = world.getBlock(x, y, z);        
         TileEntity t = world.getTileEntity(x, y, z);
         
-        if (id == 0 || Item.itemsList[id] == null)
+        if (block == null || Item.itemsList[id] == null)
         {
             return null;
         }
@@ -342,9 +342,7 @@ public abstract class BaseBlockSubtype extends Block
         }
         
         return new ItemStack(id, 1, getDamageValue(world, x, y, z));
-        */
-    	
-    	return new ItemStack(Blocks.stone);
     }
+    */
 
 }
