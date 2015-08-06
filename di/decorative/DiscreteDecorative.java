@@ -158,7 +158,7 @@ public class DiscreteDecorative
 		//881-890 Simple shapes
 		LanguageRegistry.addName(new ItemStack(decorBlock, 1, 881), "Discrete Slab");
 		
-		//900-920 Walls & Fences
+		//900-999 Walls, Fences, Bridges, Catawalks
 		LanguageRegistry.addName(new ItemStack(decorBlock, 1, BlockDecor.ID_WALL_DISCRETE), "Discrete Wall");
 		
 		LanguageRegistry.addName(new ItemStack(decorBlock, 1, BlockDecor.ID_WALL_RAILING_SIMPLE), "Simple Railing");
@@ -174,6 +174,9 @@ public class DiscreteDecorative
 	    LanguageRegistry.addName(new ItemStack(decorBlock, 1, 950), "Square Panel");
 	    LanguageRegistry.addName(new ItemStack(decorBlock, 1, 951), "Halved Square Panel");
 	    LanguageRegistry.addName(new ItemStack(decorBlock, 1, 952), "Quartered Square Panel");
+	    
+	    //1000 - 1100 Catwalks, bridges
+	    LanguageRegistry.addName(new ItemStack(decorBlock, 1, 1000), "Simple Catwalk");
 	    
 		//Tests
 		LanguageRegistry.addName(new ItemStack(decorBlock, 1, 805), "Flag Yolo Test");		

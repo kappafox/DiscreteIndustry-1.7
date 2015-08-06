@@ -20,6 +20,7 @@ public class BlockDecorRenderer extends BlockRenderingHandler
 	private static SubRendererStairs SUB_RENDERER_STAIRS;
 	private static SubRendererShape SUB_RENDERER_SHAPE;
 	private static SubRendererWall SUB_RENDERER_WALL;
+	private static SubRendererBridge SUB_RENDERER_BRIDGE;
 	
 	public BlockDecorRenderer( )
 	{
@@ -31,6 +32,7 @@ public class BlockDecorRenderer extends BlockRenderingHandler
 		 SUB_RENDERER_STAIRS = new SubRendererStairs();
 		 SUB_RENDERER_SHAPE = new SubRendererShape();
 		 SUB_RENDERER_WALL = new SubRendererWall();
+		 SUB_RENDERER_BRIDGE = new SubRendererBridge();
 		 
 		 
 		 this.mapSubBlockRenderers();
@@ -65,11 +67,12 @@ public class BlockDecorRenderer extends BlockRenderingHandler
 	
 	private void mapSubBlockRenderers( )
 	{	
-		super.registerHandlerRange(BlockDecor.RANGE_LADDER.lowerEndpoint(), BlockDecor.RANGE_LADDER.upperEndpoint(), SUB_RENDERER_LADDER);
-		super.registerHandlerRange(BlockDecor.RANGE_RACK.lowerEndpoint(), BlockDecor.RANGE_RACK.upperEndpoint(), SUB_RENDERER_WEAPON_RACK);
-		super.registerHandlerRange(BlockDecor.RANGE_STRUT.lowerEndpoint(), BlockDecor.RANGE_STRUT.upperEndpoint(), SUB_RENDERER_STRUT);
-		super.registerHandlerRange(BlockDecor.RANGE_STAIRS.lowerEndpoint(), BlockDecor.RANGE_STAIRS.upperEndpoint(), SUB_RENDERER_STAIRS);
-		super.registerHandlerRange(BlockDecor.RANGE_SHAPE.lowerEndpoint(), BlockDecor.RANGE_SHAPE.upperEndpoint(), SUB_RENDERER_SHAPE);
-		super.registerHandlerRange(BlockDecor.RANGE_WALL.lowerEndpoint(), BlockDecor.RANGE_WALL.upperEndpoint(), SUB_RENDERER_WALL);
+		super.registerHandlerRange(BlockDecor.RANGE_LADDER, SUB_RENDERER_LADDER);
+		super.registerHandlerRange(BlockDecor.RANGE_RACK, SUB_RENDERER_WEAPON_RACK);
+		super.registerHandlerRange(BlockDecor.RANGE_STRUT, SUB_RENDERER_STRUT);
+		super.registerHandlerRange(BlockDecor.RANGE_STAIRS, SUB_RENDERER_STAIRS);
+		super.registerHandlerRange(BlockDecor.RANGE_SHAPE, SUB_RENDERER_SHAPE);
+		super.registerHandlerRange(BlockDecor.RANGE_WALL, SUB_RENDERER_WALL);
+		super.registerHandlerRange(BlockDecor.RANGE_BRIDGE, SUB_RENDERER_BRIDGE);
 	}
 }

@@ -2,6 +2,8 @@ package kappafox.di.base;
 
 import java.util.HashMap;
 
+import com.google.common.collect.Range;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.world.IBlockAccess;
@@ -24,6 +26,19 @@ public abstract class BlockRenderingHandler
 	
 	public void registerHandlerRange(int keyStart, int keyEnd, SubBlockRenderingHandler handler)
 	{
+		if(keyStart < keyEnd)
+		{
+			for(int i = keyStart; i <= keyEnd; i++)
+			{
+				this.registerHandler(i, handler);
+			}
+		}
+	}
+	
+	public void registerHandlerRange(Range<Integer> range, SubBlockRenderingHandler handler)
+	{
+		int keyStart = range.lowerEndpoint();
+		int keyEnd = range.upperEndpoint();
 		if(keyStart < keyEnd)
 		{
 			for(int i = keyStart; i <= keyEnd; i++)

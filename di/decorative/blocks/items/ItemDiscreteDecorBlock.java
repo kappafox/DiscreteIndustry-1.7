@@ -35,6 +35,7 @@ public class ItemDiscreteDecorBlock extends BaseItemDiscreteOverloaded
 		super.registerSubItem(new SubItemFixture(), BlockDecor.META_STRUT);
 		super.registerSubItem(new SubItemShape(), BlockDecor.META_SHAPE);	
 		super.registerSubItem(new SubItemWall(), BlockDecor.META_WALL);
+		super.registerSubItem(new SubItemBridge(), BlockDecor.META_BRIDGE);
 		
 		startDamage = 800;
 	}
@@ -89,6 +90,9 @@ public class ItemDiscreteDecorBlock extends BaseItemDiscreteOverloaded
         itemList.add(new ItemStack(item, 1, 950));
         itemList.add(new ItemStack(item, 1, 951));
         itemList.add(new ItemStack(item, 1, 952));
+        
+        // Bridges, Catwalks, etc, 1000-1100
+        itemList.add(new ItemStack(item, 1, BlockDecor.ID_BRIDGE_CATWALK_SIMPLE));
     }
 
     @Override
