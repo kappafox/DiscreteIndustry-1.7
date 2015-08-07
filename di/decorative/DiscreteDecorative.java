@@ -12,6 +12,7 @@ import kappafox.di.decorative.blocks.items.ItemDiscreteHazardBlock;
 import kappafox.di.decorative.renderers.DiscreteDecorativeItemRenderer;
 import kappafox.di.decorative.renderers.DiscreteDecorativeRenderManager;
 import kappafox.di.decorative.renderers.TileEntitySwordRackRenderer;
+import kappafox.di.decorative.tileentities.TileEntityBridgeBlock;
 import kappafox.di.decorative.tileentities.TileEntityHazardBlock;
 import kappafox.di.decorative.tileentities.TileEntityLoomBlock;
 import kappafox.di.decorative.tileentities.TileEntityStripHazardBlock;
@@ -37,7 +38,6 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 
 public class DiscreteDecorative
 {
@@ -85,6 +85,7 @@ public class DiscreteDecorative
 		GameRegistry.registerTileEntity(TileEntityLoomBlock.class, "DD Loom Block");
 		GameRegistry.registerTileEntity(TileEntitySwordRack.class, "DD Sword Rack");
 		GameRegistry.registerTileEntity(TileEntitySidedConnector.class, "DD Fixture");
+		GameRegistry.registerTileEntity(TileEntityBridgeBlock.class, "DD Bridge Tile Entity");
 		
 		//register actual entities
 		//EntityRegistry.registerGlobalEntityID(EntityWorldItem.class, "EntWorldItem", EntityRegistry.findGlobalUniqueEntityId());		
@@ -176,7 +177,7 @@ public class DiscreteDecorative
 	    LanguageRegistry.addName(new ItemStack(decorBlock, 1, 952), "Quartered Square Panel");
 	    
 	    //1000 - 1100 Catwalks, bridges
-	    LanguageRegistry.addName(new ItemStack(decorBlock, 1, 1000), "Simple Catwalk");
+	    LanguageRegistry.addName(new ItemStack(decorBlock, 1, BlockDecor.ID_BRIDGE_CATWALK_SIMPLE), "Simple Catwalk");
 	    
 		//Tests
 		LanguageRegistry.addName(new ItemStack(decorBlock, 1, 805), "Flag Yolo Test");		
@@ -244,9 +245,6 @@ public class DiscreteDecorative
 		
 		//Shapes
 		ItemStack slab6 = new ItemStack(decorBlock, 6, 881);
-		
-		
-
 		
 		//Ladders
 		GameRegistry.addRecipe(new ShapelessOreRecipe(footLadder6, new Object[]{frameDiscreteCable, Blocks.ladder, Blocks.cobblestone}));
