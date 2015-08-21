@@ -58,6 +58,7 @@ public class BlockDecor extends BaseBlockDiscreteSubtype implements ISubItemRang
 	
 	public static final short ID_STAIRS_NORMAL = 861;
 	public static final short ID_STAIRS_SMALL = 862;
+	public static final short ID_STAIRS_CATWALK_SIMPLE = 863;
 	
 	public static final short ID_STRUT_2X2 = 871;
 	public static final short ID_STRUT_4X4 = 872;
@@ -109,7 +110,7 @@ public class BlockDecor extends BaseBlockDiscreteSubtype implements ISubItemRang
 		super.registerSubBlock((int)META_STRUT, RANGE_STRUT, new SubBlockStrut());
 		super.registerSubBlock((int)META_SHAPE, RANGE_SHAPE, new SubBlockShape());
 		super.registerSubBlock((int)META_WALL, RANGE_WALL, new SubBlockWall());
-		super.registerSubBlock(META_BRIDGE, RANGE_BRIDGE, new SubBlockBridge());
+		super.registerSubBlock((int)META_BRIDGE, RANGE_BRIDGE, new SubBlockBridge());
 	}
 	
     @Override

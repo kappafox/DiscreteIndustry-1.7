@@ -23,8 +23,4 @@ public class ItemHorseInspector extends Item
     {	
         this.itemIcon = register_.registerIcon(DiscreteIndustry.MODID + ":" + "itemHorseInspector");
     }
-
-	
-	
-
 }

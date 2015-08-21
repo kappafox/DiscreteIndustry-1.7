@@ -72,7 +72,7 @@ public abstract class SubBlock
 	
 	public boolean hasTileEntity(int meta)
 	{
-		return false;
+		return true;
 	}
 
     public boolean isLadder(IBlockAccess world, int x, int y, int z, EntityLivingBase entity)

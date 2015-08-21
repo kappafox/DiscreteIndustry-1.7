@@ -10,6 +10,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import kappafox.di.base.SubBlockRenderingHandler;
 import kappafox.di.base.tileentities.TileEntityDiscreteBlock;
 import kappafox.di.base.tileentities.TileEntitySubtype;
+import kappafox.di.base.util.PointSet;
 import kappafox.di.base.util.TextureOffset;
 import kappafox.di.decorative.blocks.BlockDecor;
 
@@ -29,10 +30,15 @@ public class SubRendererStairs extends SubBlockRenderingHandler
 			
 			case BlockDecor.ID_STAIRS_SMALL:
 				return this.renderWorldDiscreteSmallStairsBlock(world, x, y, z, block, t, renderer, subtype);
+				
+			case BlockDecor.ID_STAIRS_CATWALK_SIMPLE:
+				return this.renderWorldDiscreteSimpleCatwalkStairsBlock(world, x, y, z, block, t, renderer, subtype);
 		}
 		
 		return false;
 	}
+
+
 
 	@Override
 	public void renderInventoryBlock(Block block, int subtype, int modelID, RenderBlocks renderer)
@@ -54,10 +60,29 @@ public class SubRendererStairs extends SubBlockRenderingHandler
 				this.renderInventorySmallDiscreteStairs(block, subtype, modelID, renderer);
 				break;
 			}
+			
+			case BlockDecor.ID_STAIRS_CATWALK_SIMPLE:
+			{
+				this.renderInventorySimpleCatwalkStalks(block, subtype, modelID, renderer);
+			}
 		}
 		
 		drh.resetGL11Scale();		
 		tessellator.draw();	
+	}
+
+	private void renderInventorySimpleCatwalkStalks(Block block, int subtype, int modelID, RenderBlocks renderer) 
+	{	
+		double zstart = px.fourteen;
+		double zend = px.sixteen;
+		double ystart = px.zero;
+		double yend = px.one;
+				
+		for(int i = 0; i < 4; i ++)
+		{
+			renderer.setRenderBounds(px.zero, ystart + ((i * 4) * px.one), zstart - ((i * 4) * px.one), px.sixteen, yend + ((i * 4) * px.one), zend - ((i * 4) * px.one));
+			drh.tessellateInventoryBlock(renderer, block, subtype);
+		}
 	}
 
 	private void renderInventoryDiscreteStairs(Block block, int subtype, int modelID, RenderBlocks renderer)
@@ -839,6 +864,66 @@ public class SubRendererStairs extends SubBlockRenderingHandler
         return true;
 	}
 	
+	private boolean renderWorldDiscreteSimpleCatwalkStairsBlock(IBlockAccess world, int x, int y, int z, Block block, TileEntityDiscreteBlock t, RenderBlocks renderer, int subtype) 
+	{
+
+		boolean isAirBlock = false;
+		
+		switch(t.getForgeDirection())
+		{
+			case NORTH:
+			{
+				isAirBlock = world.isAirBlock(x, y, z + 1);
+				break;
+			}
+			
+			case SOUTH:
+			{
+				isAirBlock = world.isAirBlock(x, y, z - 1);
+				break;
+			}
+			
+			case EAST:
+			{
+				isAirBlock = world.isAirBlock(x - 1, y, z);
+				break;
+			}
+			
+			case WEST:
+			{
+				isAirBlock = world.isAirBlock(x + 1, y, z + 1);
+				break;
+			}
+			
+			default:
+			{
+				
+			}
+		}
+		
+		for(int i = 0; i < 16; i++)
+		{
+			// Step every 0, 4, 8, 12, 16
+			if(i % 4 == 0)
+			{
+				drh.renderDiscreteQuad(world, renderer, block, x, y, z, new PointSet(px.zero, ((15 - i) * px.one), i * px.one, px.sixteen, (16 - i) * px.one, (i + 4) * px.one), t.getForgeDirection());
+			}
+			else
+			{
+				int length = 4;
+				if(i >= 13 && !isAirBlock)
+				{
+					length = 16 - i;
+				}
+
+				drh.renderDiscreteQuad(world, renderer, block, x, y, z, new PointSet(px.zero, ((15 - i) * px.one), i * px.one, px.one, (16 - i) * px.one, (i + length) * px.one), t.getForgeDirection());
+				drh.renderDiscreteQuad(world, renderer, block, x, y, z, new PointSet(px.fifteen, ((15 - i) * px.one), i * px.one, px.sixteen, (16 - i) * px.one, (i + length) * px.one), t.getForgeDirection());
+			}
+			
+		}
+
+		return true;
+	}
 	
 	private boolean isSmallStair(TileEntityDiscreteBlock tile)
 	{

@@ -2,7 +2,10 @@ package kappafox.di.decorative;
 
 import ic2.api.recipe.RecipeInputItemStack;
 import ic2.api.recipe.Recipes;
+import ic2.core.init.InternalName;
+import ic2.core.item.tool.ItemObscurator;
 import kappafox.di.DiscreteIndustry;
+import kappafox.di.base.items.Ghettobscurator;
 import kappafox.di.base.lib.DiscreteID;
 import kappafox.di.base.tileentities.TileEntitySidedConnector;
 import kappafox.di.decorative.blocks.BlockDecor;
@@ -18,6 +21,7 @@ import kappafox.di.decorative.tileentities.TileEntityLoomBlock;
 import kappafox.di.decorative.tileentities.TileEntityStripHazardBlock;
 import kappafox.di.decorative.tileentities.TileEntitySwordRack;
 import kappafox.di.electrics.DiscreteElectrics;
+import kappafox.di.electrics.items.ItemHorseInspector;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
@@ -47,6 +51,7 @@ public class DiscreteDecorative
 	public static Block decorBlock;
 	
 	//Items
+	public static Item gobs;
 	
 	//RIDS
 	public static int hazardRenderID;
@@ -92,6 +97,8 @@ public class DiscreteDecorative
 		//EntityRegistry.registerModEntity(EntityWorldItem.class, "EntWorldItem", 0, this, 350, 5, false);
 		
 	    DiscreteDecorativePacketHandler.initPackets();
+	    
+		GameRegistry.registerItem(gobs, InternalName.obscurator.toString());
 	}
 
 
@@ -99,7 +106,7 @@ public class DiscreteDecorative
 	{
 		//grab the id database
 		DiscreteID ids = DiscreteIndustry.librarian.dibi;
-		
+	    gobs = new Ghettobscurator(InternalName.obscurator);
 		//hazardBlockID = config.getBlock("DiscreteHazard", ids.discreteHazard).getInt(ids.discreteHazard);
 		//decorBlockID = config.getBlock("DiscreteDecor", ids.discreteDecor).getInt(ids.discreteDecor);
 	}
@@ -148,8 +155,9 @@ public class DiscreteDecorative
 		//841-860 Doors/Hatches
 		
 		//861-870 Stairs
-		LanguageRegistry.addName(new ItemStack(decorBlock, 1, 861), "Discrete Stairs");
-		LanguageRegistry.addName(new ItemStack(decorBlock, 1, 862), "Discrete Small Stairs");
+		LanguageRegistry.addName(new ItemStack(decorBlock, 1, BlockDecor.ID_STAIRS_NORMAL), "Discrete Stairs");
+		LanguageRegistry.addName(new ItemStack(decorBlock, 1, BlockDecor.ID_STAIRS_SMALL), "Discrete Small Stairs");
+		LanguageRegistry.addName(new ItemStack(decorBlock, 1, BlockDecor.ID_STAIRS_CATWALK_SIMPLE), "Simple Catwalk Stairs");
 		
 		//871-880 Struts etc
 		LanguageRegistry.addName(new ItemStack(decorBlock, 1, 871), "2x2 Strut");
@@ -230,7 +238,7 @@ public class DiscreteDecorative
 		ItemStack discreteSmallStairs = new ItemStack(decorBlock, 1, 862);
 		
 		
-		//Ladders 800-820
+		// Ladders 800-820
 		ItemStack footLadder6 = new ItemStack(decorBlock, 6, 800);
 		ItemStack poleLadder6 = new ItemStack(decorBlock, 6, 801);
 		ItemStack simpleLadder6 = new ItemStack(decorBlock, 6, 802);
@@ -239,14 +247,18 @@ public class DiscreteDecorative
 		ItemStack classicLadder6 = new ItemStack(decorBlock, 6, 806);
 		ItemStack indLadder6 = new ItemStack(decorBlock, 6, 807);
 		
-		//Racks
+		// Racks
 		ItemStack swordRest2 = new ItemStack(decorBlock, 2, 821);
 		ItemStack swordRack2 = new ItemStack(decorBlock, 2, 822);
 		
-		//Shapes
+		// Shapes
 		ItemStack slab6 = new ItemStack(decorBlock, 6, 881);
 		
-		//Ladders
+		// Bridge
+		ItemStack catwalkSimple = new ItemStack(decorBlock, 1, BlockDecor.ID_BRIDGE_CATWALK_SIMPLE);
+		ItemStack catwalkSimple2 = new ItemStack(decorBlock, 2, BlockDecor.ID_BRIDGE_CATWALK_SIMPLE);
+		
+		// Ladders
 		GameRegistry.addRecipe(new ShapelessOreRecipe(footLadder6, new Object[]{frameDiscreteCable, Blocks.ladder, Blocks.cobblestone}));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(poleLadder6, new Object[]{frameDiscreteCable, Blocks.ladder, Blocks.stone}));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(simpleLadder6, new Object[]{frameDiscreteCable, Blocks.ladder, Blocks.planks}));
@@ -255,34 +267,33 @@ public class DiscreteDecorative
 		GameRegistry.addRecipe(new ShapelessOreRecipe(classicLadder6, new Object[]{frameDiscreteCable, Blocks.ladder, Items.iron_ingot}));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(indLadder6, new Object[]{frameDiscreteCable, Blocks.ladder, Blocks.stonebrick}));
 		
-		//Racks
+		// Racks
 		GameRegistry.addRecipe(new ShapedOreRecipe(swordRest2, new Object[]{ "   ", " Y ", "XXX", 'X', Blocks.stone_slab, 'Y', frameDiscreteCable,}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(swordRack2, new Object[]{ "Z Z", "ZYZ", "XXX", 'X', Blocks.stone_slab, 'Y', frameDiscreteCable, 'Z', Blocks.stone}));
 		
-		//fixture
+		// Fixture
 		//GameRegistry.addRecipe(new ShapedOreRecipe(fixture8, new Object[]{ " X ", "XYX", " X ", 'X', Item.stick, 'Y', frameDiscreteCable,}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(strut448, new Object[]{ " X ", "XYX", " X ", 'X', Items.stick, 'Y', frameDiscreteCable,}));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(strut44, new Object[]{fixture}));
 		
 		
-		//Struts
+		// Struts
 		GameRegistry.addRecipe(new ShapelessOreRecipe(strut664, new Object[]{strut44, strut44, strut44, strut44}));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(strut22, new Object[]{strut44}));
 		
 		GameRegistry.addRecipe(new ShapelessOreRecipe(strut444, new Object[]{strut22, strut22, strut22, strut22}));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(strut44, new Object[]{strut66}));
-		//Recipes.compressor.addRecipe(new RecipeInputItemStack(strut44), null, strut22);
-		//Recipes.compressor.addRecipe(new RecipeInputItemStack(strut66), null, strut44);
 		
-		//Recipes.extractor.addRecipe(new RecipeInputItemStack(strut44), null, strut66);
-		//Recipes.extractor.addRecipe(new RecipeInputItemStack(strut22), null, strut44);
-		
-		//Stairs
+		// Stairs
 		GameRegistry.addRecipe(new ShapedOreRecipe(discreteStairs8, new Object[]{ "X  ", "XX ", "XXX", 'X', frameDiscreteCable}));		
 		GameRegistry.addRecipe(new ShapelessOreRecipe(discreteSmallStairs, new Object[]{discreteStairs}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(catwalkSimple, new Object[]{frameDiscreteCable, discreteStairs}));
 		
-		//Slab
-		GameRegistry.addRecipe(new ShapedOreRecipe(slab6, new Object[]{ "XXX", "   ", "   ", 'X', frameDiscreteCable}));		
+		// Slab
+		GameRegistry.addRecipe(new ShapedOreRecipe(slab6, new Object[]{ "XXX", "   ", "   ", 'X', frameDiscreteCable}));
+		
+		// Bridge
+		GameRegistry.addRecipe(new ShapedOreRecipe(catwalkSimple2, new Object[]{"   ", "XXX", " Z ", 'X', Items.stick, 'Z', frameDiscreteCable}));
 		
 		GameRegistry.addRecipe(new ShapedOreRecipe(yellowDiagonalHazard, new Object[]{ "X  ", " Z ", "  Y", 'X', "dyeBlack", 'Y', "dyeYellow", 'Z', frameDiscreteCable}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(yellowDiagonalHazard, new Object[]{ "  X", " Z ", "Y  ", 'X', "dyeBlack", 'Y', "dyeYellow", 'Z', frameDiscreteCable}));
@@ -331,6 +342,9 @@ public class DiscreteDecorative
 	    GameRegistry.addRecipe(new ShapelessOreRecipe(panelSquare, new Object[] { discreteWall1, Blocks.stone}));
 	    GameRegistry.addRecipe(new ShapelessOreRecipe(panelSquareDouble, new Object[] { panelSquare, Items.stick }));
 	    GameRegistry.addRecipe(new ShapelessOreRecipe(panelSquareTriple, new Object[] { panelSquareDouble, Items.stick }));
+	    
+	    // Ghettobsucurator
+		GameRegistry.addRecipe(new ShapedOreRecipe(gobs, new Object[]{"XX ", "XX ", "  Y", 'X', Blocks.glass, 'Y', Items.stick}));
 	}
 }
 

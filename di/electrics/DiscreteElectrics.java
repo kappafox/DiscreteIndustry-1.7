@@ -66,15 +66,12 @@ public class DiscreteElectrics
 		//register tile entities
 		GameRegistry.registerTileEntity(TileEntityDiscreteCable.class, "Cable Block");
 		GameRegistry.registerTileEntity(TileEntityDiscreteBlock.class, "Discrete Block");
-				
-		
 	}
-
 
 	private void registerItems( ) 
 	{
 		horseInspector = new ItemHorseInspector("Horse Inspector", 1);
-		LanguageRegistry.addName(horseInspector, "Horse Inspector");
+		GameRegistry.registerItem(horseInspector, "Horse Inspector");
 	}
 
 	public void preInitialisation(FMLPreInitializationEvent event, Configuration config)

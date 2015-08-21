@@ -66,6 +66,7 @@ public class ItemDiscreteDecorBlock extends BaseItemDiscreteOverloaded
         //Discrete Stairs
         itemList.add(new ItemStack(item, 1, BlockDecor.ID_STAIRS_NORMAL));
         itemList.add(new ItemStack(item, 1, BlockDecor.ID_STAIRS_SMALL));
+        itemList.add(new ItemStack(item, 1, BlockDecor.ID_STAIRS_CATWALK_SIMPLE));
         
         //StrutS
         itemList.add(new ItemStack(item, 1, BlockDecor.ID_STRUT_2X2));	//2x2

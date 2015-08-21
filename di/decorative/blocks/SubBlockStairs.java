@@ -33,27 +33,9 @@ public class SubBlockStairs extends SubBlock
 		STAIR_TEXTURE_BACK = ireg.registerIcon(DiscreteIndustry.MODID + ":" + "blockDiscreteStairsback");
 	}
 
-	
 	@Override
 	public IIcon getIcon(int side, int meta) 
 	{
-		/*
-		if(side == 0 || side == 1)
-		{
-			return STAIRTEXTURETOP;
-		}
-		
-		if(side == 4 || side == 5)
-		{
-			return STAIRTEXTURESIDE;
-		}
-		
-		if(side == 7)
-		{
-			return STAIRTEXTUREBACK;
-		}
-		*/
-		
 		if(meta == 862)
 		{
 			return STAIR_SMALL_TEXTURE;
@@ -75,43 +57,6 @@ public class SubBlockStairs extends SubBlock
 		if(tile != null)
 		{
 			return this.getIcon(0, tile.getSubtype());
-			/*
-			int dir = tile.getDirection();
-			
-			if(dir == 2)
-			{
-				switch(side)
-				{
-					case 0:
-						return this.getIcon(0, 0);
-					case 1:
-						return this.getIcon(1, 0);
-					case 2:
-						return this.getIcon(7, 0);
-					case 3:
-						return this.getIcon(3, 0);
-					case 4:
-						return new IconFlipped(this.getIcon(4, 0), true, false);
-					case 5:
-						return this.getIcon(5, 0);
-						
-						
-				}
-			}
-			
-			if(dir == 3)
-			{
-				if(side == 1 || side == 0)
-				{
-					return this.getIcon(1, 0);
-				}
-				
-				if(side == 4 || side == 5)
-				{
-					return new IconFlipped(this.getIcon(4, 0), true, false);
-				}
-			}
-			*/
 		}
 		return STAIR_TEXTURE;
 	}
@@ -345,10 +290,7 @@ public class SubBlockStairs extends SubBlock
 			
 			if(tile2.getSubtype() == stair.getSubtype())
 			{
-				//int dir = stair.getDirection();
 				return tile2.getDirection();
-				
-				
 			}
 		}
 		return -1;

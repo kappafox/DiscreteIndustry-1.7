@@ -39,6 +39,7 @@ public abstract class BlockRenderingHandler
 	{
 		int keyStart = range.lowerEndpoint();
 		int keyEnd = range.upperEndpoint();
+		
 		if(keyStart < keyEnd)
 		{
 			for(int i = keyStart; i <= keyEnd; i++)

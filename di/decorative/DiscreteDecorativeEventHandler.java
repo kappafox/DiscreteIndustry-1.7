@@ -14,6 +14,7 @@ import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -77,20 +78,13 @@ public class DiscreteDecorativeEventHandler
 						double j = ((horse.getHorseJumpStrength() - 0.4) / jumpRange) * 100;
 						double s = ((ai.getAttributeValue() - 0.1125) / speedRange) * 100;
 						
-						//System.out.println("J:" + horse.getHorseJumpStrength());
-						//System.out.println("S:" + ai.getAttributeValue());
 						DecimalFormat df = new DecimalFormat("##.#");
 						String jump = df.format(j) + "%";
 						String speed = df.format(s) + "%";
 						
-						//double jump = Math.round(horse.getHorseJumpStrength() * 1000.0) / 1000.0;
-						//double speed = Math.round(ai.getAttributeValue() * 1000.0) / 1000.0;
-						
-						
 						if(FMLCommonHandler.instance().getEffectiveSide().isServer() == true)
 						{
-							//p.sendChatToPlayer(ChatMessageComponent.createFromText("Hearts:" + df.format(hp.getAttributeValue()) + "   Jump:" + jump + "   Speed:" + speed));
-
+							p.addChatMessage(new ChatComponentText("Hearts:" + df.format(hp.getAttributeValue()) + "   Jump:" + jump + "   Speed:" + speed));
 						}
 						
 						event.setCanceled(true);
