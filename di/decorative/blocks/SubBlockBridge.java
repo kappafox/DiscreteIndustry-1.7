@@ -9,6 +9,7 @@ import kappafox.di.base.blocks.SubBlock;
 import kappafox.di.base.compat.ToolHelper;
 import kappafox.di.base.tileentities.TileEntityDiscreteBlock;
 import kappafox.di.base.tileentities.TileEntitySidedConnector;
+import kappafox.di.base.util.BoundSet;
 import kappafox.di.base.util.PointSet;
 import kappafox.di.base.util.SideHelper;
 import kappafox.di.decorative.DiscreteDecorativePacketHandler;
@@ -43,13 +44,16 @@ public class SubBlockBridge extends SubBlock
 		return DEFAULT_ICON;
 	}
 	
-	/*
 	@Override
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(IBlockAccess world, int x, int y, int z)
+	public AxisAlignedBB getWireframeBox(IBlockAccess world, int x, int y, int z) 
+	{
+		return AxisAlignedBB.getBoundingBox(x + 0, y + 0, z + 0, x + 1, y + 1, z + 1);
+	}
+	
+    public BoundSet getHitBoxesBasedOnState(IBlockAccess world, int x, int y, int z)
     {
-    	return AxisAlignedBB.getBoundingBox((double)x + px.zero, (double)y + px.zero, (double)z + px.zero, (double)x + px.sixteen, (double)y + px.zero, (double)z + px.sixteen);
+    	return new PointSet(0,0,0,1,1,1);
     }
-    */
 	
 	@Override
 	public void getCollisionBoxes(World world, int x, int y, int z, AxisAlignedBB mask, List boxlist, Entity entity)

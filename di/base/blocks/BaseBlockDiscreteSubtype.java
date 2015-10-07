@@ -230,7 +230,7 @@ public class BaseBlockDiscreteSubtype extends BlockDiscreteBlock
 			blocks.get(meta).breakBlock(world, x, y, z, block, meta);
 		}
 		
-		super.breakBlock(world, x, y, z, block, meta);
+		world.removeTileEntity(x, y, z);
     }
 	
 	@Override

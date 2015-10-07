@@ -2,16 +2,16 @@ package kappafox.di.decorative;
 
 import ic2.api.recipe.RecipeInputItemStack;
 import ic2.api.recipe.Recipes;
-import ic2.core.init.InternalName;
-import ic2.core.item.tool.ItemObscurator;
 import kappafox.di.DiscreteIndustry;
-import kappafox.di.base.items.Ghettobscurator;
 import kappafox.di.base.lib.DiscreteID;
 import kappafox.di.base.tileentities.TileEntitySidedConnector;
+import kappafox.di.base.util.MirrorlessShapedRecipe;
 import kappafox.di.decorative.blocks.BlockDecor;
 import kappafox.di.decorative.blocks.BlockHazard;
+import kappafox.di.decorative.blocks.BlockIndustrial1;
 import kappafox.di.decorative.blocks.items.ItemDiscreteDecorBlock;
 import kappafox.di.decorative.blocks.items.ItemDiscreteHazardBlock;
+import kappafox.di.decorative.blocks.items.ItemIndustrialBlock1;
 import kappafox.di.decorative.renderers.DiscreteDecorativeItemRenderer;
 import kappafox.di.decorative.renderers.DiscreteDecorativeRenderManager;
 import kappafox.di.decorative.renderers.TileEntitySwordRackRenderer;
@@ -49,9 +49,10 @@ public class DiscreteDecorative
 	//Blocks
 	public static Block hazardBlock;
 	public static Block decorBlock;
+	public static Block industrialBlock1;
 	
 	//Items
-	public static Item gobs;
+	//public static Item gobs;
 	
 	//RIDS
 	public static int hazardRenderID;
@@ -98,7 +99,7 @@ public class DiscreteDecorative
 		
 	    DiscreteDecorativePacketHandler.initPackets();
 	    
-		GameRegistry.registerItem(gobs, InternalName.obscurator.toString());
+		//GameRegistry.registerItem(gobs, InternalName.obscurator.toString());
 	}
 
 
@@ -106,7 +107,7 @@ public class DiscreteDecorative
 	{
 		//grab the id database
 		DiscreteID ids = DiscreteIndustry.librarian.dibi;
-	    gobs = new Ghettobscurator(InternalName.obscurator);
+	    //gobs = new Ghettobscurator(InternalName.obscurator);
 		//hazardBlockID = config.getBlock("DiscreteHazard", ids.discreteHazard).getInt(ids.discreteHazard);
 		//decorBlockID = config.getBlock("DiscreteDecor", ids.discreteDecor).getInt(ids.discreteDecor);
 	}
@@ -115,9 +116,11 @@ public class DiscreteDecorative
 	{
 		hazardBlock = new BlockHazard(Material.rock, hazardRenderID);
 		decorBlock = new BlockDecor(Material.rock, decorRenderID);
+		industrialBlock1 = new BlockIndustrial1(Material.rock);
 		
 		GameRegistry.registerBlock(hazardBlock, ItemDiscreteHazardBlock.class, DiscreteIndustry.MODID + "hazardBlock");
 		GameRegistry.registerBlock(decorBlock, ItemDiscreteDecorBlock.class, DiscreteIndustry.MODID + "decorBlock");
+		GameRegistry.registerBlock(industrialBlock1, ItemIndustrialBlock1.class, DiscreteIndustry.MODID + "industrialBlock1");
 		
 		//Hazard Blocks
 		LanguageRegistry.addName(new ItemStack(hazardBlock, 1, 0), "Diagonal Hazard Block");
@@ -187,6 +190,16 @@ public class DiscreteDecorative
 	    //1000 - 1100 Catwalks, bridges
 	    LanguageRegistry.addName(new ItemStack(decorBlock, 1, BlockDecor.ID_BRIDGE_CATWALK_SIMPLE), "Simple Catwalk");
 	    
+	    
+	    // Standard Blocks
+	    LanguageRegistry.addName(new ItemStack(industrialBlock1, 1, 0), "Industrial Block " + 0);
+	    LanguageRegistry.addName(new ItemStack(industrialBlock1, 1, 1), "Industrial Block " + 1);
+	    LanguageRegistry.addName(new ItemStack(industrialBlock1, 1, 2), "Industrial Block " + 2);
+	    LanguageRegistry.addName(new ItemStack(industrialBlock1, 1, 3), "Industrial Block " + 3);	
+	    LanguageRegistry.addName(new ItemStack(industrialBlock1, 1, 4), "Industrial Block " + 4);	
+	    LanguageRegistry.addName(new ItemStack(industrialBlock1, 1, 5), "Industrial Block " + 5);
+	    LanguageRegistry.addName(new ItemStack(industrialBlock1, 1, 6), "Industrial Block " + 6);
+	    LanguageRegistry.addName(new ItemStack(industrialBlock1, 1, 7), "Industrial Block " + 7);	
 		//Tests
 		LanguageRegistry.addName(new ItemStack(decorBlock, 1, 805), "Flag Yolo Test");		
 		
@@ -343,8 +356,27 @@ public class DiscreteDecorative
 	    GameRegistry.addRecipe(new ShapelessOreRecipe(panelSquareDouble, new Object[] { panelSquare, Items.stick }));
 	    GameRegistry.addRecipe(new ShapelessOreRecipe(panelSquareTriple, new Object[] { panelSquareDouble, Items.stick }));
 	    
+	    ItemStack iBlock0 = new ItemStack(industrialBlock1, 8, 0);
+	    ItemStack iBlock1 = new ItemStack(industrialBlock1, 1, 1);
+	    ItemStack iBlock2 = new ItemStack(industrialBlock1, 1, 2);
+	    ItemStack iBlock3 = new ItemStack(industrialBlock1, 1, 3);
+	    ItemStack iBlock4 = new ItemStack(industrialBlock1, 1, 4);
+	    ItemStack iBlock5 = new ItemStack(industrialBlock1, 1, 5);
+	    ItemStack iBlock6 = new ItemStack(industrialBlock1, 1, 6);
+	    ItemStack iBlock7 = new ItemStack(industrialBlock1, 1, 7);
+	    
+	    ItemStack iBlock0_1 = new ItemStack(industrialBlock1, 8, 0);
+	    
+	    GameRegistry.addShapelessRecipe(iBlock0, new Object[]{ frameDiscreteCable });
+		GameRegistry.addRecipe(new MirrorlessShapedRecipe(iBlock1, new ItemStack[]{ iBlock0_1, null, null, null, null, null, null, null, null}));
+		GameRegistry.addRecipe(new MirrorlessShapedRecipe(iBlock2, new ItemStack[]{ null, iBlock0_1, null, null, null, null, null, null, null}));
+		GameRegistry.addRecipe(new MirrorlessShapedRecipe(iBlock3, new ItemStack[]{ null, null, iBlock0_1, null, null, null, null, null, null}));
+		GameRegistry.addRecipe(new MirrorlessShapedRecipe(iBlock4, new ItemStack[]{ null, null, null, iBlock0_1, null, null, null, null, null}));
+		GameRegistry.addRecipe(new MirrorlessShapedRecipe(iBlock5, new ItemStack[]{ null, null, null, null, iBlock0_1, null, null, null, null}));
+		GameRegistry.addRecipe(new MirrorlessShapedRecipe(iBlock6, new ItemStack[]{ null, null, null, null, null, iBlock0_1, null, null, null}));
+		GameRegistry.addRecipe(new MirrorlessShapedRecipe(iBlock7, new ItemStack[]{ null, null, null, null, null, null, iBlock0_1, null, null}));
 	    // Ghettobsucurator
-		GameRegistry.addRecipe(new ShapedOreRecipe(gobs, new Object[]{"XX ", "XX ", "  Y", 'X', Blocks.glass, 'Y', Items.stick}));
+		//GameRegistry.addRecipe(new ShapedOreRecipe(gobs, new Object[]{"XX ", "XX ", "  Y", 'X', Blocks.glass, 'Y', Items.stick}));
 	}
 }
 

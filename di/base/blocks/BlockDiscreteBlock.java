@@ -1,9 +1,3 @@
-
-
-
-
-
-
 package kappafox.di.base.blocks;
 
 import static net.minecraftforge.common.util.ForgeDirection.UP;
@@ -197,6 +191,6 @@ public class BlockDiscreteBlock extends Block
     @Override
     public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
     {
-    	return new ItemStack(Items.apple);
+    	return super.getPickBlock(target, world, x, y, z);
     }
 }

@@ -57,6 +57,11 @@ public class DiscreteIndustry
 	private DiscreteTransport transport = new DiscreteTransport();
 	private DiscreteDecorative decorative = new DiscreteDecorative();
 	
+	// Gui Ids
+	public static final int GID_DISCRETE_HOPPER = 0;
+	public static final int GID_SWORD_RACK = 2;
+	public static final int GID_DUST_UNIFIER = 3;
+	
 	
 	@EventHandler
 	public void preInitialisation(FMLPreInitializationEvent event)

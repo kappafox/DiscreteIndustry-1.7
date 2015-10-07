@@ -36,7 +36,7 @@ public abstract class SubBlock
 	
     public void breakBlock(World world, int x, int y, int z, Block block, int meta)
     {
-    	
+    	world.removeTileEntity(x, y, z);
     }
     
 	public void onBlockPlacedBy(IBlockAccess world, int x, int y, int z, EntityLivingBase player, ItemStack istack)

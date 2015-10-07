@@ -27,8 +27,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockDiscreteHopper extends BlockContainer
 {
-	
-	private final Random rnd = new Random();
+	private static final Random rnd = new Random();
 	private int renderID;
 	@SideOnly(Side.CLIENT)
 	private IIcon top;

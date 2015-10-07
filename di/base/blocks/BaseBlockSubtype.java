@@ -18,6 +18,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -169,7 +170,8 @@ public abstract class BaseBlockSubtype extends Block
 		{
 			blocks.get(meta).breakBlock(world, x, y, z, block, meta);
 		}
-		super.breakBlock(world, x, y, z, block, meta);
+		
+		world.removeTileEntity(x, y, z);
     }
 	
 	@Override
@@ -315,34 +317,24 @@ public abstract class BaseBlockSubtype extends Block
 		return true;
     }
     
-    /*
     @Override
     public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
     {
-
-    	//TODO: Update this for 1.7
         Block block = world.getBlock(x, y, z);        
         TileEntity t = world.getTileEntity(x, y, z);
         
-        if (block == null || Item.itemsList[id] == null)
-        {
-            return null;
-        }
-        
-        
+        if (block == null) return null;
+             
         if(t instanceof TileEntitySubtype)
         {
         	TileEntitySubtype tile = (TileEntitySubtype)t;
         	int type = tile.getSubtype();
         	
         	if(type != 0)
-        	{
-        		return new ItemStack(id, 1, type);
-        	}
+        		return new ItemStack(block, 1, type);
         }
         
-        return new ItemStack(id, 1, getDamageValue(world, x, y, z));
+        return new ItemStack(block, 1, getDamageValue(world, x, y, z));
     }
-    */
 
 }

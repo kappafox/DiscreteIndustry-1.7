@@ -11,14 +11,17 @@ import kappafox.di.decorative.tileentities.TileEntitySwordRack;
 import kappafox.di.electrics.items.ItemHorseInspector;
 import kappafox.di.transport.blocks.BlockDiscreteHopper;
 import kappafox.di.transport.blocks.BlockDiscreteTransport;
+import kappafox.di.transport.blocks.BlockDustUnifier;
 import kappafox.di.transport.blocks.items.ItemDiscreteHopperBlock;
 import kappafox.di.transport.blocks.items.ItemDiscreteTransportBlock;
+import kappafox.di.transport.blocks.items.ItemDustUnifierBlock;
 import kappafox.di.transport.items.ItemDiscreteTransport;
 import kappafox.di.transport.recipies.RecipeUpgradeStorageUnit;
 import kappafox.di.transport.renderers.DiscreteTransportRenderManager;
 import kappafox.di.transport.renderers.TileEntityStorageRackRenderer;
 import kappafox.di.transport.tileentities.TileEntityDiscreteDuct;
 import kappafox.di.transport.tileentities.TileEntityDiscreteHopper;
+import kappafox.di.transport.tileentities.TileEntityDustUnifier;
 import kappafox.di.transport.tileentities.TileEntityStorageRack;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -48,6 +51,7 @@ public class DiscreteTransport
 	//public static Block discreteCableBlock;
 	public static Block discreteHopperBlock;
 	public static Block discreteTransportBlock;
+	public static Block dustUnifierBlock;
 	
 	//items
 	//public static Item discreteTransportItem;
@@ -71,14 +75,6 @@ public class DiscreteTransport
 	
 	//Items
 	public static ItemDiscreteTransport discreteTransportItem;
-	//public static Item storageBoxStone;
-	//public static Item storageBoxIron;
-	//public static Item storageBoxRedstone;
-	//public static Item storageBoxGold;
-	//public static Item storageBoxDiamond;
-	//public static Item storageBoxEmerald;
-	//public static Item storageBoxIridium;
-	
 	
 	public DiscreteTransport( )
 	{
@@ -120,6 +116,7 @@ public class DiscreteTransport
 		GameRegistry.registerTileEntity(TileEntityDiscreteHopper.class, "Discrete Hopper");
 		GameRegistry.registerTileEntity(TileEntityStorageRack.class, "Discrete Storage Rack");
 		GameRegistry.registerTileEntity(TileEntityDiscreteDuct.class, "Discrete Duct");
+		GameRegistry.registerTileEntity(TileEntityDustUnifier.class, "Dust Unifier");
 	}
 
 
@@ -145,9 +142,11 @@ public class DiscreteTransport
 		discreteHopperBlock = new BlockDiscreteHopper(Material.rock, hopperRenderID);
 		discreteTransportBlock = new BlockDiscreteTransport(Material.rock, transportBlockRenderID);
 		//discreteTransportBlock = new BlockDiscreteTransport(discreteTransportMetaBlockID, Material.wood);
+		dustUnifierBlock = new BlockDustUnifier(Material.rock);
 		
 		GameRegistry.registerBlock(discreteHopperBlock, ItemDiscreteHopperBlock.class, DiscreteIndustry.MODID + "hopperBlock");
 		GameRegistry.registerBlock(discreteTransportBlock, ItemDiscreteTransportBlock.class, DiscreteIndustry.MODID + "discreteTransportBlock");
+		GameRegistry.registerBlock(dustUnifierBlock, ItemDustUnifierBlock.class, DiscreteIndustry.MODID + "dustUnifier");
 		
 		LanguageRegistry.addName(new ItemStack(discreteHopperBlock, 1, 0), "Discrete Hopper");
 		LanguageRegistry.addName(new ItemStack(discreteHopperBlock, 1, 1), "Discrete Hopper Half");
@@ -156,6 +155,8 @@ public class DiscreteTransport
 		LanguageRegistry.addName(new ItemStack(discreteTransportBlock, 1, 100), "Storage Rack");
 		LanguageRegistry.addName(new ItemStack(discreteTransportBlock, 1, 101), "Dual Storage Rack");
 		LanguageRegistry.addName(new ItemStack(discreteTransportBlock, 1, 102), "Quad Storage Rack");
+		
+		LanguageRegistry.addName(new ItemStack(dustUnifierBlock, 1, 0), "Dust Unifier");
 	}
 	
 	@SideOnly(Side.CLIENT)

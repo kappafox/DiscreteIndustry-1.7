@@ -117,7 +117,7 @@ public class DiscreteElectrics
 
 	private void registerRecipies( )
 	{
-		ItemStack frameDiscreteCable = new ItemStack(discreteCableBlock, 16, 0);
+		ItemStack frameDiscreteCable = new ItemStack(discreteCableBlock, 24, 0);
 		ItemStack frameDiscreteCable24 = new ItemStack(discreteCableBlock, 24, 0);
 		ItemStack frameDiscreteCable32 = new ItemStack(discreteCableBlock, 32, 0);
 		ItemStack frameDiscreteCable1 = new ItemStack(discreteCableBlock, 1, 0);
