@@ -79,7 +79,7 @@ public class BlockDustUnifier extends BlockContainer
 	@Override
     public void breakBlock(World par1World, int par2, int par3, int par4, Block par5, int par6)
     {
-        TileEntityDiscreteHopper tileentityhopper = (TileEntityDiscreteHopper)par1World.getTileEntity(par2, par3, par4);
+        TileEntityDustUnifier tileentityhopper = (TileEntityDustUnifier)par1World.getTileEntity(par2, par3, par4);
 
         if (tileentityhopper != null)
         {

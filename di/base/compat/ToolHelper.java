@@ -52,6 +52,8 @@ public class ToolHelper
 				{
 					return true;
 				}
+				
+				if(item.getDisplayName().equalsIgnoreCase("Crescent Hammer")) return true;
 			}
 		}
 		return false;

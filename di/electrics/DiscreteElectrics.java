@@ -2,7 +2,6 @@ package kappafox.di.electrics;
 
 import ic2.api.item.IC2Items;
 import kappafox.di.DiscreteIndustry;
-import kappafox.di.base.lib.DiscreteID;
 import kappafox.di.base.lib.IC2Data;
 import kappafox.di.base.tileentities.TileEntityDiscreteBlock;
 import kappafox.di.electrics.blocks.BlockDiscreteCable;
@@ -76,9 +75,6 @@ public class DiscreteElectrics
 
 	public void preInitialisation(FMLPreInitializationEvent event, Configuration config)
 	{
-		//grab the id database
-		DiscreteID ids = DiscreteIndustry.librarian.dibi;
-		
 		//discreteElectricItemID = config.getItem("DiscreteElectricItems", ids.itemDiscreteItem).getInt(ids.itemDiscreteItem);
 		//discreteCableID = config.getBlock("DiscreteCables", ids.discreteCable).getInt(ids.discreteCable);
 	}

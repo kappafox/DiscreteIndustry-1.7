@@ -1,6 +1,5 @@
 package kappafox.di.transport.gui;
 
-import ic2.core.block.invslot.InvSlotOutput;
 import kappafox.di.base.util.DustSlot;
 import kappafox.di.base.util.OutputSlot;
 import kappafox.di.decorative.tileentities.TileEntitySwordRack;
@@ -62,8 +61,8 @@ public class ContainerDustUnifier extends Container
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int slot) 
     {
-		int machineEnd = 6;
-		int max = 42;
+		int machineEnd = 96;
+		int max = 96 + (4 * 9);	// slots in machine + inventory + hotbar
 	
         ItemStack stack = null;
 
@@ -72,40 +71,42 @@ public class ContainerDustUnifier extends Container
         //null checks and checks if the item can be stacked (maxStackSize > 1)
         if(slotObject != null && slotObject.getHasStack()) 
         {
-                ItemStack stackInSlot = slotObject.getStack();
-                stack = stackInSlot.copy();
+            ItemStack stackInSlot = slotObject.getStack();
+            stack = stackInSlot.copy();
+            
+        	//if(!DustSlot.isItemValidForSlot(stackInSlot)) return stack;
 
-                //is this slot in the machine?
-                if(slot < machineEnd) 
-                {
-                	if(this.mergeItemStack(stackInSlot, machineEnd, max, false) == false) 
-                	{
-                		return null;
-                	}
-                }    
-                else //slot is either inventory or hotbar
-                {            	
-                	if(this.mergeItemStack(stackInSlot, 0, machineEnd, false) == false)
-                	{
-                		return null;
-                	}
-                        
-                }
 
-                if(stackInSlot.stackSize == 0) 
-                {
-                	slotObject.putStack(null);
-                } 
-                else 
-                {
-                	slotObject.onSlotChanged();
-                }
+            //is this slot in the machine?
+            if(slot < machineEnd) 
+            {
+            	if(this.mergeItemStack(stackInSlot, machineEnd, max, false) == false) 
+            	{
+            		return null;
+            	}
+            }    
+            else //slot is either inventory or hotbar
+            {            	
+            	if(this.mergeItemStack(stackInSlot, 0, machineEnd, false) == false)
+            	{
+            		return null;
+            	}                
+            }
 
-                if(stackInSlot.stackSize == stack.stackSize) 
-                {
-                	return null;
-                }
-                slotObject.onPickupFromSlot(player, stackInSlot);
+            if(stackInSlot.stackSize == 0) 
+            {
+            	slotObject.putStack(null);
+            } 
+            else 
+            {
+            	slotObject.onSlotChanged();
+            }
+
+            if(stackInSlot.stackSize == stack.stackSize) 
+            {
+            	return null;
+            }
+            slotObject.onPickupFromSlot(player, stackInSlot);
         }
         
         tileEntity.getWorldObj().markBlockForUpdate(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);

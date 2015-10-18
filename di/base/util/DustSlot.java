@@ -25,16 +25,31 @@ public class DustSlot extends Slot
         
         for(String name : names)
         {
-        	if(name.startsWith("dustTiny") || name.startsWith("dustSmall"))
+        	if(name.startsWith("dustTiny") || name.startsWith("dustSmall") || name.startsWith("nugget"))
         		return true;
         }
         
         return false;
     }
 	
-	private List<String> getOreDictionaryNames(ItemStack istack)
+	public static boolean isItemValidForSlot(ItemStack istack)
+    {
+        if(istack == null) return false;
+        
+        List<String> names = getOreDictionaryNames(istack);
+        
+        for(String name : names)
+        {
+        	if(name.startsWith("dustTiny") || name.startsWith("dustSmall") || name.startsWith("nugget"))
+        		return true;
+        }
+        
+        return false;
+    }
+	
+	public static List<String> getOreDictionaryNames(ItemStack istack)
 	{
-		if(istack == null) return new LinkedList<String>();
+		if(istack == null || istack.getItem() == null) return new LinkedList<String>();
 		
 		List<String> names = new LinkedList<String>();
 		

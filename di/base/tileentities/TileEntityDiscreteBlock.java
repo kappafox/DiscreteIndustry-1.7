@@ -20,7 +20,6 @@ public class TileEntityDiscreteBlock extends TileEntitySubtype
 	private short facing;
 	private int colour = 16777215;
 	private int var1 = 0;
-	//private int subType = 0;
 	private boolean fullColour = false;
 	private int textureOrienation = 0;
 	private short direction = 0;
@@ -325,7 +324,6 @@ public class TileEntityDiscreteBlock extends TileEntitySubtype
 		facing = nbt.getShort("facing");
 		colour = nbt.getInteger("colour");
 		var1 = nbt.getInteger("var1");
-		//subType = nbt.getInteger("subType");
 		textureOrienation = nbt.getInteger("torient");
 		
 		NBTTagList blockNameList = nbt.getTagList("blockNames", Constants.NBT.TAG_COMPOUND);
@@ -336,7 +334,6 @@ public class TileEntityDiscreteBlock extends TileEntitySubtype
 			blockNames[i] = tag.getString("Name" + i);	
 		}
 		
-		//blockIDs = nbt.getIntArray("blockIDs");
 		blockMetas = nbt.getIntArray("blockMetas");
 		blockSides = nbt.getIntArray("blockSides");
 		

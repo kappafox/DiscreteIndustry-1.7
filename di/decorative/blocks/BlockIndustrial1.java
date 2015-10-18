@@ -60,6 +60,15 @@ public class BlockIndustrial1 extends Block
 		icons[5] = ireg.registerIcon(DiscreteIndustry.MODID + ":" + "BlockIndustrial1/industrialBlock1_5");
 		icons[6] = ireg.registerIcon(DiscreteIndustry.MODID + ":" + "BlockIndustrial1/industrialBlock1_6");
 		icons[7] = ireg.registerIcon(DiscreteIndustry.MODID + ":" + "BlockIndustrial1/industrialBlock1_7");
+		icons[8] = ireg.registerIcon(DiscreteIndustry.MODID + ":" + "BlockIndustrial1/industrialBlock1_8");
+		icons[9] = ireg.registerIcon(DiscreteIndustry.MODID + ":" + "BlockIndustrial1/industrialBlock1_9");
+		icons[10] = ireg.registerIcon(DiscreteIndustry.MODID + ":" + "BlockIndustrial1/industrialBlock1_10");
+		icons[11] = ireg.registerIcon(DiscreteIndustry.MODID + ":" + "BlockIndustrial1/industrialBlock1_11");
+		icons[12] = ireg.registerIcon(DiscreteIndustry.MODID + ":" + "BlockIndustrial1/industrialBlock1_12");
+		icons[13] = ireg.registerIcon(DiscreteIndustry.MODID + ":" + "BlockIndustrial1/industrialBlock1_13");
+		icons[14] = ireg.registerIcon(DiscreteIndustry.MODID + ":" + "BlockIndustrial1/industrialBlock1_14");
+		icons[15] = ireg.registerIcon(DiscreteIndustry.MODID + ":" + "BlockIndustrial1/industrialBlock1_15");
+		
 	}
 
 	@Override
@@ -74,7 +83,7 @@ public class BlockIndustrial1 extends Block
 	{
 		// block id, count, meta	
 		
-		for(int i = 0; i < 8; i++)
+		for(int i = 0; i < 16; i++)
 		{
 			list.add(new ItemStack(item, 1, i));
 		}		

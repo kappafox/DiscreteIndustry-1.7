@@ -1,8 +1,6 @@
 package kappafox.di;
 
-
 import net.minecraftforge.common.config.Configuration;
-import kappafox.di.base.lib.DiscreteID;
 import kappafox.di.base.lib.IC2Data;
 import kappafox.di.base.lib.Library;
 import kappafox.di.base.network.PacketDiscreteSync;
@@ -20,9 +18,6 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.common.registry.GameRegistry;
-
-
-
 
 
 @Mod(modid = DiscreteIndustry.MODID, name = DiscreteIndustry.NAME, version = DiscreteIndustry.VERSION, dependencies = DiscreteIndustry.DEPENDENCIES)

@@ -4,7 +4,6 @@ import ic2.api.item.IC2Items;
 import ic2.api.recipe.RecipeInputItemStack;
 import ic2.api.recipe.Recipes;
 import kappafox.di.DiscreteIndustry;
-import kappafox.di.base.lib.DiscreteID;
 import kappafox.di.decorative.DiscreteDecorativeEventHandler;
 import kappafox.di.decorative.renderers.TileEntitySwordRackRenderer;
 import kappafox.di.decorative.tileentities.TileEntitySwordRack;
@@ -83,10 +82,6 @@ public class DiscreteTransport
 	
 	public void preInitialisation(FMLPreInitializationEvent event, Configuration config)
 	{
-		//grab the id database
-		DiscreteID ids = DiscreteIndustry.librarian.dibi;
-		
-		
 		//discreteTransportItemID = config.getItem("DiscreteTransportItem", ids.itemDiscreteTransport).getInt(ids.itemDiscreteTransport);
 		//discreteHopperID = config.getBlock("DiscreteHoppers", ids.discreteHopper).getInt(ids.discreteHopper);
 		//discreteTransportMetaBlockID = config.getBlock("DiscreteTransportBlock", ids.discreteTransportMetaBlock).getInt(ids.discreteTransportMetaBlock);
@@ -178,7 +173,8 @@ public class DiscreteTransport
 	{
 		
 		
-		ItemStack bcircuit = IC2Items.getItem("electronicCircuit");
+		ItemStack bcircuit = IC2Items.getItem("electronicCircuit").copy();
+		ItemStack quartz = new ItemStack(Items.quartz);
 		ItemStack hop = new ItemStack(Blocks.hopper);
 		
 		ItemStack discreteHopper = new ItemStack(discreteHopperBlock, 1, 0);
@@ -186,7 +182,7 @@ public class DiscreteTransport
 		ItemStack halfHopperSingle = new ItemStack(discreteHopperBlock, 1, 1);
 		ItemStack quarterHopper = new ItemStack(discreteHopperBlock, 2, 2);
 		
-		GameRegistry.addRecipe(new ShapelessOreRecipe(discreteHopper, bcircuit, hop));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(discreteHopper, quartz, hop));
 		
 		//Hoppers compressing down
 		Recipes.compressor.addRecipe(new RecipeInputItemStack(discreteHopper), null, halfHopper);
@@ -239,5 +235,9 @@ public class DiscreteTransport
 		CraftingManager.getInstance().getRecipeList().add(new RecipeUpgradeStorageUnit(diamondStorageUnit, 4, new Object[]{Blocks.stone_slab, "gemDiamond", Blocks.stone_slab, Blocks.stone_slab, "", Blocks.stone_slab, "itemRubber", "itemRubber", "itemRubber"} ));
 		CraftingManager.getInstance().getRecipeList().add(new RecipeUpgradeStorageUnit(emeraldStorageUnit, 4, new Object[]{Blocks.stone_slab, "gemEmerald", Blocks.stone_slab, Blocks.stone_slab, "", Blocks.stone_slab, "itemRubber", "itemRubber", "itemRubber"} ));
 		CraftingManager.getInstance().getRecipeList().add(new RecipeUpgradeStorageUnit(iridiumStorageUnit, 4, new Object[]{Blocks.stone_slab, "ingotIridium", Blocks.stone_slab, Blocks.stone_slab, "", Blocks.stone_slab, "itemRubber", "itemRubber", "itemRubber"} ));
+		
+		// Dust Unifier
+		ItemStack dustUnifier_1 = new ItemStack(dustUnifierBlock, 1, 0);
+		GameRegistry.addRecipe(new ShapedOreRecipe(dustUnifier_1, new Object[]{ "XYX", "ZAZ", "XZX", 'X', Items.iron_ingot, 'Y', discreteHopper, 'A', IC2Items.getItem("machine"), 'Z', "itemRubber"}));
 	}
 }

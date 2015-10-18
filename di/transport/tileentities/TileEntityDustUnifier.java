@@ -52,7 +52,9 @@ public class TileEntityDustUnifier extends TileEntity  implements ISidedInventor
     	if(cooldown < 0)
     	{
     		cooldown = 20;
-    		unify();
+    		boolean result = unify();
+    		
+    		if(!result) cooldown = 100;
     	}
     	else
     	{
@@ -62,40 +64,19 @@ public class TileEntityDustUnifier extends TileEntity  implements ISidedInventor
 	
 	private boolean unify()
 	{
+		boolean didChange = false;
+		
 		if(items == null) return false;
 		
-		/*
-		// First assemble a collection of what we have
-		HashMap<String, Integer> inventory = new HashMap<String, Integer>();
-		
-		for(ItemStack istack : items)
-		{
-			String name = getOreDictionaryName(istack);
-			
-			if(name == null) continue;
-			
-			if(inventory.containsKey(name))
-			{
-				int count = inventory.get(name);
-				inventory.put(name, count + istack.stackSize);
-			}
-			else
-			{
-				inventory.put(name, istack.stackSize);
-			}
-		}
-		*/
-		
-		// With out collection assembled we now process each type of particle
-		
-		for(int i = 0; i < items.length; i++)
+		for(int i = 0; i < 88; i++)
 		{
 			ItemStack item = items[i];
 			
 			if(item == null || item.stackSize == 0 || item.stackSize < 4) continue;
 			
 			String sdust = isSmallDust(item);
-			String tdust = isTinyDust(item);		
+			String tdust = isTinyDust(item);
+			String nugget = isNugget(item);
 			
 			if(sdust != null)
 			{
@@ -120,36 +101,74 @@ public class TileEntityDustUnifier extends TileEntity  implements ISidedInventor
 					
 					if(items[i].stackSize <= 0)
 						items[i] = null;
+					
+					
+					didChange = true;
+					this.markDirty();
 				}
 			}
 			else
 			{
-				while(item.stackSize >= 9)
+				if(tdust != null)
 				{
-					int outputSlot = getOutputSlot(item);
-					
-					if(outputSlot == -1) break;				
-								
-					if(items[outputSlot] == null)
-					{						
-						ItemStack result = getTinyDustCraftingResult(item);
-						result.stackSize = 1;
-						items[outputSlot] = result;
-					}
-					else
+					while(item.stackSize >= 9)
 					{
-						items[outputSlot].stackSize += 1;		
+						int outputSlot = getOutputSlot(item);
+						
+						if(outputSlot == -1) break;				
+									
+						if(items[outputSlot] == null)
+						{						
+							ItemStack result = getTinyDustCraftingResult(item);
+							result.stackSize = 1;
+							items[outputSlot] = result;
+						}
+						else
+						{
+							items[outputSlot].stackSize += 1;		
+						}
+						
+						items[i].stackSize -= 9;
+						
+						if(items[i].stackSize <= 0)
+							items[i] = null;
+						
+						didChange = true;
+						this.markDirty();
 					}
-					
-					items[i].stackSize -= 9;
-					
-					if(items[i].stackSize <= 0)
-						items[i] = null;
-				}				
+				}
+				else
+				{
+					while(item.stackSize >= 9)
+					{
+						int outputSlot = getOutputSlot(item);
+						
+						if(outputSlot == -1) break;				
+									
+						if(items[outputSlot] == null)
+						{						
+							ItemStack result = getNuggetCraftingResult(item);
+							result.stackSize = 1;
+							items[outputSlot] = result;
+						}
+						else
+						{
+							items[outputSlot].stackSize += 1;		
+						}
+						
+						items[i].stackSize -= 9;
+						
+						if(items[i].stackSize <= 0)
+							items[i] = null;
+						
+						didChange = true;
+						this.markDirty();
+					}					
+				}
 			}
 		}
 		
-		return true;
+		return didChange;
 	}
 	
 	private int getOutputSlot(ItemStack istack)
@@ -159,6 +178,8 @@ public class TileEntityDustUnifier extends TileEntity  implements ISidedInventor
 		ItemStack result = getSmallDustCraftingResult(istack);
 		
 		if(result == null) result = getTinyDustCraftingResult(istack);
+		
+		if(result == null) result = getNuggetCraftingResult(istack);
 		
 		if(result == null) return -1;
 		
@@ -213,6 +234,20 @@ public class TileEntityDustUnifier extends TileEntity  implements ISidedInventor
 		
 		return null;
 	}
+	
+	private String isNugget(ItemStack istack)
+	{
+		if(istack == null) return null;
+		
+		List<String> names = getOreDictionaryNames(istack);
+		
+		for(String name : names)
+		{
+			if(name.startsWith("nugget")) return name;
+		}
+		
+		return null;
+	}
 
 	private List<String> getOreDictionaryNames(ItemStack istack)
 	{
@@ -263,6 +298,29 @@ public class TileEntityDustUnifier extends TileEntity  implements ISidedInventor
 	}
 	
 	private ItemStack getTinyDustCraftingResult(ItemStack stack)
+	{	
+		ItemStack single = stack.copy();
+		single.stackSize = 1;
+		
+		for(int i = 0; i < 9; i++)
+		{
+			crafter.setInventorySlotContents(i, null);
+			crafter.setInventorySlotContents(i, stack.copy());
+		}
+		
+		ItemStack result = CraftingManager.getInstance().findMatchingRecipe(crafter, this.worldObj);
+		
+		if(result != null)
+		{
+			return result.copy();
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	private ItemStack getNuggetCraftingResult(ItemStack stack)
 	{	
 		ItemStack single = stack.copy();
 		single.stackSize = 1;
@@ -422,6 +480,7 @@ public class TileEntityDustUnifier extends TileEntity  implements ISidedInventor
         }
 		
         nbt.setTag("Items", itemTag);
+        nbt.setInteger("cooldown", cooldown);
 	}
 	
 	public void readFromNBT(NBTTagCompound nbt)
@@ -441,6 +500,8 @@ public class TileEntityDustUnifier extends TileEntity  implements ISidedInventor
                 this.items[j] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
             }
         }
+        
+        cooldown = nbt.getInteger("cooldown");
 	}
 	
 	@Override

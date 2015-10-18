@@ -3,7 +3,7 @@ package kappafox.di.decorative;
 import ic2.api.recipe.RecipeInputItemStack;
 import ic2.api.recipe.Recipes;
 import kappafox.di.DiscreteIndustry;
-import kappafox.di.base.lib.DiscreteID;
+import kappafox.di.base.recipes.MirrorlessRecipes;
 import kappafox.di.base.tileentities.TileEntitySidedConnector;
 import kappafox.di.base.util.MirrorlessShapedRecipe;
 import kappafox.di.decorative.blocks.BlockDecor;
@@ -106,7 +106,6 @@ public class DiscreteDecorative
 	public void preInitialisation(FMLPreInitializationEvent event, Configuration config)
 	{
 		//grab the id database
-		DiscreteID ids = DiscreteIndustry.librarian.dibi;
 	    //gobs = new Ghettobscurator(InternalName.obscurator);
 		//hazardBlockID = config.getBlock("DiscreteHazard", ids.discreteHazard).getInt(ids.discreteHazard);
 		//decorBlockID = config.getBlock("DiscreteDecor", ids.discreteDecor).getInt(ids.discreteDecor);
@@ -199,7 +198,12 @@ public class DiscreteDecorative
 	    LanguageRegistry.addName(new ItemStack(industrialBlock1, 1, 4), "Industrial Block " + 4);	
 	    LanguageRegistry.addName(new ItemStack(industrialBlock1, 1, 5), "Industrial Block " + 5);
 	    LanguageRegistry.addName(new ItemStack(industrialBlock1, 1, 6), "Industrial Block " + 6);
-	    LanguageRegistry.addName(new ItemStack(industrialBlock1, 1, 7), "Industrial Block " + 7);	
+	    LanguageRegistry.addName(new ItemStack(industrialBlock1, 1, 7), "Industrial Block " + 7);
+	    LanguageRegistry.addName(new ItemStack(industrialBlock1, 1, 8), "Industrial Block " + 8);
+	    LanguageRegistry.addName(new ItemStack(industrialBlock1, 1, 9), "Industrial Block " + 9);
+	    LanguageRegistry.addName(new ItemStack(industrialBlock1, 1, 10), "Industrial Block " + 10);	
+	    LanguageRegistry.addName(new ItemStack(industrialBlock1, 1, 11), "Industrial Block " + 11);	
+	    
 		//Tests
 		LanguageRegistry.addName(new ItemStack(decorBlock, 1, 805), "Flag Yolo Test");		
 		
@@ -364,17 +368,64 @@ public class DiscreteDecorative
 	    ItemStack iBlock5 = new ItemStack(industrialBlock1, 1, 5);
 	    ItemStack iBlock6 = new ItemStack(industrialBlock1, 1, 6);
 	    ItemStack iBlock7 = new ItemStack(industrialBlock1, 1, 7);
+	    ItemStack iBlock8 = new ItemStack(industrialBlock1, 1, 8);
+	    ItemStack iBlock9 = new ItemStack(industrialBlock1, 1, 9);
+	    ItemStack iBlock10 = new ItemStack(industrialBlock1, 1, 10);
+	    ItemStack iBlock11 = new ItemStack(industrialBlock1, 1, 11);
+	    ItemStack iBlock12 = new ItemStack(industrialBlock1, 1, 12);
+	    ItemStack iBlock13 = new ItemStack(industrialBlock1, 1, 13);
+	    ItemStack iBlock14 = new ItemStack(industrialBlock1, 1, 14);
+	    ItemStack iBlock15 = new ItemStack(industrialBlock1, 1, 15);
 	    
-	    ItemStack iBlock0_1 = new ItemStack(industrialBlock1, 8, 0);
+	    ItemStack iBlock0_1 = new ItemStack(industrialBlock1, 1, 0);
+	    ItemStack iBlock1_1 = new ItemStack(industrialBlock1, 1, 1);
 	    
 	    GameRegistry.addShapelessRecipe(iBlock0, new Object[]{ frameDiscreteCable });
-		GameRegistry.addRecipe(new MirrorlessShapedRecipe(iBlock1, new ItemStack[]{ iBlock0_1, null, null, null, null, null, null, null, null}));
-		GameRegistry.addRecipe(new MirrorlessShapedRecipe(iBlock2, new ItemStack[]{ null, iBlock0_1, null, null, null, null, null, null, null}));
-		GameRegistry.addRecipe(new MirrorlessShapedRecipe(iBlock3, new ItemStack[]{ null, null, iBlock0_1, null, null, null, null, null, null}));
-		GameRegistry.addRecipe(new MirrorlessShapedRecipe(iBlock4, new ItemStack[]{ null, null, null, iBlock0_1, null, null, null, null, null}));
-		GameRegistry.addRecipe(new MirrorlessShapedRecipe(iBlock5, new ItemStack[]{ null, null, null, null, iBlock0_1, null, null, null, null}));
-		GameRegistry.addRecipe(new MirrorlessShapedRecipe(iBlock6, new ItemStack[]{ null, null, null, null, null, iBlock0_1, null, null, null}));
-		GameRegistry.addRecipe(new MirrorlessShapedRecipe(iBlock7, new ItemStack[]{ null, null, null, null, null, null, iBlock0_1, null, null}));
+/*		GameRegistry.addRecipe(new ShapedOreRecipe(iBlock1, new Object[]{"X  ", " Y ", "   ", 'X', iBlock0, 'Y', Blocks.stone}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(iBlock2, new Object[]{" X ", " Y ", "   ", 'X', iBlock0, 'Y', Blocks.stone}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(iBlock3, new Object[]{"  X", " Y ", "   ", 'X', iBlock0, 'Y', Blocks.stone}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(iBlock4, new Object[]{"   ", "XY ", "   ", 'X', iBlock0, 'Y', Blocks.stone}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(iBlock5, new Object[]{"   ", " YX", "   ", 'X', iBlock0, 'Y', Blocks.stone}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(iBlock6, new Object[]{"   ", " Y ", "X  ", 'X', iBlock0, 'Y', Blocks.stone}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(iBlock7, new Object[]{"   ", " Y ", " X ", 'X', iBlock0, 'Y', Blocks.stone}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(iBlock8, new Object[]{"   ", " Y ", "  X", 'X', iBlock0, 'Y', Blocks.stone}));*/
+	    
+	    // Crafted from Industrial Block 0
+		MirrorlessRecipes.registerRecipe(new MirrorlessShapedRecipe(iBlock1, new ItemStack[]{ iBlock0_1, null, null, null, null, null, null, null, null}));
+		MirrorlessRecipes.registerRecipe(new MirrorlessShapedRecipe(iBlock2, new ItemStack[]{ null, iBlock0_1, null, null, null, null, null, null, null}));
+		MirrorlessRecipes.registerRecipe(new MirrorlessShapedRecipe(iBlock3, new ItemStack[]{ null, null, iBlock0_1, null, null, null, null, null, null}));
+		MirrorlessRecipes.registerRecipe(new MirrorlessShapedRecipe(iBlock4, new ItemStack[]{ null, null, null, iBlock0_1, null, null, null, null, null}));
+		MirrorlessRecipes.registerRecipe(new MirrorlessShapedRecipe(iBlock5, new ItemStack[]{ null, null, null, null, iBlock0_1, null, null, null, null}));
+		MirrorlessRecipes.registerRecipe(new MirrorlessShapedRecipe(iBlock6, new ItemStack[]{ null, null, null, null, null, iBlock0_1, null, null, null}));
+		MirrorlessRecipes.registerRecipe(new MirrorlessShapedRecipe(iBlock7, new ItemStack[]{ null, null, null, null, null, null, iBlock0_1, null, null}));
+		MirrorlessRecipes.registerRecipe(new MirrorlessShapedRecipe(iBlock8, new ItemStack[]{ null, null, null, null, null, null, null, iBlock0_1, null}));
+		MirrorlessRecipes.registerRecipe(new MirrorlessShapedRecipe(iBlock9, new ItemStack[]{ null, null, null, null, null, null, null, null, iBlock0_1}));
+		
+		// Crafter from Industrial Block 1
+		MirrorlessRecipes.registerRecipe(new MirrorlessShapedRecipe(iBlock10, new ItemStack[]{ null, iBlock1_1, null, null, null, null, null, null, null}));
+		MirrorlessRecipes.registerRecipe(new MirrorlessShapedRecipe(iBlock11, new ItemStack[]{ null, null, iBlock1_1, null, null, null, null, null, null}));
+		MirrorlessRecipes.registerRecipe(new MirrorlessShapedRecipe(iBlock12, new ItemStack[]{ null, null, null, iBlock1_1, null, null, null, null, null}));
+		MirrorlessRecipes.registerRecipe(new MirrorlessShapedRecipe(iBlock13, new ItemStack[]{ null, null, null, null, iBlock1_1, null, null, null, null}));
+		MirrorlessRecipes.registerRecipe(new MirrorlessShapedRecipe(iBlock14, new ItemStack[]{ null, null, null, null, null, iBlock1_1, null, null, null}));
+		MirrorlessRecipes.registerRecipe(new MirrorlessShapedRecipe(iBlock15, new ItemStack[]{ null, null, null, null, null, null, iBlock1_1, null, null}));
+
+		// Turning all back to Industrial Block 0
+		GameRegistry.addRecipe(new ShapelessOreRecipe(iBlock0_1, new Object[]{iBlock1}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(iBlock0_1, new Object[]{iBlock2}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(iBlock0_1, new Object[]{iBlock3}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(iBlock0_1, new Object[]{iBlock4}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(iBlock0_1, new Object[]{iBlock5}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(iBlock0_1, new Object[]{iBlock6}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(iBlock0_1, new Object[]{iBlock7}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(iBlock0_1, new Object[]{iBlock8}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(iBlock0_1, new Object[]{iBlock9}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(iBlock0_1, new Object[]{iBlock10}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(iBlock0_1, new Object[]{iBlock11}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(iBlock0_1, new Object[]{iBlock12}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(iBlock0_1, new Object[]{iBlock13}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(iBlock0_1, new Object[]{iBlock14}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(iBlock0_1, new Object[]{iBlock15}));
+		
 	    // Ghettobsucurator
 		//GameRegistry.addRecipe(new ShapedOreRecipe(gobs, new Object[]{"XX ", "XX ", "  Y", 'X', Blocks.glass, 'Y', Items.stick}));
 	}
