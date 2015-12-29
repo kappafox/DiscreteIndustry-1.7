@@ -23,31 +23,20 @@ public class ToolHelper
 			{
 				
 				Item i = item.getItem();
-				
-				if(DiscreteIndustry.GTWrench != null)
-				{
-					/*
-					if(DiscreteIndustry.GTWrench.isAssignableFrom(i.getClass()));
-					{
-						System.out.println(DiscreteIndustry.GTWrench.getClass());
-						System.out.println(i.getClass());
-						return true;
-					}
-					*/
-				}
 
-				
 				if(DiscreteIndustry.BCWrench != null)
 				{
-
-					if(DiscreteIndustry.BCWrench.isAssignableFrom(i.getClass()))
+					Class[] interfaces = i.getClass().getInterfaces();
+					
+					for(int j = 0; j < interfaces.length; j++)
 					{
-						//System.out.println(DiscreteIndustry.BCWrench.getClass());
-						//System.out.println(i.getClass());
-						return true;
+						if(interfaces[j].getName().equalsIgnoreCase("buildcraft.api.tools.IToolWrench"))
+						{
+							return true;
+						}
 					}
 				}
-			
+				
 				if(item.getDisplayName().equalsIgnoreCase(wrench.getDisplayName()) || item.getDisplayName().equalsIgnoreCase(ewrench.getDisplayName()))
 				{
 					return true;
@@ -57,5 +46,32 @@ public class ToolHelper
 			}
 		}
 		return false;
+	}
+	
+	public static short getOppositeSide(short side)
+	{
+		switch(side)
+		{
+			case 0:
+				return 1;
+			
+			case 1:
+				return 0;
+			
+			case 2:
+				return 3;
+			
+			case 3:
+				return 2;
+			
+			case 4:
+				return 5;
+			
+			case 5:
+				return 4;
+				
+			default:
+				return side;
+		}
 	}
 }

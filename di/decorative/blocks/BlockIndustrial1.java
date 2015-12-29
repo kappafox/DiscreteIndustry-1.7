@@ -68,7 +68,6 @@ public class BlockIndustrial1 extends Block
 		icons[13] = ireg.registerIcon(DiscreteIndustry.MODID + ":" + "BlockIndustrial1/industrialBlock1_13");
 		icons[14] = ireg.registerIcon(DiscreteIndustry.MODID + ":" + "BlockIndustrial1/industrialBlock1_14");
 		icons[15] = ireg.registerIcon(DiscreteIndustry.MODID + ":" + "BlockIndustrial1/industrialBlock1_15");
-		
 	}
 
 	@Override
@@ -81,8 +80,6 @@ public class BlockIndustrial1 extends Block
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(Item item, CreativeTabs tabs, List list)
 	{
-		// block id, count, meta	
-		
 		for(int i = 0; i < 16; i++)
 		{
 			list.add(new ItemStack(item, 1, i));

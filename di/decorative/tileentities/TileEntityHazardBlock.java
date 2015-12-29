@@ -133,6 +133,4 @@ public class TileEntityHazardBlock extends TileEntity implements IWrenchable
 	{
 		return null;
 	}
-	
-
 }

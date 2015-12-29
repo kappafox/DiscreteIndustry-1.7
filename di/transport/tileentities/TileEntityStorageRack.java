@@ -1,5 +1,6 @@
 package kappafox.di.transport.tileentities;
 
+
 import java.util.ArrayList;
 
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -1131,7 +1132,6 @@ public class TileEntityStorageRack extends TileEntityDiscreteBlock implements IS
 		System.out.println("Total:" + total + "\tAmounts:" + amount + "\tIS:" + ASamount + "\tES:" + this.getExtractionSlotCount(slot));
 	}
 
-		
 	@Override
 	public void markDirty( )
 	{
@@ -1175,7 +1175,7 @@ public class TileEntityStorageRack extends TileEntityDiscreteBlock implements IS
 	@Override
 	public boolean canExtractItem(int slot, ItemStack istack, int side)
 	{
-		return true;
+		return (slot >= storageUnits.length);
 	}
 
 	public boolean getSticky()

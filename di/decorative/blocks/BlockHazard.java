@@ -6,10 +6,13 @@
 
 package kappafox.di.decorative.blocks;
 
+import ic2.api.tile.IWrenchable;
+
 import java.util.List;
 
 import kappafox.di.DiscreteIndustry;
 import kappafox.di.base.blocks.BlockDiscreteBlock;
+import kappafox.di.base.compat.ToolHelper;
 import kappafox.di.decorative.tileentities.TileEntityHazardBlock;
 import kappafox.di.decorative.tileentities.TileEntityStripHazardBlock;
 import net.minecraft.block.material.Material;
@@ -254,23 +257,30 @@ public class BlockHazard extends BlockDiscreteBlock
 
 	
 	@Override
-    public boolean onBlockActivated(World world_, int xcoord_, int ycoord_, int zcoord_, EntityPlayer player_, int side_, float par7, float par8, float par9)
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float par7, float par8, float par9)
     {	
-		int meta = world_.getBlockMetadata(xcoord_, ycoord_, zcoord_);
-		
-		//if we are using one of the discrete blocks
-		if(meta > 5)
+		int meta = world.getBlockMetadata(x, y, z);
+
+		if(ToolHelper.isWrench(player.getCurrentEquippedItem()) && player.isSneaking())
 		{
-			return super.onBlockActivated(world_, xcoord_, ycoord_, zcoord_, player_, side_, par7, par8, par9);
+			TileEntity tile = world.getTileEntity(x, y, z);
+			
+			if(tile != null && tile instanceof IWrenchable)
+			{
+				IWrenchable wrenchable = (IWrenchable)tile;
+				
+				wrenchable.setFacing(ToolHelper.getOppositeSide((short)side));
+				return true;
+			}
+		}
+		else
+		{
+			return super.onBlockActivated(world, x, y, z, player, side, par7, par8, par9);
 		}
 			
-        return false;
-        
+        return false;    
     }
 
-    
-
-	
 	@Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side)

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import kappafox.di.transport.gui.ContainerDustUnifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -45,21 +46,66 @@ public class TileEntityDustUnifier extends TileEntity  implements ISidedInventor
         return true;
     }
     
-    private int cooldown = 20;
+    private int cooldown = 40;
     
     public void updateEntity()
     {
     	if(cooldown < 0)
     	{
-    		cooldown = 20;
-    		boolean result = unify();
+    		cooldown = 40;
     		
-    		if(!result) cooldown = 100;
+    		if(FMLCommonHandler.instance().getEffectiveSide().isServer() == true)
+    		{
+        		boolean result = unify();
+        		
+        		if(!result) cooldown = 100;
+    		}
     	}
     	else
     	{
     		cooldown--;
     	}
+    }
+    
+    private void Sort()
+    {
+		for(int i = 0; i < 88; i++)
+		{
+			ItemStack item = items[i];
+			
+			if(item == null || item.stackSize == 0) continue;
+			
+			if(item.stackSize == item.getMaxStackSize()) continue;
+			
+			// Find any other stacks of this item past this point
+			
+			for(int j = i + 1; j < 88; j++)
+			{
+				ItemStack istack2 = items[j];
+				
+				if(istack2 == null) continue;
+				
+				if(istack2.isItemEqual(item))
+				{
+					int space = item.getMaxStackSize() - item.stackSize;
+					
+					// Available space greater than found stacksize
+					if(space >= istack2.stackSize)
+					{
+						item.stackSize += istack2.stackSize;
+						istack2.stackSize = 0;
+						items[j] = null;
+					}
+					else
+					{
+						// Available space less than found stack size					
+						item.stackSize = item.getMaxStackSize();
+						istack2.stackSize -= space;
+						break;
+					}
+				}
+			}
+		}		    	
     }
 	
 	private boolean unify()
@@ -67,7 +113,7 @@ public class TileEntityDustUnifier extends TileEntity  implements ISidedInventor
 		boolean didChange = false;
 		
 		if(items == null) return false;
-		
+
 		for(int i = 0; i < 88; i++)
 		{
 			ItemStack item = items[i];
@@ -78,94 +124,67 @@ public class TileEntityDustUnifier extends TileEntity  implements ISidedInventor
 			String tdust = isTinyDust(item);
 			String nugget = isNugget(item);
 			
+			int comboSize = 9;
+			ItemStack result = null;
+
 			if(sdust != null)
 			{
-				while(item.stackSize >= 4)
-				{
-					int outputSlot = getOutputSlot(item);
-					
-					if(outputSlot == -1) break;				
-								
-					if(items[outputSlot] == null)
-					{						
-						ItemStack result = getSmallDustCraftingResult(item);
-						result.stackSize = 1;
-						items[outputSlot] = result;
-					}
-					else
-					{
-						items[outputSlot].stackSize += 1;		
-					}
-					
-					items[i].stackSize -= 4;
-					
-					if(items[i].stackSize <= 0)
-						items[i] = null;
-					
-					
-					didChange = true;
-					this.markDirty();
-				}
+				result = getSmallDustCraftingResult(item);
+				comboSize = 4;	
 			}
-			else
+			
+			if(nugget != null)
 			{
-				if(tdust != null)
+				result = getNuggetCraftingResult(item);
+				comboSize = 9;
+			}
+			
+			if(tdust != null)
+			{
+				result = getTinyDustCraftingResult(item);
+				comboSize = 9;
+			}
+			
+			if(result == null) continue;
+			
+			result.stackSize = 1;
+			
+			int outputSlot = getOutputSlot(result);
+			
+			if(outputSlot == -1) continue;
+			
+			while(item.stackSize >= comboSize)
+			{	
+				if(items[outputSlot] != null && items[outputSlot].stackSize >= items[outputSlot].getMaxDamage())
 				{
-					while(item.stackSize >= 9)
-					{
-						int outputSlot = getOutputSlot(item);
-						
-						if(outputSlot == -1) break;				
-									
-						if(items[outputSlot] == null)
-						{						
-							ItemStack result = getTinyDustCraftingResult(item);
-							result.stackSize = 1;
-							items[outputSlot] = result;
-						}
-						else
-						{
-							items[outputSlot].stackSize += 1;		
-						}
-						
-						items[i].stackSize -= 9;
-						
-						if(items[i].stackSize <= 0)
-							items[i] = null;
-						
-						didChange = true;
-						this.markDirty();
-					}
+					outputSlot = getOutputSlot(result);				
+					if(outputSlot == -1) break;							
+				}
+				
+				if(items[outputSlot] == null)
+				{						
+					items[outputSlot] = result.copy();
 				}
 				else
 				{
-					while(item.stackSize >= 9)
-					{
-						int outputSlot = getOutputSlot(item);
-						
-						if(outputSlot == -1) break;				
-									
-						if(items[outputSlot] == null)
-						{						
-							ItemStack result = getNuggetCraftingResult(item);
-							result.stackSize = 1;
-							items[outputSlot] = result;
-						}
-						else
-						{
-							items[outputSlot].stackSize += 1;		
-						}
-						
-						items[i].stackSize -= 9;
-						
-						if(items[i].stackSize <= 0)
-							items[i] = null;
-						
-						didChange = true;
-						this.markDirty();
-					}					
+					items[outputSlot].stackSize += 1;		
+				}
+				
+				items[i].stackSize -= comboSize;
+
+				didChange = true;
+								
+				if(items[i].stackSize <= 0)
+				{
+					items[i] = null;
 				}
 			}
+		}
+		
+		if(didChange)
+		{
+			Sort();
+			this.markDirty();
 		}
 		
 		return didChange;
@@ -175,21 +194,13 @@ public class TileEntityDustUnifier extends TileEntity  implements ISidedInventor
 	{
 		if(istack == null) return -1;
 		
-		ItemStack result = getSmallDustCraftingResult(istack);
-		
-		if(result == null) result = getTinyDustCraftingResult(istack);
-		
-		if(result == null) result = getNuggetCraftingResult(istack);
-		
-		if(result == null) return -1;
-		
 		// First try and add to an existing stack
 		for(int i = 88; i < 96; i++)
 		{
 			// No empty slots of full stacks;
 			if(items[i] == null || items[i].stackSize == items[i].getMaxStackSize()) continue;			
 			
-			if(OreDictionary.itemMatches(items[i], result, false))
+			if(OreDictionary.itemMatches(items[i], istack, false))
 			{
 				return i;
 			}
@@ -448,12 +459,14 @@ public class TileEntityDustUnifier extends TileEntity  implements ISidedInventor
 	@Override
 	public boolean canInsertItem(int slot, ItemStack istack, int side)
 	{
+		System.out.println("CIS:" + slot);
 		return (slot >= 0 && slot <= 87);
 	}
 
 	@Override
 	public boolean canExtractItem(int slot, ItemStack istack, int side)
 	{
+		System.out.println("CES:" + slot);
 		return slot > 87 && slot < 96;
 	}
 

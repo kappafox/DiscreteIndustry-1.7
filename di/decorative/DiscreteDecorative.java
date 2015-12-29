@@ -253,6 +253,7 @@ public class DiscreteDecorative
 		ItemStack discreteStairs8 = new ItemStack(decorBlock, 8, 861);
 		ItemStack discreteStairs = new ItemStack(decorBlock, 1, 861);
 		ItemStack discreteSmallStairs = new ItemStack(decorBlock, 1, 862);
+		ItemStack simpleCatwalkStairs2 = new ItemStack(decorBlock, 2, BlockDecor.ID_STAIRS_CATWALK_SIMPLE);
 		
 		
 		// Ladders 800-820
@@ -304,7 +305,7 @@ public class DiscreteDecorative
 		// Stairs
 		GameRegistry.addRecipe(new ShapedOreRecipe(discreteStairs8, new Object[]{ "X  ", "XX ", "XXX", 'X', frameDiscreteCable}));		
 		GameRegistry.addRecipe(new ShapelessOreRecipe(discreteSmallStairs, new Object[]{discreteStairs}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(catwalkSimple, new Object[]{frameDiscreteCable, discreteStairs}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(simpleCatwalkStairs2, new Object[]{catwalkSimple}));
 		
 		// Slab
 		GameRegistry.addRecipe(new ShapedOreRecipe(slab6, new Object[]{ "XXX", "   ", "   ", 'X', frameDiscreteCable}));
